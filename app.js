@@ -14,7 +14,7 @@ const P = DEMO ? 'rasd.demo.' : 'rasd.';
 const APP_URL = String(CFG.appUrl || (location.origin + location.pathname)).replace(/index\.html$/, '');
 const TZ = 'Asia/Muscat';
 const OFFSET = 4 * 3600e3; // Oman has no daylight saving
-const VENDOR = Object.assign({ jsqr: 'vendor/jsQR.js', qrcode: 'vendor/qrcode.js' }, CFG.vendor || {});
+const VENDOR = Object.assign({ jsqr: 'vendor/jsQR.js', qrcode: 'vendor/qrcode.js', exceljs: 'vendor/exceljs.min.js', pptx: 'vendor/pptxgen.bundle.js', jszip: 'vendor/jszip.min.js' }, CFG.vendor || {});
 
 /* ------------------------------------------------------------ storage */
 const MEM = {};
@@ -147,6 +147,19 @@ ar: {
   err_not_found: 'غير موجود.', err_not_assigned: 'هذه المهمة لفني آخر.', err_network: 'تعذّر الاتصال. تحقق من الإنترنت ثم أعد المحاولة.',
   err_not_configured: 'النظام غير مربوط بقاعدة البيانات بعد.', err_image: 'تعذّر قراءة الصورة. جرّب صورة أخرى.',
   err_generic: 'حدث خطأ غير متوقع. أعد المحاولة.', of100: 'من 100',
+  x_export_title: 'تصدير تقرير {m}', x_excel_d: 'كل الطلبات بتوقيتاتها، مع الملخص', x_pdf_d: 'تقرير جاهز للطباعة والإرسال', x_pptx_d: 'عرض جاهز للإدارة',
+  x_summary: 'الملخص', x_requests: 'الطلبات', x_generated: 'أُعدّ في {d}', x_pdf_hint: 'في نافذة الطباعة اختر «حفظ بصيغة PDF».',
+  x_minutes: 'بالدقائق', x_minutes_note: 'الأوقات في الجداول بالدقائق: الفعلي / المستهدف.', x_avg_arr_min: 'متوسط الوصول (دقيقة)', x_avg_work_min: 'متوسط الإصلاح (دقيقة)',
+  x_arr_vs: 'الوصول / الهدف (د)', x_work_vs: 'الإصلاح / الهدف (د)', x_log: 'سجل الطلبات', x_count: 'عدد الطلبات: {n}', x_avg_pickup_note: 'متوسط الاستلام {v}',
+  x_f_manual: 'وصول دون مسح الرمز', x_f_manual_d: 'سجّل الفني وصوله يدوياً مع ذكر السبب.', x_f_onsite: 'توقيع على جهاز الفني', x_f_onsite_d: 'وقّع صاحب الطلب على جوال الفني بدل جواله.',
+  x_f_close: 'إغلاق يدوي', x_f_close_d: 'أغلقته الإدارة دون توقيع، مع ذكر السبب.', x_f_repeat: 'أعطال متكررة', x_f_repeat_d: 'بلاغ جديد بنفس المشكلة في نفس الموقع خلال {d} يوماً من الإغلاق.',
+  yes: 'نعم', no: 'لا', col_accepted: 'قبول الفني', col_arrived: 'وقت الوصول', col_finished: 'انتهاء الإصلاح', col_closed: 'الإغلاق', col_repeat: 'عطل متكرر', col_desc: 'وصف المشكلة',
+  col_method: 'طريقة الوصول', m_qr: 'مسح الرمز', m_manual: 'يدوي',
+  p_eyebrow: 'رصد · التقرير الشهري', p_title: 'أداء فنيي {c}', p_title_plain: 'أداء فنيي الصيانة', p_score: 'درجة المقاول', p_s2: 'ملخص {m}',
+  p_weak: 'أضعف مؤشر هذا الشهر: {k} ({v})', p_weights: '40% الوصول · 30% الإصلاح · 30% التقييم', p_s3: 'ترتيب الفنيين', p_best: 'الأعلى أداءً {a} ({x})، والأدنى {b} ({y})',
+  p_jobs_line: '{n} مهمة · الوصول {a} · الإصلاح {f} · التقييم {r}', p_s4: 'العاجل والعادي', p_s4_sub: 'الأداء حسب تصنيف البلاغ', p_s5_sub: 'عدد الطلبات المتأخرة: {n}',
+  p_more: 'باقي الطلبات المتأخرة ({n}) في ملف Excel.', p_none_late: 'كل الطلبات هذا الشهر ضمن الوقت المستهدف.', p_s6: 'مؤشرات للمتابعة', p_s6_sub: 'حالات تستحق المراجعة مع المقاول',
+  p_s7: 'كيف تُجمع هذه الأرقام', p_s7_note: 'كل توقيت يسجّله الخادم، ولا يُغلق طلب دون صورة الإصلاح وتوقيع صاحب الطلب أو سبب مكتوب.',
   col_no: 'رقم الطلب', col_date: 'وقت البلاغ', col_building: 'المبنى', col_unit: 'الموقع', col_issue: 'المشكلة', col_priority: 'التصنيف', col_tech: 'الفني', col_status: 'الحالة',
   col_pickup: 'الاستلام (دقيقة)', col_arrive: 'الوصول (دقيقة)', col_arrive_t: 'هدف الوصول', col_arrive_ok: 'الوصول ضمن الوقت', col_work: 'الإصلاح (دقيقة)', col_work_t: 'هدف الإصلاح',
   col_work_ok: 'الإصلاح ضمن الوقت', col_total: 'الإجمالي (دقيقة)', col_qr: 'الوصول بمسح الرمز', col_rating: 'التقييم', col_close: 'طريقة الإغلاق',
@@ -264,6 +277,19 @@ en: {
   err_not_found: 'Not found.', err_not_assigned: 'This job belongs to another technician.', err_network: 'Could not connect. Check the internet and try again.',
   err_not_configured: 'The system is not connected to its database yet.', err_image: 'Could not read the photo. Try another one.',
   err_generic: 'Something went wrong. Please try again.', of100: 'out of 100',
+  x_export_title: 'Export the {m} report', x_excel_d: 'Every request with its timings, plus the summary', x_pdf_d: 'A report ready to print or send', x_pptx_d: 'A deck ready for management',
+  x_summary: 'Summary', x_requests: 'Requests', x_generated: 'Generated {d}', x_pdf_hint: 'In the print window, choose “Save as PDF”.',
+  x_minutes: 'in minutes', x_minutes_note: 'Times in the tables are in minutes: actual / target.', x_avg_arr_min: 'Avg arrival (min)', x_avg_work_min: 'Avg repair (min)',
+  x_arr_vs: 'Arrival / target (min)', x_work_vs: 'Repair / target (min)', x_log: 'Request log', x_count: 'Requests: {n}', x_avg_pickup_note: 'Average pickup {v}',
+  x_f_manual: 'Arrivals without a scan', x_f_manual_d: 'The technician recorded arrival by hand, with a reason.', x_f_onsite: "Signed on the technician's phone", x_f_onsite_d: "The requester signed on the technician's phone instead of their own.",
+  x_f_close: 'Closed manually', x_f_close_d: 'Management closed it without a signature, with a reason.', x_f_repeat: 'Repeat faults', x_f_repeat_d: 'A new report of the same problem at the same location within {d} days of closing.',
+  yes: 'Yes', no: 'No', col_accepted: 'Accepted', col_arrived: 'Arrived', col_finished: 'Finished', col_closed: 'Closed', col_repeat: 'Repeat fault', col_desc: 'Description',
+  col_method: 'Arrival record', m_qr: 'QR scan', m_manual: 'Manual',
+  p_eyebrow: 'Rasd · Monthly report', p_title: '{c} technicians', p_title_plain: 'Maintenance technicians', p_score: 'Contractor score', p_s2: '{m} at a glance',
+  p_weak: 'Weakest measure this month: {k} ({v})', p_weights: '40% arrival · 30% repair · 30% rating', p_s3: 'Technician ranking', p_best: 'Highest: {a} ({x}). Lowest: {b} ({y})',
+  p_jobs_line: '{n} jobs · arrival {a} · repair {f} · rating {r}', p_s4: 'Urgent and normal requests', p_s4_sub: 'Performance by request priority', p_s5_sub: 'Late requests: {n}',
+  p_more: 'The other {n} late requests are in the Excel file.', p_none_late: 'Every request this month met its targets.', p_s6: 'Points to follow up', p_s6_sub: 'Cases worth reviewing with the contractor',
+  p_s7: 'Where these numbers come from', p_s7_note: "Every time is recorded by the server, and no request closes without a repair photo and the requester's signature or a written reason.",
   col_no: 'Request no.', col_date: 'Reported', col_building: 'Building', col_unit: 'Location', col_issue: 'Problem', col_priority: 'Priority', col_tech: 'Technician', col_status: 'Status',
   col_pickup: 'Pickup (min)', col_arrive: 'Arrival (min)', col_arrive_t: 'Arrival target', col_arrive_ok: 'Arrived on time', col_work: 'Repair (min)', col_work_t: 'Repair target',
   col_work_ok: 'Fixed on time', col_total: 'Total (min)', col_qr: 'Arrival by QR scan', col_rating: 'Rating', col_close: 'Closed by',
@@ -1267,7 +1293,7 @@ async function vEval(ym, alive) {
   const list = await srpc('staff_requests', { p_from: from.toISOString(), p_to: until.toISOString() });
   if (!alive()) return;
   const ev = evaluate(list, from, to, st);
-  S.evalData = { ym, ev };
+  S.evalData = { ym, ev, st };
   const cname = (st.contractor && (st.contractor[LANG] || st.contractor.ar)) || '';
   const prow = (p, m) => `<tr><th>${t('pr_' + p)}</th><td>${m.n}</td><td>${pct(m.arrRate)}</td><td>${pct(m.fixRate)}</td><td>${fDur(m.arrive)}</td><td>${fDur(m.work)}</td><td>${m.rating == null ? '—' : m.rating.toFixed(1)}</td></tr>`;
   page(`<div class="wrap wide">
@@ -1278,6 +1304,10 @@ async function vEval(ym, alive) {
     </div>
     ${!ev.real.length ? `<p class="empty-line">${t('e_none')}</p>` : `
     <section class="score-card"><div class="score-big"><small>${t('e_score')}</small><b>${ev.all.score == null ? '—' : ev.all.score}</b><small>${t('of100')}</small></div>${kpiGrid(ev.all)}</section>
+    ${EMB ? '' : `<section class="card export no-print"><h3>${ICON.download}${t('x_export_title', { m: ymLabel(ym) })}</h3><div class="x-grid">
+      <button class="x-btn" type="button" data-act="x-excel"><b>Excel</b><span>${t('x_excel_d')}</span></button>
+      <button class="x-btn" type="button" data-act="x-pdf"><b>PDF</b><span>${t('x_pdf_d')}</span></button>
+      <button class="x-btn" type="button" data-act="x-pptx"><b>PowerPoint</b><span>${t('x_pptx_d')}</span></button></div></section>`}
     <section class="card"><h3>${t('e_by_priority')}</h3><div class="ptable-wrap"><table class="ptable"><thead><tr><th></th><th>${t('e_col_count')}</th><th>${t('e_arr_on')}</th><th>${t('e_fix_on')}</th><th>${t('e_avg_arrive')}</th><th>${t('e_avg_work')}</th><th>${t('e_rating')}</th></tr></thead><tbody>${prow('urgent', ev.pri.urgent)}${prow('normal', ev.pri.normal)}</tbody></table></div>
       ${flagsOf(ev.all)}${ev.cancelled ? `<p class="muted small">${t('e_cancelled', { n: ev.cancelled })}</p>` : ''}</section>
     <h2 class="sec">${t('e_techs')}<span class="count">${ev.techs.length}</span></h2>
@@ -1290,7 +1320,7 @@ async function vEval(ym, alive) {
       ${flagsOf(m)}</article>`).join('')}</div>
     ${ev.late.length ? `<section class="card"><h3>${ICON.alert}${t('e_late_list')}<span class="count">${ev.late.length}</span></h3><div class="late-list">${ev.late.sort((a, b) => D(b.created_at) - D(a.created_at)).map(lateRow).join('')}</div></section>` : ''}
     <p class="muted small">${t('e_formula', { d: st.repeatDays || 30 })}</p>
-    <div class="row no-print">${EMB ? `<button class="btn" type="button" data-act="csv">${ICON.copy}${t('e_csv_copy')}</button>` : `<button class="btn" type="button" data-act="csv">${ICON.download}${t('e_csv')}</button><button class="btn" type="button" data-act="print">${ICON.print}${t('e_print')}</button>`}</div>`}
+    ${EMB ? `<div class="row no-print"><button class="btn" type="button" data-act="csv">${ICON.copy}${t('e_csv_copy')}</button></div>` : ''}`}
   </div>`, { staff: true, nav: 'eval' });
 }
 function evalCsv() {
@@ -1428,6 +1458,391 @@ function vDemo() {
   </div>`, { staff: !!S.session });
 }
 
+/* ============================================================ exports: Excel, PDF, PowerPoint */
+function exportModel() {
+  const { ym, ev, st } = S.evalData;
+  const cname = (st.contractor && (st.contractor[LANG] || st.contractor.ar)) || '';
+  const buildings = Array.from(new Set(ev.real.map(r => bName(r)))).join('، ');
+  const mins = (a, b) => (a && b ? Math.round(ms(a, b) / 60000) : null);
+  const rows = ev.month.slice().sort((a, b) => a.no - b.no).map(r => {
+    const arr = mins(r.accepted_at, r.arrived_at), work = mins(r.arrived_at, r.finished_at);
+    return {
+      r, pickup: mins(r.created_at, r.accepted_at), arr, work, total: mins(r.created_at, r.closed_at || r.cancelled_at),
+      arrOk: arr == null ? null : arr <= r.target_arrive, workOk: work == null ? null : work <= r.target_work, repeat: ev.repeatOf.has(r.id)
+    };
+  });
+  const late = rows.filter(x => x.arrOk === false || x.workOk === false)
+    .sort((a, b) => Math.max(b.arr != null ? b.arr / b.r.target_arrive : 0, b.work != null ? b.work / b.r.target_work : 0) - Math.max(a.arr != null ? a.arr / a.r.target_arrive : 0, a.work != null ? a.work / a.r.target_work : 0));
+  return { ym, ev, st, cname, buildings, rows, late, month: ymLabel(ym), stamp: fmt(new Date(), { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }) };
+}
+const closedBy = r => (r.close_method === 'manual' ? t('cm_manual') : r.signoff_method ? t('cm_' + r.signoff_method) : '');
+function saveBlob(blob, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+}
+function weakest(k) {
+  const c = [['e_arr_on', k.arrRate, pct(k.arrRate)], ['e_fix_on', k.fixRate, pct(k.fixRate)], ['e_rating', k.rating != null ? k.rating / 5 : null, k.rating != null ? k.rating.toFixed(1) + ' / 5' : '']].filter(x => x[1] != null);
+  return c.length ? c.sort((a, b) => a[1] - b[1])[0] : null;
+}
+
+/* ----- Excel */
+async function exportExcel() {
+  await loadScript(VENDOR.exceljs);
+  const m = exportModel(), ev = m.ev, k = ev.all, rtl = LANG === 'ar';
+  const C = { gold: 'FF8B7E49', ink: 'FF262521', muted: 'FF8A8576', line: 'FFE3DBC9', soft: 'FFF6F3EC', ok: 'FF2E7D4F', okSoft: 'FFE3F1E8', warn: 'FF9A6200', warnSoft: 'FFFDF1D8', bad: 'FFB3261E', badSoft: 'FFFBE8E6', white: 'FFFFFFFF' };
+  const font = o => Object.assign({ name: 'Arial', size: 11, color: { argb: C.ink } }, o || {});
+  const fill = argb => ({ type: 'pattern', pattern: 'solid', fgColor: { argb } });
+  const edge = { style: 'thin', color: { argb: C.line } };
+  const box = { top: edge, bottom: edge, left: edge, right: edge };
+  const align = o => Object.assign({ vertical: 'middle', horizontal: rtl ? 'right' : 'left', readingOrder: rtl ? 'rtl' : 'ltr', wrapText: true }, o || {});
+  const scoreFill = s => (s == null ? null : s >= 85 ? [C.okSoft, C.ok] : s >= 70 ? [C.warnSoft, C.warn] : [C.badSoft, C.bad]);
+  const minsOf = v => (v == null ? null : Math.round(v / 60000));
+  const head = (row, cells) => {
+    cells.forEach((v, i) => { const c = row.getCell(i + 1); c.value = v; c.font = font({ bold: true, color: { argb: C.white } }); c.fill = fill(C.gold); c.alignment = align({ horizontal: 'center' }); c.border = box; });
+    row.height = 30;
+  };
+  const wb = new window.ExcelJS.Workbook();
+  wb.creator = t('app'); wb.created = new Date();
+
+  // summary sheet
+  const s = wb.addWorksheet(t('x_summary'), { views: [{ rightToLeft: rtl, showGridLines: false }], properties: { defaultRowHeight: 20 } });
+  s.columns = [{ width: 30 }, { width: 12 }, { width: 16 }, { width: 16 }, { width: 14 }, { width: 16 }, { width: 16 }, { width: 11 }];
+  s.mergeCells('A1:H1'); s.getCell('A1').value = t('e_title') + ' · ' + m.month; s.getCell('A1').font = font({ size: 18, bold: true }); s.getCell('A1').alignment = align(); s.getRow(1).height = 34;
+  s.mergeCells('A2:H2'); s.getCell('A2').value = [m.cname ? t('e_contractor', { n: m.cname }) : '', m.buildings, t('x_generated', { d: m.stamp })].filter(Boolean).join(' · ');
+  s.getCell('A2').font = font({ color: { argb: C.muted } }); s.getCell('A2').alignment = align();
+  let r = 4;
+  const kpi = (label, value, numFmt, note, color) => {
+    const row = s.getRow(r++);
+    row.getCell(1).value = label; row.getCell(1).font = font({ bold: true }); row.getCell(1).alignment = align();
+    const v = row.getCell(2); v.value = value == null ? '—' : value; if (numFmt && value != null) v.numFmt = numFmt;
+    v.font = font({ bold: true, size: 13, color: { argb: color || C.ink } }); v.alignment = align({ horizontal: 'center' });
+    s.mergeCells(`C${row.number}:H${row.number}`); row.getCell(3).value = note || ''; row.getCell(3).font = font({ color: { argb: C.muted } }); row.getCell(3).alignment = align();
+    [1, 2, 3].forEach(i => { row.getCell(i).fill = fill(C.soft); row.getCell(i).border = box; });
+    row.height = 24;
+  };
+  const sc = scoreFill(k.score);
+  kpi(t('e_score'), k.score, '0', t('of100'), sc && sc[1]);
+  kpi(t('e_requests'), k.n, '0', t('e_closed_open', { c: k.closed, o: k.open }) + (ev.cancelled ? ' · ' + t('e_cancelled', { n: ev.cancelled }) : ''));
+  kpi(t('e_arr_on'), k.arrRate, '0%', k.arrN ? k.arrOn + ' / ' + k.arrN : '');
+  kpi(t('e_fix_on'), k.fixRate, '0%', k.fixN ? k.fixOn + ' / ' + k.fixN : '');
+  kpi(t('e_rating'), k.rating == null ? null : +k.rating.toFixed(2), '0.0', k.ratedN ? t('e_rated', { n: k.ratedN }) : '');
+  kpi(t('e_avg_pickup'), minsOf(k.pickup), '0', t('x_minutes'));
+  kpi(t('e_avg_arrive'), minsOf(k.arrive), '0', t('x_minutes'));
+  kpi(t('e_avg_work'), minsOf(k.work), '0', t('x_minutes'));
+  kpi(t('x_f_manual'), k.manualArr, '0', t('x_f_manual_d'), k.manualArr ? C.bad : C.ok);
+  kpi(t('x_f_onsite'), k.onsite, '0', t('x_f_onsite_d'), k.onsite ? C.warn : C.ok);
+  kpi(t('x_f_close'), k.manualClose, '0', t('x_f_close_d'), k.manualClose ? C.warn : C.ok);
+  kpi(t('x_f_repeat'), k.repeats, '0', t('x_f_repeat_d', { d: m.st.repeatDays || 30 }), k.repeats ? C.bad : C.ok);
+  r++;
+  s.getRow(r).getCell(1).value = t('e_techs'); s.getRow(r).getCell(1).font = font({ bold: true, size: 13 }); r++;
+  head(s.getRow(r++), [t('dm_tech'), t('e_jobs'), t('e_arr_on'), t('e_fix_on'), t('e_rating'), t('x_avg_arr_min'), t('x_avg_work_min'), t('e_score')]);
+  ev.techs.forEach(x => {
+    const row = s.getRow(r++);
+    [x.name || '—', x.n, x.arrRate, x.fixRate, x.rating == null ? null : +x.rating.toFixed(2), minsOf(x.arrive), minsOf(x.work), x.score].forEach((v, i) => {
+      const c = row.getCell(i + 1); c.value = v == null ? '—' : v; c.border = box; c.font = font({ bold: i === 0 || i === 7 });
+      c.alignment = align(i ? { horizontal: 'center' } : {});
+      if (v != null && (i === 2 || i === 3)) c.numFmt = '0%';
+      if (v != null && i === 4) c.numFmt = '0.0';
+    });
+    const f = scoreFill(x.score); if (f) { row.getCell(8).fill = fill(f[0]); row.getCell(8).font = font({ bold: true, color: { argb: f[1] } }); }
+    row.height = 22;
+  });
+  r++;
+  s.getRow(r).getCell(1).value = t('e_by_priority'); s.getRow(r).getCell(1).font = font({ bold: true, size: 13 }); r++;
+  head(s.getRow(r++), [t('d_priority'), t('e_col_count'), t('e_arr_on'), t('e_fix_on'), t('e_rating'), t('x_avg_arr_min'), t('x_avg_work_min'), '']);
+  ['urgent', 'normal'].forEach(p => {
+    const x = ev.pri[p], row = s.getRow(r++);
+    [t('pr_' + p), x.n, x.arrRate, x.fixRate, x.rating == null ? null : +x.rating.toFixed(2), minsOf(x.arrive), minsOf(x.work)].forEach((v, i) => {
+      const c = row.getCell(i + 1); c.value = v == null ? '—' : v; c.border = box; c.font = font({ bold: i === 0 }); c.alignment = align(i ? { horizontal: 'center' } : {});
+      if (v != null && (i === 2 || i === 3)) c.numFmt = '0%';
+      if (v != null && i === 4) c.numFmt = '0.0';
+    });
+    row.height = 22;
+  });
+  r++;
+  s.mergeCells(`A${r}:H${r}`); s.getCell(`A${r}`).value = t('e_formula', { d: m.st.repeatDays || 30 }); s.getCell(`A${r}`).font = font({ size: 10, color: { argb: C.muted } }); s.getCell(`A${r}`).alignment = align(); s.getRow(r).height = 34;
+
+  // requests sheet
+  const q = wb.addWorksheet(t('x_requests'), { views: [{ rightToLeft: rtl, state: 'frozen', ySplit: 1 }] });
+  const cols = [['col_no', 10], ['col_date', 17], ['col_building', 16], ['col_unit', 14], ['col_issue', 26], ['col_priority', 10], ['col_tech', 18], ['col_status', 15],
+    ['col_pickup', 11], ['col_accepted', 17], ['col_arrived', 17], ['col_arrive', 11], ['col_arrive_t', 11], ['col_arrive_ok', 11], ['col_finished', 17], ['col_work', 11], ['col_work_t', 11], ['col_work_ok', 11],
+    ['col_closed', 17], ['col_total', 11], ['col_method', 13], ['col_close', 20], ['col_rating', 9], ['col_repeat', 11], ['col_desc', 44]];
+  q.columns = cols.map(c => ({ width: c[1] }));
+  head(q.getRow(1), cols.map(c => t(c[0])));
+  const when = x => (x ? new Date(D(x).getTime() + OFFSET) : null);
+  const yn = v => (v == null ? '' : v ? t('yes') : t('no'));
+  m.rows.forEach((x, i) => {
+    const rr = x.r, row = q.getRow(i + 2);
+    const vals = [rr.no, when(rr.created_at), bName(rr), uName(rr), issueLabel(rr.issue_type), t('pr_' + rr.priority), rr.technician || '', t('st_' + rr.status),
+      x.pickup, when(rr.accepted_at), when(rr.arrived_at), x.arr, rr.target_arrive, yn(x.arrOk), when(rr.finished_at), x.work, rr.target_work, yn(x.workOk),
+      when(rr.closed_at || rr.cancelled_at), x.total, rr.arrival_method ? t(rr.arrival_method === 'qr' ? 'm_qr' : 'm_manual') : '', closedBy(rr), rr.rating || null, x.repeat ? t('yes') : '', rr.description || ''];
+    vals.forEach((v, j) => {
+      const c = row.getCell(j + 1); c.value = v == null ? null : v; c.border = box; c.font = font({ size: 10 });
+      c.alignment = align(j === 24 || j === 4 ? {} : { horizontal: 'center' });
+      if (v instanceof Date) c.numFmt = 'yyyy-mm-dd hh:mm';
+    });
+    if (x.arrOk === false) { row.getCell(12).font = font({ size: 10, bold: true, color: { argb: C.bad } }); row.getCell(14).font = font({ size: 10, bold: true, color: { argb: C.bad } }); }
+    if (x.workOk === false) { row.getCell(16).font = font({ size: 10, bold: true, color: { argb: C.bad } }); row.getCell(18).font = font({ size: 10, bold: true, color: { argb: C.bad } }); }
+    if (rr.arrival_method === 'manual') row.getCell(21).font = font({ size: 10, bold: true, color: { argb: C.warn } });
+    if (rr.status === 'cancelled') for (let j = 1; j <= cols.length; j++) row.getCell(j).font = font({ size: 10, color: { argb: C.muted } });
+    if (i % 2) for (let j = 1; j <= cols.length; j++) row.getCell(j).fill = fill(C.soft);
+  });
+  q.autoFilter = { from: { row: 1, column: 1 }, to: { row: Math.max(1, m.rows.length + 1), column: cols.length } };
+  const buf = await wb.xlsx.writeBuffer();
+  saveBlob(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), `rasd-${m.ym}.xlsx`);
+}
+
+/* ----- PDF (the browser's own "Save as PDF" keeps Arabic text sharp and searchable) */
+function reportHtml(m) {
+  const ev = m.ev, k = ev.all;
+  const num = v => (v == null ? '—' : v);
+  const kp = (v, l, s2, cls) => `<div class="rp-k ${cls || ''}"><b>${v}</b><span>${l}</span>${s2 ? `<small>${s2}</small>` : ''}</div>`;
+  const tr = cells => `<tr>${cells.map(c => `<td>${c}</td>`).join('')}</tr>`;
+  const th = cells => `<thead><tr>${cells.map(c => `<th>${c}</th>`).join('')}</tr></thead>`;
+  const flag = (n, l) => `<span class="${n ? 'on' : ''}">${l}: <b>${n}</b></span>`;
+  const cls = s => (s == null ? '' : s >= 85 ? 'good' : s >= 70 ? 'mid' : 'low');
+  const lateCell = (v, tg, ok) => (v == null ? '—' : `<span class="${ok === false ? 'bad' : ''}">${v}</span> / ${tg}`);
+  return `<div class="rp" dir="${LANG === 'ar' ? 'rtl' : 'ltr'}" lang="${LANG}">
+    <header class="rp-h"><div class="rp-brand">${MARK}<div><b>${t('app')}</b><span>${esc(org() || t('tagline'))}</span></div></div>
+      <div class="rp-t"><h1>${t('e_title')} · ${esc(m.month)}</h1><p>${esc([m.cname ? t('e_contractor', { n: m.cname }) : '', m.buildings].filter(Boolean).join(' · '))}</p><small>${esc(t('x_generated', { d: m.stamp }))}</small></div></header>
+    <section class="rp-sum"><div class="rp-score ${cls(k.score)}"><span>${t('e_score')}</span><b>${num(k.score)}</b><small>${t('of100')}</small></div>
+      <div class="rp-ks">${kp(k.n, t('e_requests'), t('e_closed_open', { c: k.closed, o: k.open }))}${kp(pct(k.arrRate), t('e_arr_on'), k.arrN ? k.arrOn + ' / ' + k.arrN : '')}${kp(pct(k.fixRate), t('e_fix_on'), k.fixN ? k.fixOn + ' / ' + k.fixN : '')}${kp(k.rating == null ? '—' : k.rating.toFixed(1), t('e_rating'), k.ratedN ? t('e_rated', { n: k.ratedN }) : '')}
+        ${kp(fDur(k.pickup), t('e_avg_pickup'))}${kp(fDur(k.arrive), t('e_avg_arrive'))}${kp(fDur(k.work), t('e_avg_work'))}${kp(ev.cancelled, t('st_cancelled'))}</div></section>
+    <div class="rp-flags">${flag(k.manualArr, t('x_f_manual'))}${flag(k.onsite, t('x_f_onsite'))}${flag(k.manualClose, t('x_f_close'))}${flag(k.repeats, t('x_f_repeat'))}</div>
+    <h2>${t('e_techs')}</h2>
+    <table class="rp-tb">${th([t('dm_tech'), t('e_jobs'), t('e_arr_on'), t('e_fix_on'), t('e_rating'), t('e_avg_arrive'), t('e_avg_work'), t('e_score')])}<tbody>
+      ${ev.techs.map(x => tr([esc(x.name || '—'), x.n, pct(x.arrRate), pct(x.fixRate), x.rating == null ? '—' : x.rating.toFixed(1), fDur(x.arrive), fDur(x.work), `<b class="rp-sc ${cls(x.score)}">${num(x.score)}</b>`])).join('')}</tbody></table>
+    <h2>${t('e_by_priority')}</h2>
+    <table class="rp-tb">${th([t('d_priority'), t('e_col_count'), t('e_arr_on'), t('e_fix_on'), t('e_rating'), t('e_avg_arrive'), t('e_avg_work')])}<tbody>
+      ${['urgent', 'normal'].map(p => { const x = ev.pri[p]; return tr([t('pr_' + p), x.n, pct(x.arrRate), pct(x.fixRate), x.rating == null ? '—' : x.rating.toFixed(1), fDur(x.arrive), fDur(x.work)]); }).join('')}</tbody></table>
+    ${m.late.length ? `<h2>${t('e_late_list')} (${m.late.length})</h2>
+    <table class="rp-tb">${th([t('col_no'), t('col_date'), t('col_unit'), t('col_issue'), t('col_tech'), t('x_arr_vs'), t('x_work_vs')])}<tbody>
+      ${m.late.map(x => tr(['#' + x.r.no, fmt(x.r.created_at, { day: 'numeric', month: 'short' }), esc(uName(x.r)), esc(issueLabel(x.r.issue_type)), esc(x.r.technician || '—'), lateCell(x.arr, x.r.target_arrive, x.arrOk), lateCell(x.work, x.r.target_work, x.workOk)])).join('')}</tbody></table>` : ''}
+    <h2 class="rp-break">${t('x_log')} (${m.rows.length})</h2>
+    <table class="rp-tb rp-all">${th([t('col_no'), t('col_date'), t('col_unit'), t('col_issue'), t('col_priority'), t('col_tech'), t('col_status'), t('x_arr_vs'), t('x_work_vs'), t('col_rating'), t('col_close')])}<tbody>
+      ${m.rows.map(x => tr(['#' + x.r.no, fmt(x.r.created_at, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false }), esc(uName(x.r)), esc(issueLabel(x.r.issue_type)), t('pr_' + x.r.priority), esc(x.r.technician || '—'), t('st_' + x.r.status), lateCell(x.arr, x.r.target_arrive, x.arrOk), lateCell(x.work, x.r.target_work, x.workOk), x.r.rating || '—', esc(closedBy(x.r))])).join('')}</tbody></table>
+    <p class="rp-note">${esc(t('e_formula', { d: m.st.repeatDays || 30 }))} ${esc(t('x_minutes_note'))}</p>
+  </div>`;
+}
+function exportPdf() {
+  const m = exportModel();
+  let root = $('#print-root');
+  if (!root) { root = document.createElement('div'); root.id = 'print-root'; document.body.appendChild(root); }
+  root.innerHTML = reportHtml(m);
+  document.body.classList.add('print-report');
+  const title = document.title;
+  document.title = `${t('app')} · ${t('e_title')} · ${m.month}`;
+  const done = () => { document.title = title; document.body.classList.remove('print-report'); window.removeEventListener('afterprint', done); };
+  window.addEventListener('afterprint', done);
+  toast(t('x_pdf_hint'));
+  setTimeout(() => { try { window.print(); } catch (e) { done(); } }, 250);
+}
+
+/* ----- PowerPoint: native, editable slides with transitions and entrance animations */
+function svgPng(svg, size) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => { const c = document.createElement('canvas'); c.width = c.height = size; c.getContext('2d').drawImage(img, 0, 0, size, size); resolve(c.toDataURL('image/png')); };
+    img.onerror = () => resolve(null);
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg.replace('<svg class="mark"', `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"`));
+  });
+}
+function animXml(groups, dur) {
+  let n = 3, at = 0;
+  const bld = [];
+  const steps = groups.map(g => {
+    const stepId = ++n;
+    const eff = g.map((sp, i) => {
+      const a = ++n, b = ++n, c = ++n;
+      bld.push(sp);
+      return `<p:par><p:cTn id="${a}" presetID="10" presetClass="entr" presetSubtype="0" fill="hold" grpId="0" nodeType="${i ? 'withEffect' : 'afterEffect'}"><p:stCondLst><p:cond delay="0"/></p:stCondLst><p:childTnLst><p:set><p:cBhvr><p:cTn id="${b}" dur="1" fill="hold"><p:stCondLst><p:cond delay="0"/></p:stCondLst></p:cTn><p:tgtEl><p:spTgt spid="${sp}"/></p:tgtEl><p:attrNameLst><p:attrName>style.visibility</p:attrName></p:attrNameLst></p:cBhvr><p:to><p:strVal val="visible"/></p:to></p:set><p:animEffect transition="in" filter="fade"><p:cBhvr><p:cTn id="${c}" dur="${dur}"/><p:tgtEl><p:spTgt spid="${sp}"/></p:tgtEl></p:cBhvr></p:animEffect></p:childTnLst></p:cTn></p:par>`;
+    }).join('');
+    const xml = `<p:par><p:cTn id="${stepId}" fill="hold"><p:stCondLst><p:cond delay="${at}"/></p:stCondLst><p:childTnLst>${eff}</p:childTnLst></p:cTn></p:par>`;
+    at += dur;
+    return xml;
+  }).join('');
+  return `<p:timing><p:tnLst><p:par><p:cTn id="1" dur="indefinite" restart="never" nodeType="tmRoot"><p:childTnLst><p:seq concurrent="1" nextAc="seek"><p:cTn id="2" dur="indefinite" nodeType="mainSeq"><p:childTnLst><p:par><p:cTn id="3" fill="hold"><p:stCondLst><p:cond delay="indefinite"/><p:cond evt="onBegin" delay="0"><p:tn val="2"/></p:cond></p:stCondLst><p:childTnLst>${steps}</p:childTnLst></p:cTn></p:par></p:childTnLst></p:cTn><p:prevCondLst><p:cond evt="onPrev" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:prevCondLst><p:nextCondLst><p:cond evt="onNext" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:nextCondLst></p:seq></p:childTnLst></p:cTn></p:par></p:tnLst><p:bldLst>${bld.map(sp => `<p:bldP spid="${sp}" grpId="0" animBg="1"/>`).join('')}</p:bldLst></p:timing>`;
+}
+async function exportPptx() {
+  await Promise.all([loadScript(VENDOR.pptx), loadScript(VENDOR.jszip)]);
+  const m = exportModel(), ev = m.ev, k = ev.all, rtl = LANG === 'ar';
+  const P = new window.PptxGenJS();
+  P.layout = 'LAYOUT_WIDE';
+  P.title = `${t('e_title')} · ${m.month}`;
+  P.author = t('app');
+  P.theme = { headFontFace: 'Arial', bodyFontFace: 'Arial' };
+  const W = 13.333, H = 7.5, M = 0.6;
+  const C = { ink: '262521', ink2: '57534A', gold: '8B7E49', goldLight: 'D9CC9C', card: 'F4F2EC', bar: 'E9E5DA', muted: '8A8576', light: 'D8D3C6', white: 'FFFFFF', ok: '2E7D4F', warn: 'B7791F', bad: 'B3261E' };
+  const X = (x, w) => (rtl ? W - x - w : x);
+  const T = o => Object.assign({ fontFace: 'Arial', color: C.ink, rtlMode: rtl, lang: rtl ? 'ar-OM' : 'en-US', align: rtl ? 'right' : 'left', valign: 'top', margin: 0, isTextBox: true }, o);
+  const RT = (runs, o) => { const opts = T(o); runs.forEach(x => { x.options = Object.assign({ rtlMode: rtl, align: opts.align, lang: opts.lang, fontFace: 'Arial' }, x.options); }); return [runs, opts]; };
+  const scoreColor = s => (s == null ? C.muted : s >= 85 ? C.ok : s >= 70 ? C.warn : C.bad);
+  const rateColor = v => (v == null ? C.ink : v >= 0.85 ? C.ok : v >= 0.7 ? C.warn : C.bad);
+  const footer = `${t('app')} · ${t('e_title')} · ${m.month}`;
+  P.defineSlideMaster({ title: 'DARK', background: { color: C.ink }, objects: [] });
+  P.defineSlideMaster({
+    title: 'LIGHT', background: { color: C.white },
+    objects: [{ text: { text: footer, options: T({ x: X(M, 8), y: H - 0.55, w: 8, h: 0.3, fontSize: 10, color: C.muted }) } }],
+    slideNumber: { x: rtl ? M : W - M - 0.5, y: H - 0.55, w: 0.5, h: 0.3, fontFace: 'Arial', fontSize: 10, color: C.muted, align: rtl ? 'left' : 'right' }
+  });
+  const title = (sl, text, sub) => {
+    sl.addText(text, T({ x: M, y: 0.45, w: W - 2 * M, h: 0.75, fontSize: 32, bold: true }));
+    if (sub) sl.addText(sub, T({ x: M, y: 1.2, w: W - 2 * M, h: 0.4, fontSize: 15, color: C.ink2 }));
+  };
+  const mark = await svgPng(MARK, 256);
+
+  // 1. cover
+  let sl = P.addSlide({ masterName: 'DARK' });
+  if (mark) sl.addImage({ data: mark.replace(/^data:/, ''), x: X(M, 0.8), y: 0.6, w: 0.8, h: 0.8, altText: t('app') });
+  sl.addText(t('p_eyebrow'), T({ x: X(M + 1.05, 6), y: 0.78, w: 6, h: 0.45, fontSize: 16, bold: true, color: C.goldLight }));
+  sl.addText(m.cname ? t('p_title', { c: m.cname }) : t('p_title_plain'), T({ x: X(M, 7.4), y: 2.15, w: 7.4, h: 1.1, fontSize: 44, bold: true, color: C.white, objectName: 'g1-title' }));
+  sl.addText(m.month, T({ x: X(M, 7.4), y: 3.3, w: 7.4, h: 0.7, fontSize: 30, bold: true, color: C.goldLight, objectName: 'g2-month' }));
+  sl.addText([m.buildings, t('x_count', { n: k.n })].filter(Boolean).join(' · '), T({ x: X(M, 7.4), y: 4.1, w: 7.4, h: 0.5, fontSize: 16, color: C.light, objectName: 'g2-sub' }));
+  if (org()) sl.addText(org(), T({ x: X(M, 7.4), y: H - 0.95, w: 7.4, h: 0.4, fontSize: 13, color: C.muted }));
+  sl.addText(...RT([
+    { text: k.score == null ? '—' : String(k.score), options: { fontSize: 80, bold: true, color: C.white, breakLine: true } },
+    { text: t('of100'), options: { fontSize: 16, color: C.goldLight, breakLine: true } },
+    { text: t('p_score'), options: { fontSize: 14, color: C.light } }
+  ], { shape: P.ShapeType.ellipse, x: rtl ? M + 0.5 : W - M - 0.5 - 3.6, y: 1.85, w: 3.6, h: 3.6, align: 'center', valign: 'middle', fill: { color: C.ink }, line: { color: C.gold, width: 6 }, objectName: 'g3-score' }));
+
+  // 2. month at a glance
+  sl = P.addSlide({ masterName: 'LIGHT' });
+  const wk = weakest(k);
+  title(sl, t('p_s2', { m: m.month }), wk ? t('p_weak', { k: t(wk[0]), v: wk[2] }) : '');
+  const top = 1.9, hh = 4.6;
+  sl.addText(...RT([
+    { text: t('e_score'), options: { fontSize: 16, bold: true, color: C.goldLight, breakLine: true } },
+    { text: k.score == null ? '—' : String(k.score), options: { fontSize: 88, bold: true, color: C.white, breakLine: true } },
+    { text: t('of100'), options: { fontSize: 15, color: C.light, breakLine: true } },
+    { text: t('p_weights'), options: { fontSize: 11, color: C.light } }
+  ], { shape: P.ShapeType.roundRect, rectRadius: 0.12, x: X(M, 3.3), y: top, w: 3.3, h: hh, fill: { color: C.ink }, align: 'center', valign: 'middle', margin: 0.2, objectName: 'g1-score' }));
+  const gx = M + 3.3 + 0.35, gw = W - M - gx, cw = (gw - 2 * 0.3) / 3, ch = (hh - 0.3) / 2;
+  const cards = [
+    [String(k.n), t('e_requests'), t('e_closed_open', { c: k.closed, o: k.open }), C.ink],
+    [pct(k.arrRate), t('e_arr_on'), k.arrN ? k.arrOn + ' / ' + k.arrN : '', rateColor(k.arrRate)],
+    [pct(k.fixRate), t('e_fix_on'), k.fixN ? k.fixOn + ' / ' + k.fixN : '', rateColor(k.fixRate)],
+    [k.rating == null ? '—' : k.rating.toFixed(1), t('e_rating'), k.ratedN ? t('e_rated', { n: k.ratedN }) : '', rateColor(k.rating == null ? null : k.rating / 5)],
+    [fDur(k.arrive), t('e_avg_arrive'), t('x_avg_pickup_note', { v: fDur(k.pickup) }), C.ink],
+    [fDur(k.work), t('e_avg_work'), '', C.ink]
+  ];
+  cards.forEach((c, i) => {
+    const col = i % 3, row = Math.floor(i / 3);
+    sl.addText(...RT([
+      { text: c[0], options: { fontSize: 32, bold: true, color: c[3], breakLine: true } },
+      { text: c[1], options: { fontSize: 15, bold: true, color: C.ink2, breakLine: true } },
+      { text: c[2] || ' ', options: { fontSize: 11, color: C.muted } }
+    ], { shape: P.ShapeType.roundRect, rectRadius: 0.1, x: X(gx + col * (cw + 0.3), cw), y: top + row * (ch + 0.3), w: cw, h: ch, fill: { color: C.card }, valign: 'middle', margin: 0.25, objectName: `g${2 + i}-kpi` }));
+  });
+
+  // 3. technician ranking
+  sl = P.addSlide({ masterName: 'LIGHT' });
+  const techs = ev.techs.slice(0, 8), best = techs[0], worst = techs[techs.length - 1];
+  title(sl, t('p_s3'), techs.length > 1 ? t('p_best', { a: best.name, x: best.score == null ? '—' : best.score, b: worst.name, y: worst.score == null ? '—' : worst.score }) : '');
+  const rh = Math.min(0.95, 4.7 / Math.max(1, techs.length)), y0 = 1.95, barX = M + 4.6, barW = 6.2;
+  techs.forEach((x, i) => {
+    const y = y0 + i * rh, g = `g${i + 1}`;
+    sl.addText(String(i + 1), T({ shape: P.ShapeType.ellipse, x: X(M, 0.42), y: y + (rh - 0.42) / 2, w: 0.42, h: 0.42, fill: { color: C.gold }, color: C.white, fontSize: 13, bold: true, align: 'center', valign: 'middle', objectName: g + '-n' }));
+    sl.addText(...RT([
+      { text: x.name || '—', options: { fontSize: 15, bold: true, color: C.ink, breakLine: true } },
+      { text: t('p_jobs_line', { n: x.n, a: pct(x.arrRate), f: pct(x.fixRate), r: x.rating == null ? '—' : x.rating.toFixed(1) }), options: { fontSize: 10, color: C.muted } }
+    ], { x: X(M + 0.6, 3.85), y: y + 0.02, w: 3.85, h: rh - 0.04, valign: 'middle', objectName: g + '-name' }));
+    const bh = Math.min(0.36, rh * 0.45), by = y + (rh - bh) / 2, fw = Math.max(0.08, barW * (x.score || 0) / 100);
+    sl.addShape(P.ShapeType.roundRect, { x: X(barX, barW), y: by, w: barW, h: bh, rectRadius: bh / 2, fill: { color: C.bar }, line: { color: C.bar, width: 0 }, objectName: g + '-bg' });
+    sl.addShape(P.ShapeType.roundRect, { x: X(barX, fw), y: by, w: fw, h: bh, rectRadius: bh / 2, fill: { color: scoreColor(x.score) }, line: { color: scoreColor(x.score), width: 0 }, objectName: g + '-bar' });
+    sl.addText(x.score == null ? '—' : String(x.score), T({ x: X(barX + barW + 0.15, 0.8), y: y, w: 0.8, h: rh, fontSize: 20, bold: true, color: scoreColor(x.score), valign: 'middle', objectName: g + '-v' }));
+  });
+
+  // 4. urgent and normal
+  sl = P.addSlide({ masterName: 'LIGHT' });
+  title(sl, t('p_s4'), t('p_s4_sub'));
+  const pw = (W - 2 * M - 0.4) / 2;
+  ['urgent', 'normal'].forEach((p, i) => {
+    const x = ev.pri[p], px = X(M + i * (pw + 0.4), pw), g = `g${i + 1}`;
+    sl.addShape(P.ShapeType.roundRect, { x: px, y: 1.9, w: pw, h: 4.6, rectRadius: 0.1, fill: { color: C.card }, line: { color: C.card, width: 0 }, objectName: g + '-bg' });
+    sl.addText(t('pr_' + p), T({ shape: P.ShapeType.roundRect, rectRadius: 0.2, x: rtl ? px + pw - 0.35 - 1.3 : px + 0.35, y: 2.15, w: 1.3, h: 0.42, fill: { color: p === 'urgent' ? C.bad : C.gold }, color: C.white, fontSize: 14, bold: true, align: 'center', valign: 'middle', objectName: g + '-pill' }));
+    sl.addText(t('x_count', { n: x.n }), T({ x: px + 0.35, y: 2.75, w: pw - 0.7, h: 0.7, fontSize: 28, bold: true, objectName: g + '-n' }));
+    const lines = [[t('e_arr_on'), pct(x.arrRate), rateColor(x.arrRate)], [t('e_fix_on'), pct(x.fixRate), rateColor(x.fixRate)], [t('e_avg_arrive'), fDur(x.arrive), C.ink], [t('e_avg_work'), fDur(x.work), C.ink], [t('e_rating'), x.rating == null ? '—' : x.rating.toFixed(1), C.ink]];
+    lines.forEach((ln, j) => {
+      const ly = 3.6 + j * 0.55;
+      sl.addText(ln[0], T({ x: rtl ? px + pw / 2 : px + 0.35, y: ly, w: pw / 2 - 0.35, h: 0.45, fontSize: 14, color: C.ink2, valign: 'middle', objectName: `${g}-l${j}` }));
+      sl.addText(ln[1], T({ x: rtl ? px + 0.35 : px + pw / 2, y: ly, w: pw / 2 - 0.35, h: 0.45, fontSize: 16, bold: true, color: ln[2], align: rtl ? 'left' : 'right', valign: 'middle', objectName: `${g}-v${j}` }));
+    });
+  });
+
+  // 5. late requests
+  sl = P.addSlide({ masterName: 'LIGHT' });
+  title(sl, t('e_late_list'), m.late.length ? t('p_s5_sub', { n: m.late.length }) : '');
+  if (m.late.length) {
+    const hdr = [t('col_no'), t('col_date'), t('col_unit'), t('col_tech'), t('x_arr_vs'), t('x_work_vs')];
+    const cell = (text, o) => ({ text: String(text), options: Object.assign({ fontFace: 'Arial', fontSize: 12, color: C.ink, align: rtl ? 'right' : 'left', valign: 'middle', rtlMode: rtl }, o || {}) });
+    const vs = (v, tg, ok) => (v == null ? '—' : `${v} / ${tg}`);
+    let rows = [hdr.map(h => cell(h, { bold: true, color: C.white, fill: { color: C.gold } }))];
+    m.late.slice(0, 8).forEach((x, i) => {
+      const bg = i % 2 ? { fill: { color: C.card } } : { fill: { color: C.white } };
+      rows.push([cell('#' + x.r.no, bg), cell(fmt(x.r.created_at, { day: 'numeric', month: 'short' }), bg), cell(uName(x.r), bg), cell(x.r.technician || '—', bg),
+        cell(vs(x.arr, x.r.target_arrive), Object.assign({ bold: x.arrOk === false, color: x.arrOk === false ? C.bad : C.ink }, bg)),
+        cell(vs(x.work, x.r.target_work), Object.assign({ bold: x.workOk === false, color: x.workOk === false ? C.bad : C.ink }, bg))]);
+    });
+    if (rtl) rows = rows.map(rw => rw.slice().reverse());
+    const cws = [1.2, 1.6, 2.0, 2.6, 2.3, 2.43];
+    sl.addTable(rows, { x: M, y: 1.9, w: W - 2 * M, colW: rtl ? cws.slice().reverse() : cws, rowH: 0.42, border: { type: 'solid', pt: 0.75, color: 'E3DBC9' }, fontFace: 'Arial', autoPage: false });
+    if (m.late.length > 8) sl.addText(t('p_more', { n: m.late.length - 8 }), T({ x: M, y: 1.95 + 0.42 * 9 + 0.15, w: W - 2 * M, h: 0.35, fontSize: 12, color: C.muted }));
+  } else {
+    sl.addText(t('p_none_late'), T({ shape: P.ShapeType.roundRect, rectRadius: 0.1, x: M, y: 2.4, w: W - 2 * M, h: 1.4, fill: { color: 'E3F1E8' }, color: C.ok, fontSize: 22, bold: true, align: 'center', valign: 'middle', objectName: 'g1-ok' }));
+  }
+
+  // 6. points to follow up
+  sl = P.addSlide({ masterName: 'LIGHT' });
+  title(sl, t('p_s6'), t('p_s6_sub'));
+  const fl = [[k.manualArr, t('x_f_manual'), t('x_f_manual_d'), C.bad], [k.onsite, t('x_f_onsite'), t('x_f_onsite_d'), C.warn], [k.manualClose, t('x_f_close'), t('x_f_close_d'), C.warn], [k.repeats, t('x_f_repeat'), t('x_f_repeat_d', { d: m.st.repeatDays || 30 }), C.bad]];
+  const fw2 = (W - 2 * M - 0.3) / 2, fh = 1.85;
+  fl.forEach((f, i) => {
+    const col = i % 2, row = Math.floor(i / 2);
+    sl.addText(...RT([
+      { text: String(f[0]), options: { fontSize: 36, bold: true, color: f[0] ? f[3] : C.ok, breakLine: true } },
+      { text: f[1], options: { fontSize: 16, bold: true, color: C.ink, breakLine: true } },
+      { text: f[2], options: { fontSize: 12, color: C.muted } }
+    ], { shape: P.ShapeType.roundRect, rectRadius: 0.1, x: X(M + col * (fw2 + 0.3), fw2), y: 1.9 + row * (fh + 0.3), w: fw2, h: fh, fill: { color: C.card }, valign: 'middle', margin: 0.3, objectName: `g${i + 1}-f` }));
+  });
+  sl.addText(t('e_formula', { d: m.st.repeatDays || 30 }), T({ x: M, y: 6.15, w: W - 2 * M, h: 0.55, fontSize: 11, color: C.muted, valign: 'middle' }));
+
+  // 7. where the numbers come from
+  sl = P.addSlide({ masterName: 'DARK' });
+  sl.addText(t('p_s7'), T({ x: M, y: 0.6, w: W - 2 * M, h: 0.8, fontSize: 32, bold: true, color: C.white }));
+  const sw = (W - 2 * M - 3 * 0.35) / 4;
+  ['dm_s1', 'dm_s2', 'dm_s3', 'dm_s4'].forEach((key, i) => {
+    const sx = X(M + i * (sw + 0.35), sw), g = `g${i + 1}`;
+    sl.addText(String(i + 1), T({ shape: P.ShapeType.ellipse, x: rtl ? sx + sw - 0.7 : sx, y: 2.0, w: 0.7, h: 0.7, fill: { color: C.gold }, color: C.white, fontSize: 20, bold: true, align: 'center', valign: 'middle', objectName: g + '-n' }));
+    sl.addText(t(key), T({ x: sx, y: 2.95, w: sw, h: 1.6, fontSize: 16, color: C.white, objectName: g + '-t' }));
+  });
+  sl.addText(t('p_s7_note'), T({ x: M, y: 4.75, w: W - 2 * M, h: 0.9, fontSize: 18, bold: true, color: C.goldLight, valign: 'middle', objectName: 'g5-note' }));
+
+  // write, then add transitions and entrance animations
+  const data = await P.write({ outputType: 'arraybuffer' });
+  const zip = await window.JSZip.loadAsync(data);
+  const slides = Object.keys(zip.files).filter(f => /^ppt\/slides\/slide\d+\.xml$/.test(f));
+  for (const f of slides) {
+    const no = +f.match(/slide(\d+)\.xml$/)[1];
+    let xml = await zip.file(f).async('string');
+    const groups = {};
+    xml.replace(/<p:cNvPr id="(\d+)" name="g(\d+)-[^"]*"/g, (s0, id, g) => { (groups[g] = groups[g] || []).push(id); return s0; });
+    const order = Object.keys(groups).map(Number).sort((a, b) => a - b).map(g => groups[g]);
+    const trans = no === 1 || no === slides.length ? '<p:transition spd="slow"><p:fade/></p:transition>' : '<p:transition spd="med"><p:push dir="' + (rtl ? 'r' : 'l') + '"/></p:transition>';
+    const extra = trans + (order.length ? animXml(order, 400) : '');
+    xml = xml.indexOf('</p:clrMapOvr>') > -1 ? xml.replace('</p:clrMapOvr>', '</p:clrMapOvr>' + extra) : xml.replace('</p:sld>', extra + '</p:sld>');
+    zip.file(f, xml);
+  }
+  const blob = await zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' });
+  saveBlob(blob, `rasd-${m.ym}.pptx`);
+}
+async function runExport(el, fn) {
+  await busy(el, async () => {
+    try { await fn(); } catch (e) { if (e && /^(network|generic)$/.test(e.message)) throw e; console.error(e); throw new Error('generic'); }
+  });
+}
+
 /* ============================================================ actions */
 const ACT = {
   lang: () => setLang(LANG === 'ar' ? 'en' : 'ar'),
@@ -1467,6 +1882,9 @@ const ACT = {
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = f.name; document.body.appendChild(a); a.click();
     setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
   },
+  'x-excel': el => runExport(el, exportExcel),
+  'x-pdf': el => runExport(el, async () => exportPdf()),
+  'x-pptx': el => runExport(el, exportPptx),
   'staff-edit': el => staffModal((S.team || []).find(s => s.id === el.dataset.id) || null),
   'gen-pin': el => { el.closest('.row').querySelector('input').value = genPin(); },
   here: el => busy(el, async () => {
@@ -1681,7 +2099,7 @@ const Demo = (function () {
   function load() {
     if (!db) {
       db = store.get(KEY, null);
-      if (!db || db.v !== 2 || !db.units || !db.units.length) { db = seed(); save(); }
+      if (!db || db.v !== 3 || !db.units || !db.units.length) { db = seed(); save(); }
       else if (Date.now() - (db.at || 0) > 3600e3) { shift(Date.now() - (db.at || Date.now())); save(); }
     }
     return db;
@@ -1867,7 +2285,7 @@ const Demo = (function () {
     const NOTE = { ac: ['تم تنظيف الفلتر وإعادة شحن الغاز', 'Cleaned the drain line and tested cooling'], plumbing: ['تم تغيير الشطاف', 'Replaced the cartridge and tested'], water_leak: ['تم تغيير الوصلة وتجربة التشغيل', 'Sealed the joint and checked for leaks'], lights: ['تم تغيير اللمبة والمفتاح', 'Replaced the driver'], heater: ['تم تغيير الثرموستات'], sockets: ['تم تثبيت الفيش وتغييره'], drain_overflow: ['تم تسليك المجرى'], carpentry: ['Re-fixed the hinge and adjusted the door'], door_lock: ['تم تغيير الأسطوانة'], no_power: ['تم تغيير القاطع وشد التوصيلات'], pests: ['تم رش المبيد وإغلاق الفتحات'], no_water: ['تم فتح المحبس وتنظيف العوامة'], sparks: ['تم تغيير التوصيلة المحترقة'], lift: ['تمت إعادة تشغيل المصعد مع شركة المصاعد'], other: ['تم الإصلاح'] };
     const COMMENTS = ['شكراً، خدمة سريعة', 'Very polite technician', 'تأخر قليلاً لكن العمل ممتاز', 'Good job', 'الفني محترم ونظيف في العمل', 'وصل متأخراً'];
     const NAMES = ['أحمد', 'Fatma', 'خالد', 'Priya', 'سعيد', 'مريم', 'John', null, null];
-    const db0 = { v: 2, at: Date.now(), settings: st, units, staff, sessions: {}, requests: [], events: [], seq: { no: 1000, ev: 0 } };
+    const db0 = { v: 3, at: Date.now(), settings: st, units, staff, sessions: {}, requests: [], events: [], seq: { no: 1000, ev: 0 } };
     const iso = x => new Date(x).toISOString();
     const nowMs = Date.now(), midnight = d => { const n = d + OFFSET; return n - (n % 864e5) - OFFSET; };
     const pushEv = (rid, at, actor, e, note) => db0.events.push({ id: ++db0.seq.ev, request_id: rid, at: iso(at), actor: actor || null, ev: e, note: note || null });
@@ -1902,10 +2320,13 @@ const Demo = (function () {
       return r;
     };
     const name2 = id => (staff.find(x => x.id === id) || {}).full_name;
-    const hist = [];
+    const hist = [], used = new Set();
     for (let i = 0; i < 52; i++) {
       const day = 1 + Math.floor(R() * 34), created = midnight(nowMs - day * 864e5) + (7 * 60 + R() * 15 * 60) * 60000;
-      const common = R() < 0.15, u = common ? pick(commons) : pick(flats), issue = wpick(common ? commonW : flatW);
+      const common = R() < 0.15;
+      let u, issue, tries = 0;
+      do { u = common ? pick(commons) : pick(flats); issue = wpick(common ? commonW : flatW); tries++; } while (used.has(u.id + '|' + issue) && tries < 25);
+      used.add(u.id + '|' + issue);
       const r = mk(u, issue, created);
       play(r, wpick(techW), nowMs - 6 * 3600e3);
       hist.push(r);
