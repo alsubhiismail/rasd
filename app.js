@@ -147,6 +147,22 @@ ar: {
   err_not_found: 'غير موجود.', err_not_assigned: 'هذه المهمة لفني آخر.', err_network: 'تعذّر الاتصال. تحقق من الإنترنت ثم أعد المحاولة.',
   err_not_configured: 'النظام غير مربوط بقاعدة البيانات بعد.', err_image: 'تعذّر قراءة الصورة. جرّب صورة أخرى.',
   err_generic: 'حدث خطأ غير متوقع. أعد المحاولة.', of100: 'من 100',
+  pu_title: 'فعّل إشعارات الجوال', pu_body: 'ليصلك كل طلب جديد فوراً حتى والجوال مقفل.', pu_btn: 'تفعيل الإشعارات',
+  pu_done: 'تم التفعيل، ووصلك الآن إشعار تجربة.', pu_ios_title: 'الإشعارات على آيفون',
+  pu_ios_body: 'اضغط زر المشاركة في Safari ثم «إضافة إلى الشاشة الرئيسية»، وافتح رصد من الأيقونة الجديدة وسجّل الدخول، ثم فعّل الإشعارات من هناك.',
+  pu_unsupported: 'هذا المتصفح لا يعرض الإشعارات. استخدم Chrome على أندرويد، أو أضف رصد إلى الشاشة الرئيسية على آيفون.',
+  pu_denied: 'الإشعارات محظورة لرصد على هذا الجهاز. اسمح بها من إعدادات المتصفح ثم أعد فتح الصفحة.',
+  pu_admin_first: 'إشعارات الجوال غير مفعّلة للنظام بعد. فعّلها من الإعدادات.', pu_go_settings: 'فتح الإعدادات', pu_sys: 'إشعارات الجوال',
+  pu_sys_intro: 'تُرسل الإشعارات عبر خدمة صغيرة في Supabase اسمها rasd-notify. بعد إنشائها اضغط الزر مرة واحدة.', pu_sys_btn: 'تفعيل إشعارات النظام',
+  pu_sys_ok: 'تم إعداد الإشعارات للنظام.', pu_sender_ok: 'خدمة الإرسال تعمل.',
+  pu_sender_bad: 'خدمة الإرسال لا تستجيب. تأكد من إنشاء rasd-notify في Edge Functions وإيقاف Verify JWT.',
+  pu_phones: 'الأجهزة المفعّلة: {n}، لعدد {p} من الفريق.', pu_reminders_ok: 'تذكير مسؤول الصيانة بالطلبات غير المستلمة يعمل كل 5 دقائق.',
+  pu_reminders_off: 'تذكير الطلبات غير المستلمة غير متاح (pg_cron غير مفعّل).', pu_test: 'إرسال إشعار تجربة لي',
+  pu_test_ok: 'أُرسل إشعار التجربة إلى {n} جهاز.', pu_test_none: 'لم تفعّل الإشعارات على أي جهاز بعد.', pu_on: 'الإشعارات مفعّلة', pu_off: 'لم يفعّل الإشعارات',
+  pu_here: 'تفعيل على هذا الجهاز', ev_escalated: 'تنبيه لمسؤول الصيانة: لم يُستلم في الوقت المحدد',
+  err_push_denied: 'لم يُسمح بالإشعارات على هذا الجهاز.', err_push_not_ready: 'إشعارات النظام غير مفعّلة بعد.',
+  err_push_failed: 'تعذّر تفعيل الإشعارات على هذا الجهاز. أعد المحاولة.', err_bad_subscription: 'تعذّر تفعيل الإشعارات على هذا الجهاز. أعد المحاولة.',
+  err_bad_keys: 'تعذّر إعداد الإشعارات. أعد المحاولة.',
   x_export_title: 'تصدير تقرير {m}', x_excel_d: 'كل الطلبات بتوقيتاتها، مع الملخص', x_pdf_d: 'تقرير جاهز للطباعة والإرسال', x_pptx_d: 'عرض جاهز للإدارة',
   x_summary: 'الملخص', x_requests: 'الطلبات', x_generated: 'أُعدّ في {d}', x_pdf_hint: 'في نافذة الطباعة اختر «حفظ بصيغة PDF».',
   x_minutes: 'بالدقائق', x_minutes_note: 'الأوقات في الجداول بالدقائق: الفعلي / المستهدف.', x_avg_arr_min: 'متوسط الوصول (دقيقة)', x_avg_work_min: 'متوسط الإصلاح (دقيقة)',
@@ -277,6 +293,22 @@ en: {
   err_not_found: 'Not found.', err_not_assigned: 'This job belongs to another technician.', err_network: 'Could not connect. Check the internet and try again.',
   err_not_configured: 'The system is not connected to its database yet.', err_image: 'Could not read the photo. Try another one.',
   err_generic: 'Something went wrong. Please try again.', of100: 'out of 100',
+  pu_title: 'Turn on phone notifications', pu_body: 'Get every new request right away, even when the phone is locked.', pu_btn: 'Turn on notifications',
+  pu_done: 'Done. A test notification is on its way.', pu_ios_title: 'Notifications on iPhone',
+  pu_ios_body: 'In Safari tap Share, then “Add to Home Screen”. Open Rasd from the new icon, sign in, and turn on notifications there.',
+  pu_unsupported: 'This browser cannot show notifications. Use Chrome on Android, or add Rasd to the Home Screen on iPhone.',
+  pu_denied: 'Notifications are blocked for Rasd on this device. Allow them in the browser settings, then reopen the page.',
+  pu_admin_first: 'Phone notifications are not set up yet. Set them up in Settings.', pu_go_settings: 'Open Settings', pu_sys: 'Phone notifications',
+  pu_sys_intro: 'Notifications are sent by a small Supabase service called rasd-notify. Once it exists, press the button once.', pu_sys_btn: 'Set up notifications',
+  pu_sys_ok: 'Notifications are set up.', pu_sender_ok: 'The sender is working.',
+  pu_sender_bad: 'The sender does not respond. Check that rasd-notify exists in Edge Functions and that Verify JWT is off.',
+  pu_phones: 'Phones with notifications: {n}, for {p} team members.', pu_reminders_ok: 'Supervisor reminders for unclaimed requests run every 5 minutes.',
+  pu_reminders_off: 'Reminders are off (pg_cron is not enabled).', pu_test: 'Send me a test',
+  pu_test_ok: 'Test sent to {n} device(s).', pu_test_none: 'You have not turned on notifications on any device yet.', pu_on: 'Notifications on', pu_off: 'Notifications off',
+  pu_here: 'Turn on for this device', ev_escalated: 'Supervisor alerted: not picked up in time',
+  err_push_denied: 'Notifications were not allowed on this device.', err_push_not_ready: 'Notifications are not set up yet.',
+  err_push_failed: 'Could not turn on notifications on this device. Try again.', err_bad_subscription: 'Could not turn on notifications on this device. Try again.',
+  err_bad_keys: 'Could not set up notifications. Try again.',
   x_export_title: 'Export the {m} report', x_excel_d: 'Every request with its timings, plus the summary', x_pdf_d: 'A report ready to print or send', x_pptx_d: 'A deck ready for management',
   x_summary: 'Summary', x_requests: 'Requests', x_generated: 'Generated {d}', x_pdf_hint: 'In the print window, choose “Save as PDF”.',
   x_minutes: 'in minutes', x_minutes_note: 'Times in the tables are in minutes: actual / target.', x_avg_arr_min: 'Avg arrival (min)', x_avg_work_min: 'Avg repair (min)',
@@ -388,6 +420,7 @@ const ICON = {
   building: I('<rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/>'),
   wrench: I('<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9l-3.8 3.8z"/>'),
   shield: I('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>'),
+  bell: I('<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>'),
   chartbig: I('<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>')
 };
 
@@ -445,8 +478,8 @@ function setSession(res) {
   S.list = null; S.seenNew = null;
 }
 function signOut(expired) {
-  const had = !!S.session;
-  if (S.session && !expired) rpc('staff_logout', { p_token: S.session.token }).catch(() => {});
+  const had = !!S.session, tok = S.session && S.session.token;
+  if (tok && !expired) (async () => { if (LIVE) await dropPush(tok); await rpc('staff_logout', { p_token: tok }).catch(() => {}); })();
   S.session = null; S.list = null; S.seenNew = null; store.del(P + 'session');
   if (expired && had) toast(t('session_expired'), 'err');
   go(DEMO ? '/demo' : '/login');
@@ -865,6 +898,107 @@ function qrSvg(text) {
   return q.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
 }
 
+/* ------------------------------------------------------------ phone notifications */
+const PUSH = {
+  supported: () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window && !!window.isSecureContext,
+  ios: /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1),
+  standalone: () => { try { return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; } catch (e) { return false; } }
+};
+const b64uEnc = buf => { const b = new Uint8Array(buf); let x = ''; for (let i = 0; i < b.length; i++) x += String.fromCharCode(b[i]); return btoa(x).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+const b64uDec = str => { const t2 = String(str).replace(/-/g, '+').replace(/_/g, '/'); const x = atob(t2 + '==='.slice((t2.length + 3) % 4)); const b = new Uint8Array(x.length); for (let i = 0; i < x.length; i++) b[i] = x.charCodeAt(i); return b; };
+async function swReg() {
+  const reg = await navigator.serviceWorker.register('sw.js');
+  await navigator.serviceWorker.ready;
+  return reg;
+}
+async function pushHere(key) {
+  if (!PUSH.supported()) return false;
+  const reg = await navigator.serviceWorker.getRegistration();
+  const sub = reg && (await reg.pushManager.getSubscription());
+  if (!sub) return false;
+  const k = sub.options && sub.options.applicationServerKey;
+  if (key && k && b64uEnc(k) !== key) return false;
+  const mark = store.get(P + 'push', null);
+  return !!(mark && S.session && mark.staff === S.session.me.id && mark.endpoint === sub.endpoint);
+}
+async function enablePush() {
+  if (!PUSH.supported()) throw new Error('push_failed');
+  const key = await rpc('push_public_key');
+  if (!key) throw new Error('push_not_ready');
+  const perm = await Notification.requestPermission();
+  if (perm !== 'granted') throw new Error('push_denied');
+  const reg = await swReg();
+  let sub = await reg.pushManager.getSubscription();
+  const k = sub && sub.options && sub.options.applicationServerKey;
+  if (sub && k && b64uEnc(k) !== key) { await sub.unsubscribe().catch(() => {}); sub = null; }
+  if (!sub) {
+    try { sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64uDec(key) }); }
+    catch (e) { throw new Error('push_failed'); }
+  }
+  await srpc('push_subscribe', { p_sub: sub.toJSON(), p_lang: LANG });
+  store.set(P + 'push', { staff: S.session.me.id, endpoint: sub.endpoint });
+  return srpc('push_test');
+}
+async function dropPush(tok) {
+  try {
+    if (!PUSH.supported()) return;
+    const reg = await navigator.serviceWorker.getRegistration();
+    const sub = reg && (await reg.pushManager.getSubscription());
+    if (!sub) return;
+    if (tok) await rpc('push_unsubscribe', { p_token: tok, p_endpoint: sub.endpoint }).catch(() => {});
+    await sub.unsubscribe().catch(() => {});
+  } catch (e) { /* nothing to undo */ }
+  store.del(P + 'push');
+}
+function pushCard(icon, title, body, btn) {
+  return `<section class="push-card"><div class="pc-ic">${icon}</div><div class="pc-t"><b>${title}</b><p>${body}</p></div>${btn || ''}</section>`;
+}
+async function fillPushSlot() {
+  const el = $('#push-slot');
+  if (!el || DEMO || !LIVE || !S.session) return;
+  let html = '';
+  try {
+    const key = await rpc('push_public_key');
+    if (!key) html = isAdmin() ? pushCard(ICON.bell, t('pu_sys'), t('pu_admin_first'), `<a class="btn" href="#/settings">${t('pu_go_settings')}</a>`) : '';
+    else if (!PUSH.supported()) html = PUSH.ios && !PUSH.standalone() ? pushCard(ICON.bell, t('pu_ios_title'), t('pu_ios_body')) : pushCard(ICON.alert, t('pu_title'), t('pu_unsupported'));
+    else if (Notification.permission === 'denied') html = pushCard(ICON.alert, t('pu_title'), t('pu_denied'));
+    else if (!(await pushHere(key))) html = pushCard(ICON.bell, t('pu_title'), t('pu_body'), `<button class="btn primary" type="button" data-act="push-on">${t('pu_btn')}</button>`);
+  } catch (e) { html = ''; }
+  if (el.isConnected) el.innerHTML = html;
+}
+async function checkSender(url) {
+  try {
+    const r = await fetch(url, { method: 'GET' });
+    if (!r.ok) return false;
+    const j = await r.json().catch(() => ({}));
+    return j.service === 'rasd-notify';
+  } catch (e) { return false; }
+}
+async function fillPushAdmin() {
+  const el = $('#push-admin');
+  if (!el) return;
+  let html;
+  try {
+    const st = await srpc('admin_push_status');
+    if (!st.configured) {
+      html = `<p class="muted small">${t('pu_sys_intro')}</p><div class="row"><button class="btn primary" type="button" data-act="push-setup">${ICON.bell}${t('pu_sys_btn')}</button></div>`;
+    } else {
+      const ok = await checkSender(st.fn_url);
+      const here = await pushHere(await rpc('push_public_key')).catch(() => false);
+      html = `<ul class="pu-list">
+        <li class="${ok ? 'good' : 'bad'}">${ok ? ICON.check : ICON.alert}<span>${ok ? t('pu_sender_ok') : t('pu_sender_bad')}</span></li>
+        <li>${ICON.bell}<span>${t('pu_phones', { n: st.phones, p: st.people })}</span></li>
+        <li class="${st.reminders ? '' : 'muted'}">${ICON.clock}<span>${st.reminders ? t('pu_reminders_ok') : t('pu_reminders_off')}</span></li></ul>
+        <div class="row">${here ? '' : `<button class="btn primary" type="button" data-act="push-on">${t('pu_here')}</button>`}<button class="btn" type="button" data-act="push-test">${t('pu_test')}</button></div>`;
+    }
+  } catch (e) { html = `<p class="err">${esc(errMsg(e))}</p>`; }
+  if (el.isConnected) el.innerHTML = html;
+}
+async function makeVapid() {
+  const kp = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
+  return { publicKey: b64uEnc(await crypto.subtle.exportKey('raw', kp.publicKey)), privateKey: (await crypto.subtle.exportKey('jwk', kp.privateKey)).d };
+}
+
 /* ============================================================ views: public */
 function langChooser() {
   page(`<div class="wrap narrow"><div class="langpick">${MARK}<h1>رصد · Rasd</h1><p class="muted">اختر اللغة · Choose your language</p><div class="lp-btns"><button class="btn primary big" type="button" data-act="pick-lang" data-l="ar" lang="ar">العربية</button><button class="btn big" type="button" data-act="pick-lang" data-l="en" lang="en">English</button></div></div></div>`, { bare: true });
@@ -1004,7 +1138,8 @@ async function vJobs(alive) {
   await settings();
   const list = await loadList();
   if (!alive()) return;
-  page(`<div class="wrap wide" id="jobs">${jobsBody(list)}</div>`, { staff: true, nav: 'jobs' });
+  page(`<div class="wrap wide"><div id="push-slot"></div><div class="stack" id="jobs">${jobsBody(list)}</div></div>`, { staff: true, nav: 'jobs' });
+  fillPushSlot();
   listPoll(() => { const el = $('#jobs'); if (el) { el.innerHTML = jobsBody(S.list); tick(); } });
 }
 function jobsBody(list) {
@@ -1194,10 +1329,12 @@ async function vBoard(alive) {
   const list = await loadList();
   if (!alive()) return;
   page(`<div class="wrap wide">
+    <div id="push-slot"></div>
     <div id="kpis">${boardKpis(list)}</div>
     <div class="toolbar"><div class="seg" id="btabs">${boardTabs()}</div><input class="search" id="b-q" type="search" placeholder="${esc(t('b_search'))}" aria-label="${esc(t('b_search'))}" value="${esc(S.q)}" data-input="q"></div>
     <div id="blist">${boardList(list)}</div>
   </div>`, { staff: true, nav: 'board' });
+  fillPushSlot();
   listPoll(() => { const k = $('#kpis'), b = $('#blist'); if (k) k.innerHTML = boardKpis(S.list); if (b) b.innerHTML = boardList(S.list); tick(); });
 }
 const boardTabs = () => ['open', 'closed', 'all'].map(k => `<button type="button" data-act="btab" data-v="${k}" class="${S.boardTab === k ? 'on' : ''}">${t('b_' + k)}</button>`).join('');
@@ -1347,7 +1484,7 @@ async function vTeam(alive) {
   page(`<div class="wrap">
     <div class="sec-h"><h1>${t('tm_title')}</h1>${admin ? `<button class="btn primary" type="button" data-act="staff-edit" data-id="">${ICON.plus}${t('tm_add')}</button>` : ''}</div>
     ${admin ? '' : `<p class="muted">${t('tm_readonly')}</p>`}
-    <section class="card list">${team.map(s => `<div class="member ${s.active ? '' : 'off'}"><div class="av">${initials(s.name)}</div><div class="mi"><b>${esc(s.name)}</b><small>${t('role_' + s.role)} · <span dir="ltr" class="num">${esc(fPhone(s.phone))}</span>${s.active ? '' : ' · ' + t('tm_inactive')}${s.locked ? ' · ' + t('tm_locked') : ''}</small></div>${admin ? `<button class="btn sm ghost" type="button" data-act="staff-edit" data-id="${esc(s.id)}">${t('tm_edit')}</button>` : ''}</div>`).join('')}</section>
+    <section class="card list">${team.map(s => `<div class="member ${s.active ? '' : 'off'}"><div class="av">${initials(s.name)}</div><div class="mi"><b>${esc(s.name)}</b><small>${t('role_' + s.role)} · <span dir="ltr" class="num">${esc(fPhone(s.phone))}</span>${s.active ? '' : ' · ' + t('tm_inactive')}${s.locked ? ' · ' + t('tm_locked') : ''}</small></div>${LIVE ? `<span class="bell ${s.push ? 'on' : ''}" title="${s.push ? t('pu_on') : t('pu_off')}">${ICON.bell}<span class="vh">${s.push ? t('pu_on') : t('pu_off')}</span></span>` : ''}${admin ? `<button class="btn sm ghost" type="button" data-act="staff-edit" data-id="${esc(s.id)}">${t('tm_edit')}</button>` : ''}</div>`).join('')}</section>
     <section class="card"><h3>${t('tm_share')}</h3><p class="mono" dir="ltr">${esc(APP_URL)}</p><div class="row"><button class="btn sm" type="button" data-act="copy" data-v="${esc(APP_URL)}">${ICON.copy}${t('q_copy')}</button></div></section>
   </div>`, { staff: true, nav: 'team' });
 }
@@ -1389,10 +1526,12 @@ async function vSettings(alive) {
         <div class="field"><span class="lbl">${t('se_b_loc')}</span><div class="row"><input name="b_${b.code}_lat" id="b-${b.code}-lat" aria-label="${t('se_lat')}" placeholder="${t('se_lat')}" dir="ltr" value="${val(bs.lat)}"><input name="b_${b.code}_lng" id="b-${b.code}-lng" aria-label="${t('se_lng')}" placeholder="${t('se_lng')}" dir="ltr" value="${val(bs.lng)}">${EMB ? '' : `<button type="button" class="btn sm" data-act="here" data-code="${esc(b.code)}">${ICON.pin}${t('se_b_here')}</button>`}</div></div></div>`; }).join('')}
     </section>
     <section class="card"><div class="sec-h"><h3>${t('se_issues')}</h3><button type="button" class="btn sm" data-act="issue-add">${ICON.plus}${t('se_add_issue')}</button></div><div id="issues">${(st.issueTypes || []).map(issueRow).join('')}</div></section>
+    ${LIVE ? `<section class="card"><h3>${ICON.bell}${t('pu_sys')}</h3><div id="push-admin"><div class="spin"></div></div></section>` : ''}
     <section class="card"><div class="field"><label for="se-rep">${t('se_repeat')}</label><input id="se-rep" type="number" name="repeat" min="1" max="365" value="${val(st.repeatDays || 30)}"></div></section>
     <p class="err" data-err="form"></p>
     <button class="btn primary big" type="submit">${t('save')}</button>
   </form>`, { staff: true, nav: 'settings' });
+  fillPushAdmin();
 }
 let ISSUE_SEQ = 0;
 function issueRow(i) {
@@ -1882,6 +2021,18 @@ const ACT = {
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = f.name; document.body.appendChild(a); a.click();
     setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
   },
+  'push-on': el => busy(el, async () => {
+    const n = await enablePush();
+    toast(n ? t('pu_done') : t('pu_test_none'));
+    fillPushSlot(); fillPushAdmin();
+  }),
+  'push-test': el => busy(el, async () => { const n = await srpc('push_test'); toast(n ? t('pu_test_ok', { n }) : t('pu_test_none'), n ? '' : 'err'); }),
+  'push-setup': el => busy(el, async () => {
+    const k = await makeVapid();
+    await srpc('admin_set_push', { p_public: k.publicKey, p_private: k.privateKey, p_subject: APP_URL, p_fn_url: String(CFG.supabaseUrl).replace(/\/+$/, '') + '/functions/v1/rasd-notify' });
+    toast(t('pu_sys_ok'));
+    await fillPushAdmin();
+  }),
   'x-excel': el => runExport(el, exportExcel),
   'x-pdf': el => runExport(el, async () => exportPdf()),
   'x-pptx': el => runExport(el, exportPptx),
@@ -2059,6 +2210,7 @@ function onClick(e) {
   unlockAudio();
   const a = e.target.closest('a[href^="#/"]');
   if (EMB && a) { e.preventDefault(); S.route = a.getAttribute('href'); render(); return; }
+  if (a && a.getAttribute('href') === location.hash) { e.preventDefault(); S.list = null; render(); return; }
   const el = e.target.closest('[data-act]');
   if (!el) return;
   const f = ACT[el.dataset.act];
@@ -2402,6 +2554,10 @@ function boot() {
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('.modal')) closeModal(); });
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') runPoll(); });
   window.addEventListener('resize', () => Object.values(PADS).forEach(p => p.c.isConnected && p.fit()));
+  if (LIVE && !EMB && PUSH.supported()) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+    navigator.serviceWorker.addEventListener('message', e => { if (e.data && e.data.rasd === 'go' && e.data.url) location.href = e.data.url; });
+  }
   setInterval(tick, 1000);
   render();
   if (LIVE && S.session) rpc('staff_me', { p_token: S.session.token }).then(me => { if (me && S.session) { S.session.me = me; store.set(P + 'session', S.session); } }).catch(e => { if (e.message === 'auth_required') signOut(true); });

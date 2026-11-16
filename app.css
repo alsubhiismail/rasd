@@ -101,6 +101,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 16px; }
 .wrap.narrow { max-width: 560px; }
 .wrap.wide { max-width: 1160px; }
+.stack { display: grid; gap: 16px; min-width: 0; }
+#push-slot:empty { display: none; }
 
 .nav {
   position: fixed; inset-inline: 0; bottom: 0; z-index: 30; background: var(--paper);
@@ -442,6 +444,22 @@ details.more > .form { margin-top: 12px; }
 .hero { display: grid; justify-items: center; gap: 12px; text-align: center; padding: 48px 0; }
 .hero .mark { width: 72px; height: 72px; }
 .hero .lead { font-size: 1.1rem; color: var(--ink-2); }
+
+/* ---------- notifications ---------- */
+.push-card { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; background: var(--gold-soft); border: 1px solid color-mix(in srgb, var(--gold) 35%, var(--line)); border-radius: var(--r); padding: 14px 16px; }
+.push-card .pc-ic { width: 42px; height: 42px; border-radius: 50%; background: var(--gold); color: var(--on-gold); display: grid; place-items: center; flex: none; }
+.push-card .pc-ic .ic { width: 22px; height: 22px; }
+.push-card .pc-t { flex: 1 1 220px; min-width: 0; }
+.push-card .pc-t b { display: block; font-family: var(--font-display); font-weight: 600; }
+.push-card .pc-t p { color: var(--ink-2); font-size: .92rem; }
+.pu-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.pu-list li { display: flex; gap: 8px; align-items: flex-start; font-size: .92rem; }
+.pu-list li .ic { margin-top: 3px; color: var(--gold-deep); }
+.pu-list li.good .ic { color: var(--ok); }
+.pu-list li.bad { color: var(--bad); }
+.pu-list li.bad .ic { color: var(--bad); }
+.bell { color: var(--line); display: inline-grid; place-items: center; width: 30px; height: 30px; flex: none; }
+.bell.on { color: var(--gold); }
 
 /* ---------- export ---------- */
 .x-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }

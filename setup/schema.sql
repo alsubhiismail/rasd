@@ -107,6 +107,24 @@ create table if not exists public.events (
 );
 create index if not exists events_request_idx on public.events (request_id, at);
 
+-- Phone notifications: the server keys (made once by the admin in Settings) and each phone that switched them on.
+create table if not exists public.push_config (
+  id int primary key default 1 check (id = 1),
+  public_key text not null,
+  private_key text not null,
+  subject text not null,
+  fn_url text not null,
+  updated_at timestamptz not null default now()
+);
+create table if not exists public.push_subs (
+  endpoint text primary key,
+  staff_id uuid not null references public.staff(id) on delete cascade,
+  sub jsonb not null,
+  lang text not null default 'ar',
+  created_at timestamptz not null default now()
+);
+alter table public.requests add column if not exists escalated_at timestamptz;
+
 -- No one reads or writes the tables directly: every change goes through the
 -- functions below, which check the sign-in and stamp the server's own clock.
 alter table public.settings enable row level security;
@@ -115,8 +133,10 @@ alter table public.staff    enable row level security;
 alter table public.sessions enable row level security;
 alter table public.requests enable row level security;
 alter table public.events   enable row level security;
-revoke all on public.settings, public.units, public.staff, public.sessions, public.requests, public.events
-  from anon, authenticated;
+alter table public.push_config enable row level security;
+alter table public.push_subs enable row level security;
+revoke all on public.settings, public.units, public.staff, public.sessions, public.requests, public.events,
+  public.push_config, public.push_subs from anon, authenticated;
 
 -- --------------------------------------------------------------- helpers
 create or replace function public._norm_phone(p text) returns text
@@ -424,6 +444,7 @@ begin
     update public.requests set technician_id = p_staff where id = p_id;
     perform public._event(p_id, me.id, 'reassigned', v_name);
   end if;
+  perform public._push(array[p_staff], 'assigned', p_id);
 end $$;
 
 create or replace function public.mgr_priority(p_token text, p_id uuid, p_priority text) returns void
@@ -466,7 +487,8 @@ language plpgsql security definer set search_path = public, pg_temp as $$
 declare me public.staff := public._auth(p_token, array['supervisor','admin']);
 begin
   return coalesce((select json_agg(json_build_object('id', s.id, 'name', s.full_name, 'phone', s.phone, 'role', s.role,
-                     'active', s.active, 'locked', coalesce(s.locked_until > now(), false), 'created_at', s.created_at)
+                     'active', s.active, 'locked', coalesce(s.locked_until > now(), false), 'created_at', s.created_at,
+                     'push', exists (select 1 from public.push_subs ps where ps.staff_id = s.id))
                      order by s.active desc, s.role, s.full_name)
                    from public.staff s), '[]'::json);
 end $$;
@@ -554,9 +576,179 @@ begin
   on conflict (id) do update set data = excluded.data, updated_at = now();
 end $$;
 
+-- --------------------------------------------------- phone notifications
+-- Sending goes through the rasd-notify Edge Function, called by pg_net after the change is saved.
+-- If notifications are not set up yet, or anything fails, requests are still saved normally.
+do $$ begin
+  create extension if not exists pg_net;
+exception when others then raise notice 'pg_net is not available: %', sqlerrm;
+end $$;
+
+create or replace function public._push_text(p_kind text, r public.requests, p_lang text, st jsonb) returns jsonb
+language sql stable set search_path = public, pg_temp as $$
+  select jsonb_build_object(
+    'title', case p_kind
+      when 'new' then case when p_lang = 'en' then 'New request' || case when r.priority = 'urgent' then ' · Urgent' else '' end
+                           else 'طلب جديد' || case when r.priority = 'urgent' then ' · عاجل' else '' end end
+      when 'assigned' then case when p_lang = 'en' then 'Job assigned to you' else 'أُسند إليك طلب' end
+      when 'late' then case when p_lang = 'en' then 'Not picked up yet' else 'لم يُستلم بعد' end
+      else case when p_lang = 'en' then 'Rasd notifications are on' else 'إشعارات رصد تعمل' end end,
+    'body', case when p_kind = 'test' or r.id is null
+      then case when p_lang = 'en' then 'New requests will reach you here.' else 'ستصلك الطلبات الجديدة هنا.' end
+      else '#' || r.no || ' · ' || case when p_lang = 'en' then r.unit_en || ' · ' || r.building_en else r.unit_ar || ' · ' || r.building_ar end
+           || ' · ' || coalesce((select e->>(case when p_lang = 'en' then 'en' else 'ar' end) from jsonb_array_elements(st->'issueTypes') e
+                                 where e->>'k' = r.issue_type limit 1), r.issue_type)
+           || case when p_kind = 'late'
+                then case when p_lang = 'en' then ' · waiting ' || floor(extract(epoch from now() - r.created_at) / 60)::int || ' min'
+                          else ' · منذ ' || floor(extract(epoch from now() - r.created_at) / 60)::int || ' دقيقة' end
+                else '' end end,
+    'url', case when p_kind = 'test' or r.id is null then './' else '#/r/' || r.id end,
+    'tag', coalesce(r.id::text, 'rasd-test'),
+    'lang', case when p_lang = 'en' then 'en' else 'ar' end,
+    'dir', case when p_lang = 'en' then 'ltr' else 'rtl' end)
+$$;
+
+create or replace function public._push(p_staff uuid[], p_kind text, p_req uuid) returns int
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare cfg public.push_config; r public.requests; st jsonb; msgs jsonb;
+begin
+  select * into cfg from public.push_config where id = 1;
+  if not found then return 0; end if;
+  if p_req is not null then select * into r from public.requests where id = p_req; end if;
+  select data into st from public.settings where id = 1;
+  select coalesce(jsonb_agg(jsonb_build_object('subscription', ps.sub, 'payload', public._push_text(p_kind, r, ps.lang, st))), '[]'::jsonb)
+    into msgs
+    from public.push_subs ps join public.staff s on s.id = ps.staff_id
+   where s.active and s.id = any (p_staff);
+  if jsonb_array_length(msgs) = 0 then return 0; end if;
+  perform net.http_post(url := cfg.fn_url,
+    body := jsonb_build_object('vapid', jsonb_build_object('publicKey', cfg.public_key, 'privateKey', cfg.private_key, 'subject', cfg.subject),
+                               'messages', msgs),
+    headers := '{"Content-Type": "application/json"}'::jsonb,
+    timeout_milliseconds := 8000);
+  return jsonb_array_length(msgs);
+exception when others then
+  raise warning 'rasd notification skipped: %', sqlerrm;
+  return 0;
+end $$;
+
+-- every new request goes to the whole team at once
+create or replace function public._on_request_new() returns trigger
+language plpgsql security definer set search_path = public, pg_temp as $$
+begin
+  perform public._push(array(select id from public.staff where active), 'new', new.id);
+  return new;
+end $$;
+drop trigger if exists rasd_request_new on public.requests;
+create trigger rasd_request_new after insert on public.requests for each row execute function public._on_request_new();
+
+-- a request nobody accepted within its pickup target alerts the supervisor and the admin once
+create or replace function public._escalate() returns int
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare q record; n int := 0; st jsonb;
+begin
+  select data into st from public.settings where id = 1;
+  for q in
+    select r.id from public.requests r
+     where r.status = 'new' and r.escalated_at is null
+       and r.created_at < now() - make_interval(mins => coalesce(nullif(st #>> array['targets', r.priority, 'pickup'], '')::int,
+                                                                  case when r.priority = 'urgent' then 15 else 60 end))
+  loop
+    update public.requests set escalated_at = now() where id = q.id;
+    perform public._event(q.id, null, 'escalated');
+    perform public._push(array(select id from public.staff where active and role in ('supervisor','admin')), 'late', q.id);
+    n := n + 1;
+  end loop;
+  return n;
+end $$;
+
+do $$ begin
+  create extension if not exists pg_cron;
+exception when others then raise notice 'pg_cron is not available: %', sqlerrm;
+end $$;
+do $$ begin
+  if exists (select 1 from pg_namespace where nspname = 'cron') then
+    perform cron.schedule('rasd-escalate', '*/5 * * * *', 'select public._escalate()');
+  end if;
+exception when others then raise notice 'reminder schedule skipped: %', sqlerrm;
+end $$;
+
+create or replace function public.push_public_key() returns text
+language sql stable security definer set search_path = public, pg_temp as $$
+  select public_key from public.push_config where id = 1
+$$;
+
+create or replace function public.push_subscribe(p_token text, p_sub jsonb, p_lang text default 'ar') returns void
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare me public.staff := public._auth(p_token);
+begin
+  if coalesce(p_sub->>'endpoint', '') !~ '^https://' or coalesce(p_sub #>> '{keys,p256dh}', '') = '' or coalesce(p_sub #>> '{keys,auth}', '') = '' then
+    raise exception 'bad_subscription';
+  end if;
+  insert into public.push_subs (endpoint, staff_id, sub, lang)
+  values (p_sub->>'endpoint', me.id, jsonb_build_object('endpoint', p_sub->>'endpoint', 'keys', p_sub->'keys'),
+          case when p_lang = 'en' then 'en' else 'ar' end)
+  on conflict (endpoint) do update set staff_id = excluded.staff_id, sub = excluded.sub, lang = excluded.lang, created_at = now();
+end $$;
+
+create or replace function public.push_unsubscribe(p_token text, p_endpoint text) returns void
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare me public.staff := public._auth(p_token);
+begin
+  delete from public.push_subs where endpoint = p_endpoint and staff_id = me.id;
+end $$;
+
+create or replace function public.push_test(p_token text) returns int
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare me public.staff := public._auth(p_token);
+begin
+  return public._push(array[me.id], 'test', null);
+end $$;
+
+create or replace function public.push_gone(p_endpoints text[]) returns void
+language sql security definer set search_path = public, pg_temp as $$
+  delete from public.push_subs where endpoint = any (p_endpoints)
+$$;
+
+create or replace function public.admin_set_push(p_token text, p_public text, p_private text, p_subject text, p_fn_url text) returns void
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare me public.staff := public._auth(p_token, array['admin']); v_old text;
+begin
+  if coalesce(p_public, '') !~ '^[A-Za-z0-9_-]{80,100}$' or coalesce(p_private, '') !~ '^[A-Za-z0-9_-]{40,50}$' then raise exception 'bad_keys'; end if;
+  if coalesce(p_fn_url, '') !~ '^https://' or coalesce(p_subject, '') !~ '^(https://|mailto:)' then raise exception 'bad_keys'; end if;
+  select public_key into v_old from public.push_config where id = 1;
+  insert into public.push_config (id, public_key, private_key, subject, fn_url, updated_at)
+  values (1, p_public, p_private, p_subject, p_fn_url, now())
+  on conflict (id) do update set public_key = excluded.public_key, private_key = excluded.private_key,
+                                 subject = excluded.subject, fn_url = excluded.fn_url, updated_at = now();
+  if v_old is distinct from p_public then delete from public.push_subs; end if;
+end $$;
+
+create or replace function public.admin_push_status(p_token text) returns json
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare me public.staff := public._auth(p_token, array['supervisor','admin']);
+begin
+  return json_build_object(
+    'configured', exists (select 1 from public.push_config where id = 1),
+    'fn_url', (select fn_url from public.push_config where id = 1),
+    'phones', (select count(*) from public.push_subs),
+    'people', (select count(distinct staff_id) from public.push_subs),
+    'sender', exists (select 1 from pg_extension where extname = 'pg_net'),
+    'reminders', exists (select 1 from pg_extension where extname = 'pg_cron'));
+end $$;
+
 -- ------------------------------------------------------ who may call what
 revoke all on function public._norm_phone(text), public._auth(text, text[]), public._new_session(uuid),
-  public._targets(text, text), public._event(uuid, uuid, text, text) from public, anon, authenticated;
+  public._targets(text, text), public._event(uuid, uuid, text, text), public._push(uuid[], text, uuid),
+  public._push_text(text, public.requests, text, jsonb), public._on_request_new(), public._escalate()
+  from public, anon, authenticated;
+
+revoke all on function public.push_public_key(), public.push_subscribe(text, jsonb, text), public.push_unsubscribe(text, text),
+  public.push_test(text), public.push_gone(text[]), public.admin_set_push(text, text, text, text, text), public.admin_push_status(text)
+  from public;
+grant execute on function public.push_public_key(), public.push_subscribe(text, jsonb, text), public.push_unsubscribe(text, text),
+  public.push_test(text), public.push_gone(text[]), public.admin_set_push(text, text, text, text, text), public.admin_push_status(text)
+  to anon, authenticated;
 
 revoke all on function
   public.get_settings(), public.unit_info(text), public.submit_request(text,text,text,text,text,text,text),
