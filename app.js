@@ -4,8 +4,8 @@
 'use strict';
 
 const CFG = Object.assign({ supabaseUrl: '', supabaseKey: '', orgAr: '', orgEn: '', appUrl: '', demo: false, embedded: false }, window.RASD_CONFIG || {});
-const DEFAULTS = {"contractor":{"ar":"الطاؤوس","en":"Tawoos"},"targets":{"urgent":{"pickup":15,"arrive":60,"work":120},"normal":{"pickup":60,"arrive":240,"work":240}},"buildings":{"AZB":{"arrive":{"urgent":null,"normal":null},"lat":null,"lng":null}},"repeatDays":30,"issueTypes":[{"k":"water_leak","p":"urgent","ar":"تسرّب مياه أو فيضان","en":"Water leak or flooding"},{"k":"no_power","p":"urgent","ar":"انقطاع الكهرباء","en":"Power outage"},{"k":"sparks","p":"urgent","ar":"شرارة أو رائحة احتراق","en":"Sparks or burning smell"},{"k":"no_water","p":"urgent","ar":"انقطاع المياه","en":"No water supply"},{"k":"drain_overflow","p":"urgent","ar":"انسداد أو طفح المجاري","en":"Blocked or overflowing drain"},{"k":"door_lock","p":"urgent","ar":"باب لا يُقفل","en":"Door will not lock"},{"k":"lift","p":"urgent","ar":"المصعد متوقف أو عالق","en":"Lift stopped or stuck"},{"k":"ac","p":"normal","ar":"المكيف لا يعمل أو لا يبرّد","en":"AC not working or not cooling"},{"k":"lights","p":"normal","ar":"إنارة لا تعمل","en":"Lights not working"},{"k":"sockets","p":"normal","ar":"أفياش أو مفاتيح كهرباء","en":"Sockets or switches"},{"k":"heater","p":"normal","ar":"سخان الماء","en":"Water heater"},{"k":"plumbing","p":"normal","ar":"حنفية أو سيفون أو شطاف","en":"Tap, toilet flush or hand spray"},{"k":"carpentry","p":"normal","ar":"أبواب أو نوافذ أو خزائن","en":"Doors, windows or cupboards"},{"k":"pests","p":"normal","ar":"حشرات","en":"Pests"},{"k":"other","p":"normal","ar":"أخرى","en":"Other"}]};
-const DEMO_UNITS = {"building":{"code":"AZB","ar":"مبنى العذيبة","en":"Azaiba Building"},"units":[{"kind":"flat","label_ar":"شقة 11","label_en":"Flat 11","token":"azb11-v6jt9x","sort":11},{"kind":"flat","label_ar":"شقة 12","label_en":"Flat 12","token":"azb12-vhbyze","sort":12},{"kind":"flat","label_ar":"شقة 13","label_en":"Flat 13","token":"azb13-bky9gm","sort":13},{"kind":"flat","label_ar":"شقة 14","label_en":"Flat 14","token":"azb14-msr63u","sort":14},{"kind":"flat","label_ar":"شقة 21","label_en":"Flat 21","token":"azb21-n7qnnu","sort":21},{"kind":"flat","label_ar":"شقة 22","label_en":"Flat 22","token":"azb22-4eu76z","sort":22},{"kind":"flat","label_ar":"شقة 23","label_en":"Flat 23","token":"azb23-rt4t62","sort":23},{"kind":"flat","label_ar":"شقة 24","label_en":"Flat 24","token":"azb24-cunkud","sort":24},{"kind":"flat","label_ar":"شقة 31","label_en":"Flat 31","token":"azb31-7zped2","sort":31},{"kind":"flat","label_ar":"شقة 32","label_en":"Flat 32","token":"azb32-sj2xbm","sort":32},{"kind":"flat","label_ar":"شقة 33","label_en":"Flat 33","token":"azb33-49c27v","sort":33},{"kind":"flat","label_ar":"شقة 34","label_en":"Flat 34","token":"azb34-sv3ah9","sort":34},{"kind":"flat","label_ar":"شقة 41","label_en":"Flat 41","token":"azb41-c3u93h","sort":41},{"kind":"flat","label_ar":"شقة 42","label_en":"Flat 42","token":"azb42-abp626","sort":42},{"kind":"flat","label_ar":"شقة 43","label_en":"Flat 43","token":"azb43-yjchw5","sort":43},{"kind":"flat","label_ar":"شقة 44","label_en":"Flat 44","token":"azb44-cnxm69","sort":44},{"kind":"flat","label_ar":"شقة 51","label_en":"Flat 51","token":"azb51-7jawz3","sort":51},{"kind":"flat","label_ar":"شقة 52","label_en":"Flat 52","token":"azb52-x8c3aq","sort":52},{"kind":"flat","label_ar":"شقة 53","label_en":"Flat 53","token":"azb53-yhc6ms","sort":53},{"kind":"flat","label_ar":"شقة 54","label_en":"Flat 54","token":"azb54-eea9wx","sort":54},{"kind":"flat","label_ar":"شقة 61","label_en":"Flat 61","token":"azb61-kz68wf","sort":61},{"kind":"flat","label_ar":"شقة 62","label_en":"Flat 62","token":"azb62-wgfyu9","sort":62},{"kind":"flat","label_ar":"شقة 63","label_en":"Flat 63","token":"azb63-f3jjhw","sort":63},{"kind":"flat","label_ar":"شقة 64","label_en":"Flat 64","token":"azb64-tst374","sort":64},{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"azbc-b8xswv","sort":100}]};
+const DEFAULTS = {"v":2,"contractor":{"ar":"الطاؤوس","en":"Tawoos"},"targets":{"urgent":{"pickup":15,"arrive":15,"work":120},"normal":{"pickup":60,"arrive":60,"work":240}},"buildings":{"AZB":{"ar":"مبنى العذيبة","en":"Azaiba Building","type":"res","ops":30,"sort":1,"lat":null,"lng":null},"SAY":{"ar":"مبنى السيب","en":"Seeb Building","type":"res","ops":120,"sort":2,"lat":null,"lng":null},"MWL":{"ar":"مبنى الموالح","en":"Mawaleh Building","type":"res","ops":90,"sort":3,"lat":null,"lng":null},"BSH":{"ar":"مبنى بوشر","en":"Bousher Building","type":"res","ops":60,"sort":4,"lat":null,"lng":null},"HO":{"ar":"المكتب الرئيسي","en":"Head Office","type":"com","ops":30,"sort":5,"lat":null,"lng":null},"SCC":{"ar":"سابكو سنتر","en":"SABCO Centre","type":"com","ops":30,"sort":6,"lat":null,"lng":null},"OBTS":{"ar":"الواحة على الشاطئ","en":"Oasis by the Sea","type":"com","ops":30,"sort":7,"lat":null,"lng":null}},"repeatDays":30,"issueTypes":[{"k":"water_leak","p":"urgent","ar":"تسرّب مياه أو فيضان","en":"Water leak or flooding"},{"k":"no_power","p":"urgent","ar":"انقطاع الكهرباء","en":"Power outage"},{"k":"sparks","p":"urgent","ar":"شرارة أو رائحة احتراق","en":"Sparks or burning smell"},{"k":"no_water","p":"urgent","ar":"انقطاع المياه","en":"No water supply"},{"k":"drain_overflow","p":"urgent","ar":"انسداد أو طفح المجاري","en":"Blocked or overflowing drain"},{"k":"door_lock","p":"urgent","ar":"باب لا يُقفل","en":"Door will not lock"},{"k":"lift","p":"urgent","ar":"المصعد متوقف أو عالق","en":"Lift stopped or stuck"},{"k":"ac","p":"normal","ar":"المكيف لا يعمل أو لا يبرّد","en":"AC not working or not cooling"},{"k":"lights","p":"normal","ar":"إنارة لا تعمل","en":"Lights not working"},{"k":"sockets","p":"normal","ar":"أفياش أو مفاتيح كهرباء","en":"Sockets or switches"},{"k":"heater","p":"normal","ar":"سخان الماء","en":"Water heater"},{"k":"plumbing","p":"normal","ar":"حنفية أو سيفون أو شطاف","en":"Tap, toilet flush or hand spray"},{"k":"carpentry","p":"normal","ar":"أبواب أو نوافذ أو خزائن","en":"Doors, windows or cupboards"},{"k":"pests","p":"normal","ar":"حشرات","en":"Pests"},{"k":"other","p":"normal","ar":"أخرى","en":"Other"}]};
+const DEMO_UNITS = {"buildings":[{"code":"AZB","ar":"مبنى العذيبة","en":"Azaiba Building","units":[{"kind":"flat","label_ar":"شقة 11","label_en":"Flat 11","token":"azb11-v6jt9x","sort":11},{"kind":"flat","label_ar":"شقة 12","label_en":"Flat 12","token":"azb12-vhbyze","sort":12},{"kind":"flat","label_ar":"شقة 13","label_en":"Flat 13","token":"azb13-bky9gm","sort":13},{"kind":"flat","label_ar":"شقة 14","label_en":"Flat 14","token":"azb14-msr63u","sort":14},{"kind":"flat","label_ar":"شقة 21","label_en":"Flat 21","token":"azb21-n7qnnu","sort":21},{"kind":"flat","label_ar":"شقة 22","label_en":"Flat 22","token":"azb22-4eu76z","sort":22},{"kind":"flat","label_ar":"شقة 23","label_en":"Flat 23","token":"azb23-rt4t62","sort":23},{"kind":"flat","label_ar":"شقة 24","label_en":"Flat 24","token":"azb24-cunkud","sort":24},{"kind":"flat","label_ar":"شقة 31","label_en":"Flat 31","token":"azb31-7zped2","sort":31},{"kind":"flat","label_ar":"شقة 32","label_en":"Flat 32","token":"azb32-sj2xbm","sort":32},{"kind":"flat","label_ar":"شقة 33","label_en":"Flat 33","token":"azb33-49c27v","sort":33},{"kind":"flat","label_ar":"شقة 34","label_en":"Flat 34","token":"azb34-sv3ah9","sort":34},{"kind":"flat","label_ar":"شقة 41","label_en":"Flat 41","token":"azb41-c3u93h","sort":41},{"kind":"flat","label_ar":"شقة 42","label_en":"Flat 42","token":"azb42-abp626","sort":42},{"kind":"flat","label_ar":"شقة 43","label_en":"Flat 43","token":"azb43-yjchw5","sort":43},{"kind":"flat","label_ar":"شقة 44","label_en":"Flat 44","token":"azb44-cnxm69","sort":44},{"kind":"flat","label_ar":"شقة 51","label_en":"Flat 51","token":"azb51-7jawz3","sort":51},{"kind":"flat","label_ar":"شقة 52","label_en":"Flat 52","token":"azb52-x8c3aq","sort":52},{"kind":"flat","label_ar":"شقة 53","label_en":"Flat 53","token":"azb53-yhc6ms","sort":53},{"kind":"flat","label_ar":"شقة 54","label_en":"Flat 54","token":"azb54-eea9wx","sort":54},{"kind":"flat","label_ar":"شقة 61","label_en":"Flat 61","token":"azb61-kz68wf","sort":61},{"kind":"flat","label_ar":"شقة 62","label_en":"Flat 62","token":"azb62-wgfyu9","sort":62},{"kind":"flat","label_ar":"شقة 63","label_en":"Flat 63","token":"azb63-f3jjhw","sort":63},{"kind":"flat","label_ar":"شقة 64","label_en":"Flat 64","token":"azb64-tst374","sort":64},{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"azbc-b8xswv","sort":100}]},{"code":"SAY","ar":"مبنى السيب","en":"Seeb Building","units":[{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"sayc-a5s5va","sort":100}]},{"code":"MWL","ar":"مبنى الموالح","en":"Mawaleh Building","units":[{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"mwlc-25ss5i","sort":100}]},{"code":"BSH","ar":"مبنى بوشر","en":"Bousher Building","units":[{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"bshc-9arcwu","sort":100}]},{"code":"HO","ar":"المكتب الرئيسي","en":"Head Office","units":[{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"hoc-jxu2ur","sort":100}]},{"code":"SCC","ar":"سابكو سنتر","en":"SABCO Centre","units":[{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"sccc-2b2ze8","sort":100}]},{"code":"OBTS","ar":"الواحة على الشاطئ","en":"Oasis by the Sea","units":[{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"obtsc-tz7gxn","sort":100}]}]};
 const QS = new URLSearchParams(location.search);
 const DEMO = !!CFG.demo || QS.get('demo') === '1' || !(CFG.supabaseUrl && CFG.supabaseKey);
 const LIVE = !DEMO && !!(CFG.supabaseUrl && CFG.supabaseKey);
@@ -57,7 +57,7 @@ ar: {
   t_rating: 'تقييم الخدمة', t_comment: 'ملاحظة', t_signature: 'التوقيع', t_sign_here: 'وقّع هنا بإصبعك', t_clear: 'مسح',
   t_sign_submit: 'توقيع وإغلاق الطلب', t_need_rating: 'اختر التقييم', t_need_sig: 'التوقيع مطلوب',
   t_thanks: 'شكراً لك، تم إغلاق الطلب.', t_signed_onsite: 'تم التوقيع في الموقع.', t_new_req: 'إرسال طلب جديد',
-  t_after_photo: 'صورة بعد الإصلاح', t_tech_note: 'ملاحظة الفني', t_not_found: 'لم نجد هذا الطلب.',
+  t_after_photo: 'صورة بعد الإصلاح', t_tech_note: 'تقرير الفني', t_not_found: 'لم نجد هذا الطلب.',
   t_staff_here: 'لديك مهمة في هذا الموقع', t_staff_arrive: 'تأكيد الوصول، طلب {no}',
   l_title: 'دخول فريق العمل', l_phone: 'رقم الهاتف', l_pin: 'الرمز السري (6 أرقام)', l_submit: 'دخول',
   l_bad: 'رقم الهاتف أو الرمز السري غير صحيح.', l_locked: 'أُوقف الدخول 15 دقيقة بعد 5 محاولات خاطئة.',
@@ -71,7 +71,7 @@ ar: {
   tm_wait: 'بانتظار الاستلام', tm_way: 'زمن الوصول', tm_work: 'زمن الإصلاح', tm_sign: 'بانتظار التوقيع', tm_total: 'المدة الإجمالية',
   tm_pickup: 'زمن الاستلام', target: 'الهدف {m}', on_time: 'ضمن الوقت', late: 'متأخر',
   d_reported: 'وقت البلاغ', d_photo_before: 'صورة المشكلة', d_times: 'التوقيتات', d_log: 'سجل الأحداث',
-  d_accept: 'قبول الطلب', d_accept_ok: 'تم قبول الطلب وبدأ عدّاد الوصول.',
+  d_accept: 'قبول والتوجّه الآن', d_accept_ok: 'تم قبول الطلب وبدأ عدّاد الوصول.',
   d_arrive: 'وصلت: امسح رمز QR في الموقع', d_arrive_manual: 'تعذّر المسح؟ سجّل الوصول يدوياً',
   d_manual_reason: 'سبب عدم المسح', d_manual_warn: 'سيظهر للإدارة أن الوصول سُجّل دون مسح الرمز.',
   d_manual_submit: 'تسجيل الوصول يدوياً', d_arrived_ok: 'تم تسجيل وصولك وبدأ عدّاد الإصلاح.',
@@ -82,7 +82,7 @@ ar: {
   d_onsite: 'التوقيع على جهازي بدلاً من ذلك', d_signer: 'اسم الموقّع', d_signer_ph: 'مثال: صاحب الشقة أو حارس المبنى',
   d_need_signer: 'اكتب اسم الموقّع', d_onsite_warn: 'سيظهر للإدارة أن التوقيع تم على جهاز الفني.',
   d_close_req: 'إغلاق الطلب', d_closed_ok: 'تم إغلاق الطلب.', d_mgr: 'إجراءات الإدارة', d_assign: 'إسناد إلى فني',
-  d_reassign: 'تغيير الفني', d_assign_btn: 'إسناد', d_assigned_ok: 'تم الإسناد.', d_priority: 'التصنيف',
+  d_reassign: 'تغيير الفني', d_assign_btn: 'إسناد', d_pick_tech: 'اختر فنياً', d_assigned_ok: 'تم الإسناد.', d_priority: 'التصنيف',
   d_manual_close: 'إغلاق يدوي', d_cancel_req: 'إلغاء الطلب', d_reason: 'السبب', d_reason_need: 'اكتب السبب',
   d_signoff: 'الإغلاق والتقييم', d_signed_tenant: 'وقّع صاحب الطلب من جواله', d_signed_onsite: 'وُقّع على جهاز الفني',
   d_closed_manual: 'أُغلق يدوياً: {n}', d_cancelled: 'أُلغي: {n}', d_location: 'موقع الفني عند الوصول',
@@ -105,7 +105,7 @@ ar: {
   e_techs: 'الفنيون', e_jobs: 'المهام', e_manual_arr: 'وصول دون مسح: {n}', e_onsite: 'توقيع على جهاز الفني: {n}',
   e_manual_close: 'إغلاق يدوي: {n}', e_repeat: 'عطل متكرر: {n}', e_csv: 'تنزيل CSV', e_csv_copy: 'نسخ البيانات',
   e_copied: 'تم نسخ البيانات', e_print: 'طباعة', e_none: 'لا توجد طلبات في هذا الشهر.',
-  e_formula: 'الدرجة = 40% الوصول ضمن الوقت + 30% الإصلاح ضمن الوقت + 30% تقييم أصحاب الطلبات. العطل المتكرر: بلاغ جديد بنفس المشكلة في نفس الموقع خلال {d} يوماً من الإغلاق.',
+  e_formula: 'الدرجة = 40% الوصول ضمن الوقت + 30% الإصلاح ضمن الوقت + 30% تقييم أصحاب الطلبات. لا يُحتسب وقت التوقف: انشغال الفني بطلب آخر، أو انتظار قطع الغيار، أو عدم تواجد المستأجر. العطل المتكرر: بلاغ جديد بنفس المشكلة في نفس الموقع خلال {d} يوماً من الإغلاق.',
   e_by_priority: 'حسب التصنيف', e_late_list: 'طلبات تجاوزت الوقت المستهدف', e_cancelled: 'ملغاة: {n}',
   e_col_count: 'العدد', h_title: 'سجلي', h_month: 'هذا الشهر',
   tm_title: 'فريق العمل', tm_add: 'إضافة عضو', tm_edit: 'تعديل', tm_name: 'الاسم', tm_phone: 'رقم الهاتف', tm_role: 'الدور',
@@ -113,7 +113,7 @@ ar: {
   tm_pin_new: 'رمز جديد (اتركه فارغاً للإبقاء على الحالي)', tm_gen: 'توليد', tm_saved: 'تم الحفظ. أعطِ {n} الرمز السري {p} ورابط الدخول.',
   tm_saved_plain: 'تم الحفظ.', tm_readonly: 'إضافة الأعضاء وتعديلهم من صلاحية المدير.', tm_share: 'رابط دخول الفريق',
   se_title: 'الإعدادات', se_contractor: 'اسم المقاول', se_targets: 'الأوقات المستهدفة بالدقائق', se_pickup: 'الاستلام',
-  se_arrive: 'الوصول', se_work: 'الإصلاح', se_buildings: 'المباني', se_b_arrive: 'وقت الوصول لهذا المبنى حسب بعده عن المقر (اتركه فارغاً لاستخدام الوقت العام)',
+  se_arrive: 'وصول الهاندي مان', se_work: 'الإصلاح', se_buildings: 'المباني ووقت وصول غرفة العمليات', se_b_arrive: 'وقت الوصول لهذا المبنى حسب بعده عن المقر (اتركه فارغاً لاستخدام الوقت العام)',
   se_b_loc: 'موقع المبنى (لحساب بُعد الفني عند الوصول)', se_b_here: 'استخدم موقعي الحالي', se_issues: 'أنواع المشاكل وتصنيفها',
   se_add_issue: 'إضافة نوع', se_repeat: 'يُحتسب العطل متكرراً إذا تكرر خلال (يوم)', se_saved: 'تم حفظ الإعدادات.',
   se_note: 'التعديل يسري على الطلبات الجديدة، وتحتفظ الطلبات السابقة بأهدافها.', se_label_ar: 'بالعربية', se_label_en: 'بالإنجليزية',
@@ -123,16 +123,18 @@ ar: {
   q_building_ar: 'اسم المبنى بالعربية', q_building_en: 'اسم المبنى بالإنجليزية', q_kind: 'النوع', q_label_ar: 'الاسم بالعربية',
   q_label_en: 'الاسم بالإنجليزية', q_added: 'تمت الإضافة.', q_disable: 'إيقاف', q_enable: 'تفعيل',
   q_scan_ar: 'للإبلاغ عن عطل امسح الرمز', q_scan_en: 'Scan to report a maintenance problem', q_print_hint: 'اطبع على ورق A4 ثم قصّ الملصقات.',
-  dm_title: 'متابعة أعمال الصيانة بالدقيقة', dm_lead: 'من بلاغ المستأجر إلى توقيعه، كل خطوة مسجّلة بوقتها، وتقييم شهري تلقائي لفنيي المقاول.',
-  dm_s1: 'المستأجر يمسح رمز الشقة ويرسل البلاغ مع صورة.', dm_s2: 'الفني يقبل الطلب فيبدأ عدّاد الوصول.', dm_s3: 'يمسح الفني رمز الموقع عند وصوله، ثم يُنهي العمل بصورة.',
-  dm_s4: 'المستأجر يوقّع ويقيّم، والتقييم الشهري يُحسب تلقائياً.', dm_body: 'اختر دوراً وجرّب بنفسك. البيانات افتراضية وتبقى على جهازك فقط.',
-  g_next: 'الخطوة التالية', g_tech: 'ادخل بدور الفني واستلم هذا الطلب.', g_tech_btn: 'ادخل كفني',
+  dm_title: 'متابعة أعمال الصيانة بالدقيقة', dm_lead: 'من بلاغ المستأجر إلى توقيعه، كل خطوة مسجّلة بوقتها: الهاندي مان في المبنى، وفنيو غرفة العمليات، وتقارير يومية وتقييم شهري تلقائي.',
+  dm_s1: 'المستأجر يمسح رمز الشقة ويرسل البلاغ مع صورة، فيصل لجوال الهاندي مان في المبنى.', dm_s2: 'يقبله ويبدأ عدّاد الوصول، ويتوقف العدّاد إذا كان مشغولاً بطلب آخر.', dm_s3: 'يمسح رمز الموقع عند وصوله، فيصلح ويكتب تقريره وقطع الغيار، أو يحوّله لغرفة العمليات.',
+  dm_s4: 'المستأجر يوقّع ويقيّم، والتقارير اليومية والتقييم الشهري جاهزة تلقائياً.', dm_body: 'اختر دوراً وجرّب بنفسك. البيانات افتراضية وتبقى على جهازك فقط.',
+  g_next: 'الخطوة التالية', g_tech: 'وصل الطلب لجوال الهاندي مان في المبنى. ادخل بدوره واستلمه.', g_tech_btn: 'ادخل كهاندي مان',
   g_tenant: 'ارجع لدور المستأجر ليراجع صورة الإصلاح ويوقّع ويقيّم.', g_tenant_btn: 'افتح صفحة المستأجر',
-  g_admin: 'شاهد الطلب كما يراه المدير: التوقيتات كاملة والتوقيع والتقييم.', g_admin_btn: 'ادخل كمدير',
+  g_admin: 'شاهد الطلب كما يراه المدير: التوقيتات كاملة والتقرير وقطع الغيار والتوقيع والتقييم.', g_admin_btn: 'ادخل كمدير',
+  g_ops: 'وصل الطلب لجوالات فنيي غرفة العمليات. ادخل بدور أحدهم واستلمه.', g_ops_btn: 'ادخل كفني',
+  dm_hm: 'الهاندي مان', dm_hm_body: 'في المبنى السكني: يستلم بلاغات مبناه أولاً، فيصلحها أو يحوّلها لغرفة العمليات.',
   dm_tenant: 'المستأجر', dm_tenant_body: 'يمسح رمز الشقة، يرسل البلاغ مع صورة، ثم يوقّع ويقيّم بعد الإصلاح.', dm_open_unit: 'افتح صفحة الموقع',
-  dm_tech: 'الفني', dm_tech_body: 'يقبل الطلب، يمسح رمز الموقع عند الوصول، ويُنهي العمل بصورة.',
-  dm_sup: 'مسؤول الصيانة', dm_sup_body: 'يتابع الطلبات المفتوحة والمتأخرة ويُسند المهام.',
-  dm_admin: 'المدير', dm_admin_body: 'التقييم الشهري للمقاول والفنيين، والفريق، والإعدادات، ورموز QR.',
+  dm_tech: 'فني غرفة العمليات', dm_tech_body: 'يستلم ما يحوّله الهاندي مان، وبلاغات المكتب الرئيسي وسابكو سنتر والواحة. هدف الوصول حسب بُعد المبنى.',
+  dm_sup: 'الهيلب ديسك ومسؤول الصيانة', dm_sup_body: 'يتابع الطلبات المفتوحة والمعلّقة والمتأخرة، ويسجّل البلاغات الهاتفية، ويُسند المهام.',
+  dm_admin: 'المدير', dm_admin_body: 'التقارير اليومية والأسبوعية والشهرية، والتقييم الشهري، والفريق، والإعدادات، ورموز QR.',
   dm_enter: 'دخول', dm_reset: 'إعادة البيانات التجريبية', dm_reset_ok: 'أُعيدت البيانات التجريبية.',
   err_auth_required: 'انتهت الجلسة، سجّل الدخول من جديد.', err_not_allowed: 'هذا الإجراء غير متاح لك.',
   err_already_taken: 'استلم فني آخر هذا الطلب.', err_wrong_unit: 'هذا الرمز لا يخص موقع الطلب.',
@@ -179,7 +181,70 @@ ar: {
   col_no: 'رقم الطلب', col_date: 'وقت البلاغ', col_building: 'المبنى', col_unit: 'الموقع', col_issue: 'المشكلة', col_priority: 'التصنيف', col_tech: 'الفني', col_status: 'الحالة',
   col_pickup: 'الاستلام (دقيقة)', col_arrive: 'الوصول (دقيقة)', col_arrive_t: 'هدف الوصول', col_arrive_ok: 'الوصول ضمن الوقت', col_work: 'الإصلاح (دقيقة)', col_work_t: 'هدف الإصلاح',
   col_work_ok: 'الإصلاح ضمن الوقت', col_total: 'الإجمالي (دقيقة)', col_qr: 'الوصول بمسح الرمز', col_rating: 'التقييم', col_close: 'طريقة الإغلاق',
-  cm_tenant: 'توقيع صاحب الطلب', cm_onsite: 'توقيع على جهاز الفني', cm_manual: 'إغلاق يدوي'
+  cm_tenant: 'توقيع صاحب الطلب', cm_onsite: 'توقيع على جهاز الفني', cm_manual: 'إغلاق يدوي',
+  team_hm: 'هاندي مان', team_ops: 'غرفة العمليات', tech_hm: 'هاندي مان · {b}', tech_ops: 'فني · غرفة العمليات', role_hm: 'هاندي مان',
+  stage_hm: 'عند الهاندي مان', stage_ops: 'عند غرفة العمليات', st_queued: 'بانتظار الفني', st_hold: 'معلّق',
+  hold_busy: 'ينتظر انتهاء عمل آخر', hold_access: 'المستأجر غير متاح', hold_parts: 'بانتظار قطع غيار', hold_other: 'معلّق لسبب آخر',
+  tm_paused: 'متوقف', tm_busy_on: 'بعد #{no}', d_target_from: 'الهدف {m} · قادم من {b}', d_target_in: 'الهدف {m} · داخل المبنى', d_target_ops: 'الهدف {m} · من غرفة العمليات',
+  paused_note: 'توقف {d} لا يُحتسب', d_accept_busy: 'أقبله، لكني مشغول بعمل آخر الآن',
+  b_title: 'مشغول بعمل آخر', b_body: 'يتوقف عدّاد الوصول لهذا الطلب، ويبدأ تلقائياً عند إنهائك العمل الذي بين يديك.',
+  b_pick: 'ما العمل الذي تنهيه الآن؟', b_other: 'عمل آخر خارج رصد', b_other_ph: 'مثال: صيانة دورية لمضخات المياه',
+  b_other_warn: 'عند انتهائك اضغط «أنا في الطريق الآن» ليبدأ عدّاد الوصول.', b_submit: 'قبول وإيقاف العدّاد', b_pause_submit: 'إيقاف العدّاد',
+  d_pause_busy: 'مشغول بعمل آخر؟ أوقف عدّاد الوصول', d_pause_access: 'المستأجر غير متاح أو طلب موعداً آخر',
+  d_access_title: 'المستأجر غير متاح', d_access_ph: 'مثال: طلب الحضور بعد الساعة 5 مساءً', d_access_when: 'الموعد الجديد',
+  d_go_now: 'أنا في الطريق الآن', d_go_ok: 'بدأ عدّاد الوصول.', d_paused_ok: 'تم إيقاف العدّاد.',
+  d_wait_auto: 'يبدأ عدّاد الوصول تلقائياً عند إنهائك الطلب #{no}.', d_wait_other: 'أنت مشغول بعمل خارج رصد: {n}',
+  d_wait_access: 'المستأجر غير متاح: {n}', d_paused_title: 'العدّاد متوقف', d_paused_since: 'متوقف منذ {d}',
+  d_hold_parts: 'بانتظار قطع غيار', d_hold_other: 'تعليق لسبب آخر', d_hold_title: 'تعليق العمل',
+  d_parts_needed: 'القطع المطلوبة', d_eta: 'الموعد المتوقع لوصولها', d_other_ph: 'مثال: يحتاج موافقة المالك أو شركة متخصصة',
+  d_hold_note: 'ملاحظة', d_hold_warn: 'يتوقف عدّاد الإصلاح، وعند عودتك امسح رمز الموقع ليستأنف.',
+  d_resume_scan: 'عدت للموقع: امسح الرمز للاستئناف', d_resume_manual: 'تعذّر المسح؟ استأنف يدوياً', d_resume_submit: 'استئناف يدوياً',
+  d_resumed_ok: 'استؤنف عدّاد الإصلاح.', d_held_since: 'معلّق منذ {d}', d_held_eta: 'المتوقع: {d}',
+  d_escalate: 'تحويل لغرفة العمليات', d_escalate_body: 'عندما يحتاج الإصلاح فني غرفة العمليات. اكتب ما وجدته ليعرف الفني ماذا يحضر معه.',
+  d_findings: 'ما الذي وجدته؟', d_escalate_ph: 'مثال: الكمبروسر لا يعمل، يحتاج فني تكييف وغاز', d_escalate_submit: 'تحويل الطلب', d_escalated_ok: 'تم التحويل لغرفة العمليات.',
+  d_report: 'تقرير الفني', d_report_ph: 'ماذا وجدت وماذا أصلحت؟ مثال: الوصلة تحت المغسلة متآكلة، تم تغييرها وتجربة التشغيل',
+  d_need_report: 'اكتب تقرير العمل', d_parts_used: 'قطع الغيار والمواد المستبدلة', d_part_name: 'اسم القطعة', d_part_qty: 'الكمية',
+  d_add_part: 'إضافة قطعة', d_del_part: 'حذف', d_none_parts: 'لم تُستبدل أي قطعة', d_need_parts: 'أضف قطعة واحدة على الأقل',
+  d_legs: 'مراحل الطلب', d_leg_now: 'الآن', leg_escalated: 'حوّله لغرفة العمليات', leg_reassigned: 'أُسند لفني آخر', leg_finished: 'أصلحه', leg_open: 'يعمل عليه', leg_closed: 'أُغلق', leg_cancelled: 'أُلغي',
+  d_inspect: 'الفحص', d_send_ops: 'إرسال لغرفة العمليات', d_send_hm: 'إرسال للهاندي مان', d_stage_now: 'الطلب الآن {s}', d_sent_ok: 'تم الإرسال.',
+  d_parts_list: 'القطع المستبدلة', d_parts_wait: 'القطع المنتظرة', d_source: 'المصدر',
+  t_hold_busy: 'الفني ينهي عملاً آخر الآن، وسيتوجه إليك بعده مباشرة.', t_hold_access: 'تم تأجيل الزيارة إلى موعد مناسب.',
+  t_hold_parts: 'طلبك بانتظار وصول قطع الغيار.', t_hold_eta: 'الموعد المتوقع: {d}', t_hold_other: 'طلبك معلّق مؤقتاً، وسيتابعه الفريق.',
+  t_escalated: 'حُوِّل طلبك إلى فنيي غرفة العمليات المختصين.', t_parts: 'القطع المستبدلة',
+  b_k_hold: 'معلّقة', b_hold: 'المعلّقة', b_all_buildings: 'كل المباني', b_new_req: 'بلاغ جديد',
+  n_title: 'تسجيل بلاغ', n_sub: 'لبلاغ وصل بالهاتف أو واتساب أو حضورياً. يصل للفريق كأي بلاغ آخر ويُحسب في التقارير.', n_source: 'وصل البلاغ عن طريق',
+  n_building: 'المبنى', n_unit: 'الموقع', n_requester: 'اسم صاحب البلاغ', n_photo: 'صورة', n_submit: 'تسجيل البلاغ',
+  n_done: 'تم تسجيل البلاغ رقم {no}', n_share: 'أرسل لصاحب البلاغ رابط المتابعة ليتابع طلبه ويوقّع بعد الإصلاح.',
+  n_wa: 'إرسال عبر واتساب', n_open: 'فتح الطلب', n_wa_text: 'تم استلام بلاغك رقم {no} لدى {o}. لمتابعته والتوقيع بعد الإصلاح: {u}',
+  src_qr: 'رمز QR', src_phone: 'اتصال هاتفي', src_whatsapp: 'واتساب', src_walkin: 'حضورياً', src_email: 'بريد إلكتروني', src_other: 'أخرى',
+  ev_logged: 'سجّل الهيلب ديسك البلاغ ({n})', ev_hold_busy: 'الفني مشغول بعمل آخر: توقف عدّاد الوصول', ev_hold_access: 'تعليق: المستأجر غير متاح',
+  ev_hold_parts: 'تعليق: بانتظار قطع غيار', ev_hold_other: 'تعليق لسبب آخر', ev_resumed: 'الفني في الطريق: استؤنف عدّاد الوصول',
+  ev_resumed_auto: 'بدأ عدّاد الوصول بعد إنهاء {n}', ev_resumed_qr: 'عاد الفني ومسح الرمز: استؤنف الإصلاح', ev_resumed_manual: 'عاد الفني (تسجيل يدوي): استؤنف الإصلاح',
+  ev_to_ops: 'حوّله الهاندي مان لغرفة العمليات', ev_sent_ops: 'أرسله الهيلب ديسك لغرفة العمليات', ev_sent_hm: 'أرسله الهيلب ديسك للهاندي مان',
+  err_bad_busy: 'اختر عملاً مفتوحاً لديك.', err_on_hold: 'العدّاد متوقف. اضغط «أنا في الطريق الآن» أولاً.',
+  err_report_required: 'اكتب تقرير العمل (5 أحرف على الأقل).', err_parts_required: 'أضف قطعة واحدة على الأقل.', err_sites_required: 'اختر مبنى الهاندي مان.',
+  tm_team: 'الفريق', tm_sites: 'المباني التي يغطيها', tm_hm_hint: 'تصله بلاغات مبانيه أولاً، ويحوّل لغرفة العمليات ما يحتاجهم.',
+  se_b_type: 'النوع', type_res: 'سكني', type_com: 'تجاري ومكاتب', se_b_ops: 'وصول غرفة العمليات (دقيقة)',
+  se_b_hint: 'السكني يستلم بلاغه الهاندي مان أولاً إن وُجد، والتجاري يذهب لغرفة العمليات مباشرة. إذا كان الفني قادماً من مبنى آخر يُعتمد الوقت الأطول.',
+  se_hm_note: 'وصول الهاندي مان: هو في المبنى نفسه، فيُقاس وصوله بهذا الوقت. وصول غرفة العمليات يُضبط لكل مبنى في الأسفل.',
+  n_reports: 'التقارير', r_title: 'تقارير البلاغات', r_day: 'يومي', r_week: 'أسبوعي', r_month: 'شهري', r_today: 'اليوم', r_this_week: 'هذا الأسبوع', r_this_month: 'هذا الشهر',
+  r_total: 'البلاغات', r_done: 'تم حلها', r_progress: 'قيد التنفيذ', r_hold: 'معلّقة', r_cancel: 'ملغاة', r_carried: 'مفتوحة من قبل',
+  r_carried_s: 'بلاغات سابقة لم تُغلق', r_prev_day: 'عن اليوم السابق', r_prev_week: 'عن الأسبوع السابق', r_prev_month: 'عن الشهر السابق', r_same: 'نفس {p}',
+  r_first_line: 'حلّها الهاندي مان بنفسه', r_arr_on: 'الوصول ضمن الوقت', r_fix_on: 'الإصلاح ضمن الوقت',
+  r_trend_day: 'عدد البلاغات في آخر 14 يوماً', r_trend_week: 'عدد البلاغات في آخر 8 أسابيع', r_trend_month: 'عدد البلاغات في آخر 6 أشهر',
+  r_urgent_part: 'منها عاجل', r_by_type: 'حسب الأهمية ونوع البلاغ', r_by_building: 'حسب المبنى', r_by_team: 'حسب الفريق',
+  r_list: 'كل البلاغات', r_table: 'عرض كجدول', r_holds: 'البلاغات المعلّقة', r_none: 'لا توجد بلاغات في هذه الفترة.', r_all: 'الكل',
+  r_f_building: 'المبنى', r_f_status: 'الحالة', r_f_priority: 'الأهمية', r_s_open: 'مفتوحة', r_s_done: 'تم حلها', r_s_hold: 'معلّقة', r_s_cancel: 'ملغاة',
+  r_week_of: '{a} – {b}', r_col_type: 'النوع', r_col_open: 'مفتوحة', r_col_avg_fix: 'متوسط الإصلاح', r_col_avg_arr: 'متوسط الوصول',
+  r_hm_fixed: 'أصلحها الهاندي مان', r_hm_handed: 'حوّلها لغرفة العمليات', r_ops_direct: 'لغرفة العمليات مباشرة', r_ops_fixed: 'أصلحها فنيو غرفة العمليات',
+  r_export: 'تصدير تقرير {p}', x_period_excel_d: 'كل البلاغات بتفاصيلها وتقارير الفنيين وقطع الغيار، مع الملخص', x_period_pdf_d: 'تقرير جاهز للطباعة أو الحفظ PDF',
+  x_parts_sheet: 'قطع الغيار', x_holds_sheet: 'المعلّقة', x_counts_sheet: 'العدد اليومي', x_visits: 'الزيارات',
+  col_time: 'الوقت', col_source: 'المصدر', col_hold: 'سبب التعليق', col_hold_since: 'معلّق منذ', col_eta: 'الموعد المتوقع', col_by: 'نفّذه',
+  col_team: 'الفريق', col_handed: 'محوّل لغرفة العمليات', col_hm: 'الهاندي مان', col_paused_a: 'توقف قبل الوصول (دقيقة)', col_paused_w: 'توقف أثناء العمل (دقيقة)',
+  col_report: 'تقرير الفني', col_parts: 'قطع الغيار المستبدلة', col_part: 'القطعة', col_qty: 'الكمية', col_comment: 'ملاحظة صاحب الطلب', col_count: 'العدد',
+  col_urgent: 'عاجل', col_normal: 'عادي', col_period: 'الفترة', col_outcome: 'النتيجة', col_parts_wait: 'القطع المنتظرة', col_note: 'ملاحظة',
+  e_by_team: 'حسب الفريق', e_hm_group: 'الهاندي مان', e_ops_group: 'فنيو غرفة العمليات', e_paused: 'توقف لا يُحتسب', e_self_fixed: 'أصلحها بنفسه', e_visits: 'الزيارات',
+  p_s8: 'الهاندي مان وغرفة العمليات', p_s8_sub: 'الأداء حسب الفريق', p_team_line: '{n} زيارة · الوصول {a} · الإصلاح {f}'
 },
 en: {
   app: 'Rasd', tagline: 'Maintenance tracking', demo_banner: 'Demo with sample data', demo_switch: 'Switch role',
@@ -203,7 +268,7 @@ en: {
   t_rating: 'Rate the service', t_comment: 'Comment', t_signature: 'Signature', t_sign_here: 'Sign here with your finger', t_clear: 'Clear',
   t_sign_submit: 'Sign and close request', t_need_rating: 'Choose a rating', t_need_sig: 'Your signature is required',
   t_thanks: 'Thank you. The request is closed.', t_signed_onsite: 'Signed on site.', t_new_req: 'Send a new request',
-  t_after_photo: 'Photo after the repair', t_tech_note: "Technician's note", t_not_found: 'We could not find this request.',
+  t_after_photo: 'Photo after the repair', t_tech_note: "Technician's report", t_not_found: 'We could not find this request.',
   t_staff_here: 'You have a job at this location', t_staff_arrive: 'Confirm arrival for request {no}',
   l_title: 'Team sign-in', l_phone: 'Phone number', l_pin: 'PIN (6 digits)', l_submit: 'Sign in',
   l_bad: 'Wrong phone number or PIN.', l_locked: 'Sign-in is paused for 15 minutes after 5 wrong tries.',
@@ -217,7 +282,7 @@ en: {
   tm_wait: 'Waiting for pickup', tm_way: 'Time to arrive', tm_work: 'Repair time', tm_sign: 'Awaiting sign-off', tm_total: 'Total time',
   tm_pickup: 'Pickup time', target: 'target {m}', on_time: 'On time', late: 'Late',
   d_reported: 'Reported', d_photo_before: 'Photo of the problem', d_times: 'Timings', d_log: 'Event log',
-  d_accept: 'Accept request', d_accept_ok: 'Accepted. The arrival timer has started.',
+  d_accept: 'Accept and go now', d_accept_ok: 'Accepted. The arrival timer has started.',
   d_arrive: "I've arrived: scan the QR code on site", d_arrive_manual: "Can't scan? Record arrival manually",
   d_manual_reason: 'Why could you not scan?', d_manual_warn: 'Management will see that arrival was recorded without a scan.',
   d_manual_submit: 'Record arrival manually', d_arrived_ok: 'Arrival recorded. The repair timer has started.',
@@ -228,7 +293,7 @@ en: {
   d_onsite: 'Sign on my phone instead', d_signer: "Signer's name", d_signer_ph: 'e.g. the tenant or the building guard',
   d_need_signer: "Enter the signer's name", d_onsite_warn: "Management will see this was signed on the technician's phone.",
   d_close_req: 'Close request', d_closed_ok: 'Request closed.', d_mgr: 'Management actions', d_assign: 'Assign to a technician',
-  d_reassign: 'Change technician', d_assign_btn: 'Assign', d_assigned_ok: 'Assigned.', d_priority: 'Priority',
+  d_reassign: 'Change technician', d_assign_btn: 'Assign', d_pick_tech: 'Choose a technician', d_assigned_ok: 'Assigned.', d_priority: 'Priority',
   d_manual_close: 'Close manually', d_cancel_req: 'Cancel request', d_reason: 'Reason', d_reason_need: 'Please give a reason',
   d_signoff: 'Sign-off and rating', d_signed_tenant: 'Signed by the requester on their phone', d_signed_onsite: "Signed on the technician's phone",
   d_closed_manual: 'Closed manually: {n}', d_cancelled: 'Cancelled: {n}', d_location: "Technician's location on arrival",
@@ -251,7 +316,7 @@ en: {
   e_techs: 'Technicians', e_jobs: 'Jobs', e_manual_arr: 'Arrivals without scan: {n}', e_onsite: "Signed on tech's phone: {n}",
   e_manual_close: 'Closed manually: {n}', e_repeat: 'Repeat faults: {n}', e_csv: 'Download CSV', e_csv_copy: 'Copy data',
   e_copied: 'Data copied', e_print: 'Print', e_none: 'No requests in this month.',
-  e_formula: 'Score = 40% arrival on time + 30% repair on time + 30% requester rating. A repeat fault is a new report of the same problem at the same location within {d} days of closing.',
+  e_formula: 'Score = 40% arrival on time + 30% repair on time + 30% requester rating. Paused time is not counted: the technician busy with another job, waiting for parts, or the tenant unavailable. A repeat fault is a new report of the same problem at the same location within {d} days of closing.',
   e_by_priority: 'By priority', e_late_list: 'Requests that missed their target', e_cancelled: 'Cancelled: {n}',
   e_col_count: 'Count', h_title: 'My record', h_month: 'This month',
   tm_title: 'Team', tm_add: 'Add member', tm_edit: 'Edit', tm_name: 'Name', tm_phone: 'Phone number', tm_role: 'Role',
@@ -259,7 +324,7 @@ en: {
   tm_pin_new: 'New PIN (leave empty to keep the current one)', tm_gen: 'Generate', tm_saved: 'Saved. Give {n} the PIN {p} and the sign-in link.',
   tm_saved_plain: 'Saved.', tm_readonly: 'Only the admin can add or change members.', tm_share: 'Team sign-in link',
   se_title: 'Settings', se_contractor: 'Contractor name', se_targets: 'Target times in minutes', se_pickup: 'Pickup',
-  se_arrive: 'Arrival', se_work: 'Repair', se_buildings: 'Buildings', se_b_arrive: 'Arrival target for this building, by its distance from base (leave empty to use the general target)',
+  se_arrive: 'Handyman arrival', se_work: 'Repair', se_buildings: 'Buildings and operations-room travel time', se_b_arrive: 'Arrival target for this building, by its distance from base (leave empty to use the general target)',
   se_b_loc: "Building location (to measure the technician's distance on arrival)", se_b_here: 'Use my current location', se_issues: 'Problem types and priority',
   se_add_issue: 'Add type', se_repeat: 'Count a fault as repeat within (days)', se_saved: 'Settings saved.',
   se_note: 'Changes apply to new requests; earlier requests keep their targets.', se_label_ar: 'Arabic', se_label_en: 'English',
@@ -269,16 +334,18 @@ en: {
   q_building_ar: 'Building name in Arabic', q_building_en: 'Building name in English', q_kind: 'Type', q_label_ar: 'Name in Arabic',
   q_label_en: 'Name in English', q_added: 'Added.', q_disable: 'Switch off', q_enable: 'Switch on',
   q_scan_ar: 'للإبلاغ عن عطل امسح الرمز', q_scan_en: 'Scan to report a maintenance problem', q_print_hint: 'Print on A4 paper, then cut out the labels.',
-  dm_title: 'Maintenance work, tracked to the minute', dm_lead: "From the tenant's report to their signature, every step is time-stamped, and the contractor's technicians get an automatic monthly score.",
-  dm_s1: 'The tenant scans the flat code and sends the report with a photo.', dm_s2: 'The technician accepts and the arrival timer starts.', dm_s3: 'On arrival the technician scans the location code, then finishes with a photo.',
-  dm_s4: 'The tenant signs and rates; the monthly score is calculated automatically.', dm_body: 'Pick a role and try it yourself. The data is sample data and stays on your device.',
-  g_next: 'Next step', g_tech: 'Switch to the technician and take this request.', g_tech_btn: 'Enter as technician',
+  dm_title: 'Maintenance work, tracked to the minute', dm_lead: "From the tenant's report to their signature, every step is time-stamped: the building handymen, the operations-room technicians, daily reports and an automatic monthly score.",
+  dm_s1: "The tenant scans the flat code and sends the report with a photo; it reaches the building handyman's phone.", dm_s2: 'He accepts and the arrival timer starts; it pauses while he finishes another job.', dm_s3: 'He scans the code on arrival, then fixes it with a report and the parts used, or hands it to the operations room.',
+  dm_s4: 'The tenant signs and rates; daily reports and the monthly score are ready automatically.', dm_body: 'Pick a role and try it yourself. The data is sample data and stays on your device.',
+  g_next: 'Next step', g_tech: "The request reached the building handyman's phone. Switch to him and take it.", g_tech_btn: 'Enter as handyman',
   g_tenant: 'Switch back to the tenant to check the repair photo, sign and rate.', g_tenant_btn: 'Open the tenant page',
-  g_admin: 'See the request as the admin sees it: every timing, the signature and the rating.', g_admin_btn: 'Enter as admin',
+  g_admin: 'See the request as the admin sees it: every timing, the report and parts, the signature and the rating.', g_admin_btn: 'Enter as admin',
+  g_ops: "The request reached the operations-room technicians' phones. Switch to one of them and take it.", g_ops_btn: 'Enter as technician',
+  dm_hm: 'Handyman', dm_hm_body: 'In the residential building: gets its requests first, then fixes them or hands them to the operations room.',
   dm_tenant: 'Tenant', dm_tenant_body: 'Scans the flat code, sends the report with a photo, then signs and rates after the repair.', dm_open_unit: 'Open the location page',
-  dm_tech: 'Technician', dm_tech_body: 'Accepts the request, scans the location code on arrival, and finishes with a photo.',
-  dm_sup: 'Maintenance supervisor', dm_sup_body: 'Follows open and late requests and assigns jobs.',
-  dm_admin: 'Admin', dm_admin_body: 'Monthly evaluation of the contractor and technicians, the team, settings and QR codes.',
+  dm_tech: 'Operations-room technician', dm_tech_body: 'Takes what the handymen hand over, and requests at Head Office, SABCO Centre and Oasis. Arrival targets follow the distance.',
+  dm_sup: 'Helpdesk and supervisor', dm_sup_body: 'Follows open, paused and late requests, logs phone reports and assigns jobs.',
+  dm_admin: 'Admin', dm_admin_body: 'Daily, weekly and monthly reports, the monthly evaluation, the team, settings and QR codes.',
   dm_enter: 'Enter', dm_reset: 'Reset demo data', dm_reset_ok: 'Demo data reset.',
   err_auth_required: 'Your session ended. Please sign in again.', err_not_allowed: 'This action is not available to you.',
   err_already_taken: 'Another technician has taken this request.', err_wrong_unit: 'This code does not belong to the request location.',
@@ -325,7 +392,70 @@ en: {
   col_no: 'Request no.', col_date: 'Reported', col_building: 'Building', col_unit: 'Location', col_issue: 'Problem', col_priority: 'Priority', col_tech: 'Technician', col_status: 'Status',
   col_pickup: 'Pickup (min)', col_arrive: 'Arrival (min)', col_arrive_t: 'Arrival target', col_arrive_ok: 'Arrived on time', col_work: 'Repair (min)', col_work_t: 'Repair target',
   col_work_ok: 'Fixed on time', col_total: 'Total (min)', col_qr: 'Arrival by QR scan', col_rating: 'Rating', col_close: 'Closed by',
-  cm_tenant: 'Requester signature', cm_onsite: "Signed on technician's phone", cm_manual: 'Closed manually'
+  cm_tenant: 'Requester signature', cm_onsite: "Signed on technician's phone", cm_manual: 'Closed manually',
+  team_hm: 'Handyman', team_ops: 'Operations room', tech_hm: 'Handyman · {b}', tech_ops: 'Technician · Operations room', role_hm: 'Handyman',
+  stage_hm: 'with the handyman', stage_ops: 'with the operations room', st_queued: 'Queued', st_hold: 'On hold',
+  hold_busy: 'Waiting for another job', hold_access: 'Tenant unavailable', hold_parts: 'Waiting for parts', hold_other: 'On hold, other reason',
+  tm_paused: 'Paused', tm_busy_on: 'after #{no}', d_target_from: 'target {m} · coming from {b}', d_target_in: 'target {m} · in the building', d_target_ops: 'target {m} · from the operations room',
+  paused_note: '{d} paused, not counted', d_accept_busy: "Accept, but I'm busy with another job",
+  b_title: 'Busy with another job', b_body: 'The arrival timer for this request waits, and starts by itself when you finish the job you are on.',
+  b_pick: 'Which job are you finishing now?', b_other: 'Other work, not in Rasd', b_other_ph: 'e.g. routine maintenance of the water pumps',
+  b_other_warn: 'When you finish, tap “On my way now” to start the arrival timer.', b_submit: 'Accept and pause the timer', b_pause_submit: 'Pause the timer',
+  d_pause_busy: 'Busy with another job? Pause the arrival timer', d_pause_access: 'Tenant unavailable or asked for another time',
+  d_access_title: 'Tenant unavailable', d_access_ph: 'e.g. asked us to come after 5 pm', d_access_when: 'New time',
+  d_go_now: "I'm on my way now", d_go_ok: 'The arrival timer has started.', d_paused_ok: 'Timer paused.',
+  d_wait_auto: 'The arrival timer starts by itself when you finish #{no}.', d_wait_other: 'You are on work outside Rasd: {n}',
+  d_wait_access: 'Tenant unavailable: {n}', d_paused_title: 'Timer paused', d_paused_since: 'Paused for {d}',
+  d_hold_parts: 'Waiting for parts', d_hold_other: 'Pause for another reason', d_hold_title: 'Pause the job',
+  d_parts_needed: 'Parts needed', d_eta: 'Expected date', d_other_ph: "e.g. needs the owner's approval or a specialist company",
+  d_hold_note: 'Note', d_hold_warn: 'The repair timer stops. When you are back, scan the location code to resume.',
+  d_resume_scan: "I'm back on site: scan to resume", d_resume_manual: "Can't scan? Resume manually", d_resume_submit: 'Resume manually',
+  d_resumed_ok: 'The repair timer is running again.', d_held_since: 'On hold for {d}', d_held_eta: 'Expected: {d}',
+  d_escalate: 'Hand over to the operations room', d_escalate_body: 'When the repair needs an operations-room technician. Write what you found so they know what to bring.',
+  d_findings: 'What did you find?', d_escalate_ph: 'e.g. the compressor is dead; needs an AC technician and gas', d_escalate_submit: 'Hand over', d_escalated_ok: 'Handed over to the operations room.',
+  d_report: "Technician's report", d_report_ph: 'What did you find and fix? e.g. the hose under the sink was corroded; replaced and tested',
+  d_need_report: 'Write the work report', d_parts_used: 'Parts and materials replaced', d_part_name: 'Part', d_part_qty: 'Qty',
+  d_add_part: 'Add part', d_del_part: 'Remove', d_none_parts: 'No parts replaced', d_need_parts: 'Add at least one part',
+  d_legs: 'Visits', d_leg_now: 'now', leg_escalated: 'Handed over to the operations room', leg_reassigned: 'Reassigned', leg_finished: 'Fixed it', leg_open: 'Working on it', leg_closed: 'Closed', leg_cancelled: 'Cancelled',
+  d_inspect: 'Inspection', d_send_ops: 'Send to the operations room', d_send_hm: 'Send to the handyman', d_stage_now: 'The request is {s}', d_sent_ok: 'Sent.',
+  d_parts_list: 'Parts replaced', d_parts_wait: 'Parts awaited', d_source: 'Source',
+  t_hold_busy: 'The technician is finishing another job and will come to you right after.', t_hold_access: 'The visit has been moved to a convenient time.',
+  t_hold_parts: 'Your request is waiting for spare parts.', t_hold_eta: 'Expected: {d}', t_hold_other: 'Your request is on hold for now; the team is following it.',
+  t_escalated: 'Your request has been passed to the specialist technicians.', t_parts: 'Parts replaced',
+  b_k_hold: 'On hold', b_hold: 'On hold', b_all_buildings: 'All buildings', b_new_req: 'New request',
+  n_title: 'Log a request', n_sub: 'For a report received by phone, WhatsApp or in person. It reaches the team like any other and counts in the reports.', n_source: 'Received by',
+  n_building: 'Building', n_unit: 'Location', n_requester: "Requester's name", n_photo: 'Photo', n_submit: 'Log the request',
+  n_done: 'Request {no} logged', n_share: 'Send the requester the tracking link so they can follow it and sign after the repair.',
+  n_wa: 'Send by WhatsApp', n_open: 'Open the request', n_wa_text: 'We received your request no. {no} at {o}. Follow it and sign after the repair here: {u}',
+  src_qr: 'QR code', src_phone: 'Phone call', src_whatsapp: 'WhatsApp', src_walkin: 'In person', src_email: 'Email', src_other: 'Other',
+  ev_logged: 'Logged by the desk ({n})', ev_hold_busy: 'Technician busy with another job: arrival timer paused', ev_hold_access: 'Paused: tenant unavailable',
+  ev_hold_parts: 'Paused: waiting for parts', ev_hold_other: 'Paused, other reason', ev_resumed: 'Technician on the way: arrival timer running',
+  ev_resumed_auto: 'Arrival timer started after finishing {n}', ev_resumed_qr: 'Technician back on site (QR): repair resumed', ev_resumed_manual: 'Technician back on site (manual): repair resumed',
+  ev_to_ops: 'Handed over to the operations room by the handyman', ev_sent_ops: 'Sent to the operations room by the desk', ev_sent_hm: 'Sent to the handyman by the desk',
+  err_bad_busy: 'Choose one of your open jobs.', err_on_hold: 'The timer is paused. Tap “On my way now” first.',
+  err_report_required: 'Write the work report (at least 5 characters).', err_parts_required: 'Add at least one part.', err_sites_required: "Choose the handyman's building.",
+  tm_team: 'Team', tm_sites: 'Buildings covered', tm_hm_hint: 'Gets the requests from his buildings first, and hands to the operations room what needs them.',
+  se_b_type: 'Type', type_res: 'Residential', type_com: 'Commercial and offices', se_b_ops: 'Operations-room arrival (min)',
+  se_b_hint: 'In residential buildings the handyman gets the request first, if there is one; commercial buildings go straight to the operations room. Coming from another building, the longer time applies.',
+  se_hm_note: 'Handyman arrival: he is in the building, so his arrival is measured against this time. Operations-room arrival is set per building below.',
+  n_reports: 'Reports', r_title: 'Request reports', r_day: 'Daily', r_week: 'Weekly', r_month: 'Monthly', r_today: 'Today', r_this_week: 'This week', r_this_month: 'This month',
+  r_total: 'Requests', r_done: 'Fixed', r_progress: 'In progress', r_hold: 'On hold', r_cancel: 'Cancelled', r_carried: 'Open from before',
+  r_carried_s: 'Earlier requests not closed yet', r_prev_day: 'vs the day before', r_prev_week: 'vs the week before', r_prev_month: 'vs the month before', r_same: 'Same as {p}',
+  r_first_line: 'Fixed by the handyman', r_arr_on: 'Arrived on time', r_fix_on: 'Fixed on time',
+  r_trend_day: 'Requests over the last 14 days', r_trend_week: 'Requests over the last 8 weeks', r_trend_month: 'Requests over the last 6 months',
+  r_urgent_part: 'of which urgent', r_by_type: 'By priority and type', r_by_building: 'By building', r_by_team: 'By team',
+  r_list: 'All requests', r_table: 'Show as a table', r_holds: 'Requests on hold', r_none: 'No requests in this period.', r_all: 'All',
+  r_f_building: 'Building', r_f_status: 'Status', r_f_priority: 'Priority', r_s_open: 'Open', r_s_done: 'Fixed', r_s_hold: 'On hold', r_s_cancel: 'Cancelled',
+  r_week_of: '{a} – {b}', r_col_type: 'Type', r_col_open: 'Open', r_col_avg_fix: 'Avg repair', r_col_avg_arr: 'Avg arrival',
+  r_hm_fixed: 'Fixed by the handyman', r_hm_handed: 'Handed to the operations room', r_ops_direct: 'Straight to the operations room', r_ops_fixed: 'Fixed by the operations room',
+  r_export: 'Export the {p} report', x_period_excel_d: "Every request in detail, with the technicians' reports and parts, plus the summary", x_period_pdf_d: 'A report ready to print or save as PDF',
+  x_parts_sheet: 'Parts', x_holds_sheet: 'On hold', x_counts_sheet: 'Daily counts', x_visits: 'Visits',
+  col_time: 'Time', col_source: 'Source', col_hold: 'On hold for', col_hold_since: 'On hold since', col_eta: 'Expected', col_by: 'Done by',
+  col_team: 'Team', col_handed: 'Handed to operations room', col_hm: 'Handyman', col_paused_a: 'Paused before arrival (min)', col_paused_w: 'Paused during work (min)',
+  col_report: "Technician's report", col_parts: 'Parts replaced', col_part: 'Part', col_qty: 'Qty', col_comment: "Requester's comment", col_count: 'Count',
+  col_urgent: 'Urgent', col_normal: 'Normal', col_period: 'Period', col_outcome: 'Outcome', col_parts_wait: 'Parts awaited', col_note: 'Note',
+  e_by_team: 'By team', e_hm_group: 'Handymen', e_ops_group: 'Operations-room technicians', e_paused: 'Paused, not counted', e_self_fixed: 'Fixed himself', e_visits: 'Visits',
+  p_s8: 'Handymen and the operations room', p_s8_sub: 'Performance by team', p_team_line: '{n} visits · arrival {a} · repair {f}'
 }
 };
 function t(k, p) {
@@ -390,6 +520,16 @@ function initials(n) { const p = String(n || '').trim().split(/\s+/); return esc
 const org = () => (LANG === 'ar' ? CFG.orgAr || CFG.orgEn : CFG.orgEn || CFG.orgAr) || '';
 const uName = r => (LANG === 'ar' ? r.unit_ar || r.label_ar : r.unit_en || r.label_en);
 const bName = r => (LANG === 'ar' ? r.building_ar : r.building_en);
+const bMeta = code => (((S.settings || DEFAULTS).buildings || {})[code]) || {};
+const bLabel = code => { const m = bMeta(code); return (LANG === 'ar' ? m.ar : m.en) || m.ar || m.en || code || ''; };
+function bCodes() { const b = (S.settings || DEFAULTS).buildings || {}; return Object.keys(b).sort((x, y) => ((b[x].sort || 99) - (b[y].sort || 99)) || x.localeCompare(y)); }
+const holdLabel = r => t('hold_' + r.hold_kind);
+const secs = v => (+v || 0) * 1000;
+const isoPlus = (x, msAdd) => new Date(D(x).getTime() + msAdd).toISOString();
+const minsOf = v => (v == null ? null : Math.round(v / 60000));
+function dayKey(x) { const d = new Date(D(x).getTime() + OFFSET); return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0'); }
+const teamOf = s => (s && s.role === 'technician' ? (s.team === 'hm' ? 'hm' : 'ops') : null);
+function teamLine(s) { if (!s || s.role !== 'technician') return t('role_' + (s ? s.role : 'technician')); return s.team === 'hm' ? t('tech_hm', { b: (s.sites || []).map(bLabel).join('، ') }) : t('tech_ops'); }
 
 /* ------------------------------------------------------------ icons */
 const I = d => `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
@@ -421,14 +561,22 @@ const ICON = {
   wrench: I('<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9l-3.8 3.8z"/>'),
   shield: I('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>'),
   bell: I('<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>'),
-  chartbig: I('<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>')
+  chartbig: I('<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>'),
+  pause: I('<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>'),
+  play: I('<path d="M7 5l12 7-12 7z"/>'),
+  handover: I('<path d="M17 3l4 4-4 4M21 7H9M7 21l-4-4 4-4M3 17h12"/>'),
+  box: I('<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/>'),
+  calendar: I('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'),
+  report: I('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h6"/>'),
+  send: I('<path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/>'),
+  trash: I('<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>')
 };
 
 /* ------------------------------------------------------------ state */
 const S = {
   session: store.get(P + 'session', null),
   settings: null, list: null, listAt: 0, req: null, draft: {}, photos: {}, unit: null, track: null,
-  seenNew: null, boardTab: 'open', q: '', route: '#/demo', justSent: null
+  seenNew: null, boardTab: 'open', q: '', bf: '', route: '#/demo', justSent: null, rf: { b: '', st: '', p: '' }
 };
 const isMgr = () => !!(S.session && S.session.me.role !== 'technician');
 const isAdmin = () => !!(S.session && S.session.me.role === 'admin');
@@ -531,6 +679,8 @@ async function dispatch(p, alive) {
     case 'board': return mgr ? vBoard(alive) : go('/jobs');
     case 'r': return vReq(p[1], alive);
     case 'eval': return mgr ? vEval(p[1], alive) : go('/history');
+    case 'reports': return mgr ? vReports(p[1], p[2], alive) : go('/jobs');
+    case 'new': return mgr ? vNewReq(alive) : go('/jobs');
     case 'team': return mgr ? vTeam(alive) : go('/jobs');
     case 'settings': return role === 'admin' ? vSettings(alive) : go('/');
     case 'qr': return role === 'admin' ? (p[1] === 'print' ? vQrPrint(p[2], alive) : vQr(alive)) : go('/');
@@ -542,7 +692,7 @@ async function dispatch(p, alive) {
 function header(o) {
   const right = [`<button class="chip-btn" type="button" data-act="lang">${t('lang_other')}</button>`];
   if (o.staff && S.session) {
-    right.push(`<span class="who"><b>${esc(S.session.me.name)}</b><small>${t('role_' + S.session.me.role)}</small></span>`);
+    right.push(`<span class="who"><b>${esc(S.session.me.name)}</b><small>${esc(S.session.me.role === 'technician' ? (S.session.me.team === 'hm' ? t('role_hm') : t('team_ops')) : t('role_' + S.session.me.role))}</small></span>`);
     right.push(`<button class="icon-btn" type="button" data-act="logout" title="${t('logout')}" aria-label="${t('logout')}">${ICON.logout}</button>`);
   }
   const home = o.staff && S.session ? '#/' : (S.unit && o.tenant ? '#/u/' + encodeURIComponent(S.unit.token) : '#/');
@@ -554,7 +704,7 @@ function navBar(active) {
   if (!me) return '';
   let items = me.role === 'technician'
     ? [['jobs', ICON.list, t('n_jobs')], ['history', ICON.chart, t('n_history')]]
-    : [['board', ICON.list, t('n_board')], ['eval', ICON.chart, t('n_eval')], ['team', ICON.users, t('n_team')]];
+    : [['board', ICON.list, t('n_board')], ['reports', ICON.report, t('n_reports')], ['eval', ICON.chart, t('n_eval')], ['team', ICON.users, t('n_team')]];
   if (me.role === 'admin') items = items.concat([['qr', ICON.qr, t('n_qr')], ['settings', ICON.gear, t('n_settings')]]);
   return `<nav class="nav" aria-label="${t('app')}">${items.map(([k, ic, l]) => `<a href="#/${k}" class="${k === active ? 'on' : ''}">${ic}<span>${l}</span></a>`).join('')}</nav>`;
 }
@@ -654,7 +804,7 @@ function chime() {
 }
 async function loadList(force) {
   if (S.list && !force && Date.now() - S.listAt < 4000) return S.list;
-  const list = await srpc('staff_requests', { p_from: new Date(Date.now() - 45 * 864e5).toISOString() });
+  const list = await srpc('staff_requests', { p_from: new Date(Date.now() - 10 * 864e5).toISOString() });
   S.list = Array.isArray(list) ? list : [];
   S.listAt = Date.now();
   const fresh = S.list.filter(r => r.status === 'new');
@@ -676,17 +826,28 @@ function listPoll(update) {
 
 /* ------------------------------------------------------------ shared bits */
 const prBadge = p => `<span class="badge ${p}">${p === 'urgent' ? ICON.alert : ''}${t('pr_' + p)}</span>`;
-const statusChip = s => `<span class="status s-${s}">${t('st_' + s)}</span>`;
+function statusChip(r) {
+  if (typeof r === 'string') return `<span class="status s-${r}">${t('st_' + r)}</span>`;
+  if (r.hold_kind === 'busy') return `<span class="status s-queued">${t('st_queued')}</span>`;
+  if (r.hold_kind) return `<span class="status s-hold">${esc(holdLabel(r))}</span>`;
+  return `<span class="status s-${r.status}">${t('st_' + r.status)}</span>`;
+}
+const stageChip = r => (r.status === 'new' && r.stage ? `<span class="stage st-${r.stage}">${r.stage === 'hm' ? t('team_hm') : t('team_ops')}</span>` : '');
+const pickupTarget = r => r.target_pickup || targetsFor(r).pickup;
 function phase(r) {
-  const T = targetsFor(r);
-  if (r.status === 'new') return { from: r.created_at, target: T.pickup, label: 'tm_wait' };
-  if (r.status === 'accepted') return { from: r.accepted_at, target: r.target_arrive, label: 'tm_way' };
-  if (r.status === 'onsite') return { from: r.arrived_at, target: r.target_work, label: 'tm_work' };
+  if (r.hold_kind) return null;
+  if (r.status === 'new') return { from: r.offered_at || r.created_at, target: pickupTarget(r), label: 'tm_wait' };
+  if (r.status === 'accepted') return { from: isoPlus(r.accepted_at, secs(r.paused_arrive)), target: r.target_arrive, label: 'tm_way' };
+  if (r.status === 'onsite') return { from: isoPlus(r.arrived_at, secs(r.paused_work)), target: r.target_work, label: 'tm_work' };
   if (r.status === 'finished') return { from: r.finished_at, target: 24 * 60, label: 'tm_sign' };
   return null;
 }
 function isLate(r) { const p = phase(r); return !!(p && p.from && Date.now() - D(p.from) > p.target * 60000); }
 function timerChip(r) {
+  if (r.hold_kind && ['accepted', 'onsite'].includes(r.status)) {
+    const sub = r.hold_kind === 'busy' && r.hold_ref_no ? t('tm_busy_on', { no: r.hold_ref_no }) : t('tm_paused');
+    return `<span class="tm paused">${ICON.pause}<small>${esc(sub)}</small><b class="clock" data-tick="${esc(r.hold_at)}">${fClock(Date.now() - D(r.hold_at))}</b></span>`;
+  }
   const p = phase(r);
   if (!p) {
     if (r.status === 'closed') return `<span class="tm done">${ICON.check}<b class="num">${fDur(ms(r.created_at, r.closed_at))}</b></span>`;
@@ -697,13 +858,16 @@ function timerChip(r) {
 function byUrgency(a, b) {
   const la = isLate(a), lb = isLate(b);
   if (la !== lb) return la ? -1 : 1;
+  const ha = !!a.hold_kind, hb = !!b.hold_kind;
+  if (ha !== hb) return ha ? 1 : -1;
   if (a.priority !== b.priority) return a.priority === 'urgent' ? -1 : 1;
   return D(a.created_at) - D(b.created_at);
 }
 function reqCard(r) {
-  return `<a class="req ${r.priority} st-${r.status} ${isLate(r) ? 'is-late' : ''}" href="#/r/${esc(r.id)}">
-    <div class="req-top">${prBadge(r.priority)}<b class="no num">#${r.no}</b><span class="where">${esc(uName(r))}<small> · ${esc(bName(r))}</small></span>${statusChip(r.status)}</div>
-    <div class="req-issue">${esc(issueLabel(r.issue_type))}</div>
+  const handed = (r.legs || []).some(l => l.outcome === 'escalated');
+  return `<a class="req ${r.priority} st-${r.status} ${r.hold_kind ? 'held' : ''} ${isLate(r) ? 'is-late' : ''}" href="#/r/${esc(r.id)}">
+    <div class="req-top">${prBadge(r.priority)}<b class="no num">#${r.no}</b><span class="where">${esc(uName(r))}<small> · ${esc(bName(r))}</small></span>${statusChip(r)}</div>
+    <div class="req-issue">${esc(issueLabel(r.issue_type))}${stageChip(r)}${handed && r.status !== 'new' ? `<span class="stage st-ops">${ICON.handover}${t('team_ops')}</span>` : ''}</div>
     <div class="req-desc">${esc(r.description)}</div>
     <div class="req-foot"><span class="tech">${ICON.user}${r.technician ? esc(r.technician) : `<i>${t('b_unassigned')}</i>`}</span>${timerChip(r)}</div>
   </a>`;
@@ -1019,8 +1183,10 @@ async function vUnit(token, alive) {
   let job = null;
   if (S.session) {
     try {
-      const list = await rpc('staff_requests', { p_token: S.session.token });
-      job = (list || []).find(r => r.unit_id === unit.id && r.status === 'accepted' && r.technician_id === S.session.me.id) || null;
+      const nowIso = new Date().toISOString();
+      const list = await rpc('staff_requests', { p_token: S.session.token, p_from: nowIso, p_to: nowIso });
+      const mine = (list || []).filter(r => r.unit_id === unit.id && r.technician_id === S.session.me.id);
+      job = mine.find(r => r.status === 'accepted' && !r.hold_kind) || mine.find(r => r.status === 'onsite' && r.hold_kind) || mine.find(r => r.status === 'accepted') || null;
     } catch (e) { /* not signed in on this device */ }
   }
   if (!alive()) return;
@@ -1029,7 +1195,10 @@ async function vUnit(token, alive) {
   const issues = unit.issues || issueList();
   page(`<div class="wrap narrow">
     <section class="unit-card"><div class="uc-ic">${unit.kind === 'common' ? ICON.building : ICON.door}</div><div><small>${esc(bName(unit))}</small><h1>${esc(uName(unit))}</h1></div></section>
-    ${job ? `<section class="card"><h3>${ICON.wrench}${t('t_staff_here')}</h3><button class="btn primary block big" type="button" data-act="unit-arrive" data-id="${esc(job.id)}">${ICON.check}${t('t_staff_arrive', { no: job.no })}</button></section>` : ''}
+    ${job ? `<section class="card"><h3>${ICON.wrench}${t('t_staff_here')}</h3>${job.status === 'accepted' && !job.hold_kind
+      ? `<button class="btn primary block big" type="button" data-act="unit-arrive" data-id="${esc(job.id)}">${ICON.check}${t('t_staff_arrive', { no: job.no })}</button>`
+      : job.status === 'onsite' ? `<button class="btn primary block big" type="button" data-act="unit-resume" data-id="${esc(job.id)}">${ICON.play}${t('d_resume_scan').split(':')[0]} · #${job.no}</button>`
+      : `<p class="callout">${ICON.pause}<span>${esc(t('d_paused_title'))} · ${esc(holdLabel(job))}</span></p><a class="btn block" href="#/r/${esc(job.id)}">#${job.no}</a>`}</section>` : ''}
     ${tracked.length ? `<section class="card"><h3>${t('t_your')}</h3><div class="mine">${tracked.map(r => `<a class="mine-item ${r.status === 'finished' ? 'attn' : ''}" href="#/t/${esc(r.id)}/${esc(r.code)}"><span><b class="num">#${r.no}</b> · ${esc(issueLabel(r.issue_type))}</span>${r.status === 'finished' ? `<span class="btn sm primary">${t('t_sign_now')}</span>` : statusChip(r.status)}</a>`).join('')}</div></section>` : ''}
     <form class="card form" data-form="submit-req" novalidate>
       <div><h2>${t('t_report')}</h2><p class="muted small">${t('t_report_sub')}</p></div>
@@ -1067,11 +1236,11 @@ async function vTrack(id, code, alive) {
     <section class="card">
       <div class="track-h"><div><small class="muted">${esc(bName(r))} · ${esc(uName(r))}</small><h1>${t('t_track_title', { no: r.no })}</h1></div>${statusChip(r.status)}</div>
       <div><p class="issue-l">${esc(issueLabel(r.issue_type))}</p><p class="muted desc">${esc(r.description)}</p></div>
-      ${r.status === 'cancelled' ? `<p class="callout">${ICON.alert}${t('t_cancelled')}</p>` : stepper(r)}
+      ${r.status === 'cancelled' ? `<p class="callout">${ICON.alert}${t('t_cancelled')}</p>` : trackNotes(r) + stepper(r)}
     </section>
-    ${DEMO && r.status === 'new' ? guide('g_tech', 'g_tech_btn', '/r/' + r.id, 's-t1') : ''}
+    ${DEMO && r.status === 'new' ? guide(r.stage === 'ops' ? 'g_ops' : 'g_tech', r.stage === 'ops' ? 'g_ops_btn' : 'g_tech_btn', '/r/' + r.id, Demo.firstFor(r.building_code, r.stage)) : ''}
     ${r.status === 'finished' ? tenantSignForm(r) : ''}
-    ${r.status === 'closed' ? `<section class="card"><div class="success">${ICON.check}<div><b>${t('t_thanks')}</b>${r.rating ? `<p>${starsRo(r.rating)}</p>` : ''}${r.signoff_method === 'onsite' ? `<p class="muted small">${t('t_signed_onsite')}</p>` : ''}</div></div>${r.photo_after ? `<figure class="ph"><img src="${r.photo_after}" alt="" data-act="zoom"><figcaption>${t('t_after_photo')}</figcaption></figure>` : ''}</section>` : ''}
+    ${r.status === 'closed' ? `<section class="card"><div class="success">${ICON.check}<div><b>${t('t_thanks')}</b>${r.rating ? `<p>${starsRo(r.rating)}</p>` : ''}${r.signoff_method === 'onsite' ? `<p class="muted small">${t('t_signed_onsite')}</p>` : ''}</div></div>${r.photo_after ? `<figure class="ph"><img src="${r.photo_after}" alt="" data-act="zoom"><figcaption>${t('t_after_photo')}</figcaption></figure>` : ''}${reportBlock(r)}</section>` : ''}
     ${DEMO && r.status === 'closed' ? guide('g_admin', 'g_admin_btn', '/r/' + r.id, 's-admin') : ''}
     ${token ? `<a class="btn block" href="#/u/${esc(encodeURIComponent(token))}">${ICON.plus}${t('t_new_req')}</a>` : ''}
   </div>`, { tenant: true });
@@ -1079,9 +1248,26 @@ async function vTrack(id, code, alive) {
   if (['new', 'accepted', 'onsite'].includes(r.status)) {
     startPoll(async () => {
       const n = await rpc('track_request', { p_id: id, p_code: code });
-      if (n && n.status !== S.track.r.status) render();
+      if (n && (n.status !== S.track.r.status || n.hold_kind !== S.track.r.hold_kind || n.escalated !== S.track.r.escalated)) render();
     }, 20000);
   }
+}
+function trackNotes(r) {
+  const n = [];
+  if (r.escalated && !['finished', 'closed'].includes(r.status)) n.push(`<p class="callout">${ICON.handover}<span>${t('t_escalated')}</span></p>`);
+  if (r.hold_kind) {
+    const eta = r.hold_eta ? ' ' + t('t_hold_eta', { d: fmt(r.hold_eta, { weekday: 'long', day: 'numeric', month: 'long' }) }) : '';
+    n.push(`<p class="callout hold">${ICON.pause}<span>${t('t_hold_' + r.hold_kind)}${r.hold_kind === 'busy' ? '' : esc(eta)}</span></p>`);
+  }
+  return n.join('');
+}
+function partsList(parts) {
+  if (!parts || !parts.length) return '';
+  return `<ul class="parts-ro">${parts.map(x => `<li><span>${esc(x.n)}</span><b class="num">× ${esc(x.q)}</b></li>`).join('')}</ul>`;
+}
+function reportBlock(r) {
+  if (!r.tech_note && !(r.parts && r.parts.length)) return '';
+  return `<div class="report-b">${r.tech_note ? `<p class="note"><b>${t('t_tech_note')}:</b> ${esc(r.tech_note)}</p>` : ''}${r.parts && r.parts.length ? `<div><span class="lbl">${t('t_parts')}</span>${partsList(r.parts)}</div>` : ''}</div>`;
 }
 function stepper(r) {
   const steps = [['t_step_sent', r.created_at], ['t_step_acc', r.accepted_at, r.technician], ['t_step_arr', r.arrived_at], ['t_step_fin', r.finished_at], ['t_step_closed', r.closed_at]];
@@ -1092,7 +1278,7 @@ function tenantSignForm(r) {
   return `<form class="card form" data-form="tenant-sign" novalidate>
     <div><h2>${t('t_confirm_title')}</h2><p class="muted small">${t('t_confirm_body')}</p></div>
     ${r.photo_after ? `<figure class="ph"><img src="${r.photo_after}" alt="${esc(t('t_after_photo'))}" data-act="zoom"><figcaption>${t('t_after_photo')}</figcaption></figure>` : ''}
-    ${r.tech_note ? `<p class="note"><b>${t('t_tech_note')}:</b> ${esc(r.tech_note)}</p>` : ''}
+    ${reportBlock(r)}
     ${starsField()}
     <div class="field"><label for="ts-c">${t('t_comment')} <span class="opt">(${t('optional')})</span></label><textarea id="ts-c" name="comment" rows="2" maxlength="500"></textarea></div>
     ${sigField('tenant')}
@@ -1142,11 +1328,16 @@ async function vJobs(alive) {
   fillPushSlot();
   listPoll(() => { const el = $('#jobs'); if (el) { el.innerHTML = jobsBody(S.list); tick(); } });
 }
+function jobOrder(a, b) {
+  const rank = r => (r.status === 'onsite' && !r.hold_kind ? 0 : r.status === 'accepted' && !r.hold_kind ? 1 : r.status === 'finished' ? 3 : 2);
+  return rank(a) - rank(b) || byUrgency(a, b);
+}
 function jobsBody(list) {
-  const me = S.session.me.id;
-  const mine = list.filter(r => r.technician_id === me && ['accepted', 'onsite', 'finished'].includes(r.status)).sort(byUrgency);
+  const me = S.session.me;
+  const mine = list.filter(r => r.technician_id === me.id && ['accepted', 'onsite', 'finished'].includes(r.status)).sort(jobOrder);
   const fresh = list.filter(r => r.status === 'new').sort(byUrgency);
-  return `<h2 class="sec">${t('j_mine')}<span class="count">${mine.length}</span></h2>
+  return `<p class="team-line">${me.team === 'hm' ? ICON.building : ICON.wrench}<span>${esc(teamLine(me))}</span></p>
+    <h2 class="sec">${t('j_mine')}<span class="count">${mine.length}</span></h2>
     ${mine.length ? `<div class="cards">${mine.map(reqCard).join('')}</div>` : `<p class="empty-line">${t('j_none_mine')}</p>`}
     <h2 class="sec">${t('j_new')}<span class="count">${fresh.length}</span></h2>
     ${fresh.length ? `<div class="cards">${fresh.map(reqCard).join('')}</div>` : `<p class="empty-line">${t('j_none_new')}</p>`}`;
@@ -1158,13 +1349,15 @@ async function vHistory(alive) {
   const list = await srpc('staff_requests', { p_from: from.toISOString(), p_to: to.toISOString() });
   if (!alive()) return;
   const me = S.session.me.id;
-  const mineAll = list.filter(r => r.technician_id === me);
-  const month = mineAll.filter(r => D(r.created_at) >= from && D(r.created_at) < to && r.status !== 'cancelled');
-  const m = metrics(month, new Set());
+  const month = list.filter(r => D(r.created_at) >= from && D(r.created_at) < to && r.status !== 'cancelled');
+  const legs = [];
+  month.forEach(r => legsOf(r).forEach(l => { if (l.staff_id === me) legs.push(l); }));
+  const reqs = month.filter(r => legsOf(r).some(l => l.staff_id === me));
+  const m = metricsL(legs, new Set());
   page(`<div class="wrap wide">
-    <div class="eval-h"><div><h1>${t('h_title')}</h1><p class="muted">${ymLabel(ym)}</p></div></div>
-    ${month.length ? `<section class="score-card"><div class="score-big"><small>${t('e_score')}</small><b>${m.score == null ? '—' : m.score}</b><small>${t('of100')}</small></div>${kpiGrid(m)}</section>
-    <div class="cards">${month.sort((a, b) => D(b.created_at) - D(a.created_at)).map(reqCard).join('')}</div>` : `<p class="empty-line">${t('e_none')}</p>`}
+    <div class="eval-h"><div><h1>${t('h_title')}</h1><p class="muted">${ymLabel(ym)} · ${esc(teamLine(S.session.me))}</p></div></div>
+    ${legs.length ? `<section class="score-card"><div class="score-big"><small>${t('e_score')}</small><b>${m.score == null ? '—' : m.score}</b><small>${t('of100')}</small></div>${kpiGrid(m)}</section>
+    <div class="cards">${reqs.sort((a, b) => D(b.created_at) - D(a.created_at)).map(reqCard).join('')}</div>` : `<p class="empty-line">${t('e_none')}</p>`}
     <p class="muted small">${t('e_formula', { d: st.repeatDays || 30 })}</p>
   </div>`, { staff: true, nav: 'history' });
 }
@@ -1179,22 +1372,23 @@ async function vReq(id, alive) {
     if (isMgr()) team = await srpc('team_list').catch(() => null);
   } catch (e) { if (alive()) page(errorBox(e), { staff: true, nav: navKey() }); return; }
   if (!alive()) return;
-  S.req = r;
+  S.req = r; S.team = team || S.team;
   page(reqView(r, team), { staff: true, nav: navKey() });
   initPads();
   if (!['closed', 'cancelled'].includes(r.status)) {
     startPoll(async () => {
       const n = await srpc('staff_request', { p_id: id });
-      if (n.status !== S.req.status || n.technician_id !== S.req.technician_id || n.priority !== S.req.priority) { S.list = null; render(); }
+      if (n.status !== S.req.status || n.technician_id !== S.req.technician_id || n.priority !== S.req.priority || n.hold_kind !== S.req.hold_kind || n.stage !== S.req.stage) { S.list = null; render(); }
     }, 20000);
   }
 }
 function reqView(r, team) {
   const back = isMgr() ? 'board' : 'jobs';
+  const src = r.source && r.source !== 'qr' ? `<span class="flag info">${ICON.phone}${t('src_' + r.source)}</span>` : '';
   return `<div class="wrap wide">
     <a class="back no-print" href="#/${back}">${ICON.back}${t('back')}</a>
     <div class="det-h">
-      <div><div class="det-tags">${prBadge(r.priority)}${statusChip(r.status)}${r.arrival_method === 'manual' ? `<span class="flag">${ICON.alert}${t('ev_arrived_manual')}</span>` : ''}</div>
+      <div><div class="det-tags">${prBadge(r.priority)}${statusChip(r)}${stageChip(r)}${src}${r.arrival_method === 'manual' ? `<span class="flag">${ICON.alert}${t('ev_arrived_manual')}</span>` : ''}</div>
         <h1><span class="num">#${r.no}</span> · ${esc(uName(r))}</h1>
         <p class="muted">${esc(bName(r))} · ${t('d_reported')} <span class="num">${fDT(r.created_at)}</span></p></div>
       ${r.status === 'closed' && !EMB ? `<button class="btn sm no-print" type="button" data-act="print">${ICON.print}${t('d_print')}</button>` : ''}
@@ -1205,11 +1399,11 @@ function reqView(r, team) {
           <h3>${esc(issueLabel(r.issue_type))}</h3>
           <p class="desc">${esc(r.description)}</p>
           ${r.contact_name || r.contact_phone ? `<p class="contact">${ICON.user}<span>${esc(r.contact_name || '')}</span>${r.contact_phone ? `<a href="tel:${esc(r.contact_phone)}" dir="ltr">${ICON.phone}${esc(r.contact_phone)}</a>` : ''}</p>` : ''}
-          <div class="photos">
-            <figure class="ph"><img src="${r.photo_before}" alt="" data-act="zoom"><figcaption>${t('d_photo_before')}</figcaption></figure>
+          ${r.photo_before || r.photo_after ? `<div class="photos">
+            ${r.photo_before ? `<figure class="ph"><img src="${r.photo_before}" alt="" data-act="zoom"><figcaption>${t('d_photo_before')}</figcaption></figure>` : ''}
             ${r.photo_after ? `<figure class="ph"><img src="${r.photo_after}" alt="" data-act="zoom"><figcaption>${t('t_after_photo')}</figcaption></figure>` : ''}
-          </div>
-          ${r.tech_note ? `<p class="note"><b>${t('t_tech_note')}:</b> ${esc(r.tech_note)}</p>` : ''}
+          </div>` : ''}
+          ${reportBlock(r)}
         </section>
         ${closeSummary(r)}
         ${locationBlock(r)}
@@ -1217,33 +1411,77 @@ function reqView(r, team) {
       <div class="col">
         ${actionPanel(r)}
         <section class="card"><h3>${ICON.clock}${t('d_times')}</h3>${timesTable(r)}</section>
+        ${legsCard(r)}
         ${mgrPanel(r, team)}
         <section class="card"><h3>${t('d_log')}</h3>${eventsList(r.events || [])}</section>
       </div>
     </div>
   </div>`;
 }
-function bigTimer(from, target, label) {
-  return `<div class="big-timer" data-tick="${esc(from)}" data-target="${target || ''}"><small>${t(label)}</small><b class="clock">${fClock(Date.now() - D(from))}</b>${target ? `<small>${t('target', { m: target + ' ' + t('min') })}</small>` : ''}</div>`;
+function bigTimer(from, target, label, sub) {
+  return `<div class="big-timer" data-tick="${esc(from)}" data-target="${target || ''}"><small>${t(label)}</small><b class="clock">${fClock(Date.now() - D(from))}</b>${target ? `<small>${esc(sub || t('target', { m: target + ' ' + t('min') }))}</small>` : ''}</div>`;
 }
+function arriveTargetNote(r) {
+  const m = r.target_arrive + ' ' + t('min');
+  if (r.stage === 'hm' || (r.origin && r.origin === r.building_code)) return t('d_target_in', { m });
+  if (r.origin) return t('d_target_from', { m, b: bLabel(r.origin) });
+  return t('d_target_ops', { m });
+}
+function pausedPanel(r, body, buttons) {
+  return `<section class="card paused-card">
+    <div class="big-timer paused" data-tick="${esc(r.hold_at)}"><small>${ICON.pause} ${t('d_paused_title')} · ${esc(holdLabel(r))}</small><b class="clock">${fClock(Date.now() - D(r.hold_at))}</b><small>${t('tm_paused')}</small></div>
+    ${body}${buttons}</section>`;
+}
+function holdInfo(r) {
+  const bits = [];
+  if (r.hold_kind === 'busy') bits.push(r.hold_ref ? t('d_wait_auto', { no: r.hold_ref_no || '' }) : t('d_wait_other', { n: r.hold_note || '' }));
+  else if (r.hold_kind === 'access') bits.push(t('d_wait_access', { n: r.hold_note || '' }));
+  else if (r.hold_note) bits.push(r.hold_note);
+  if (r.hold_eta) bits.push(t('d_held_eta', { d: fmt(r.hold_eta, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false }) }));
+  const parts = r.hold_kind === 'parts' && r.hold_parts && r.hold_parts.length ? `<div><span class="lbl">${t('d_parts_wait')}</span>${partsList(r.hold_parts)}</div>` : '';
+  return (bits.length ? `<p class="callout hold">${ICON.pause}<span>${bits.map(esc).join(' · ')}</span></p>` : '') + parts;
+}
+function partRow(x, i) {
+  x = x || {};
+  return `<div class="part-row"><input name="pn" aria-label="${t('d_part_name')}" placeholder="${t('d_part_name')}" maxlength="80" value="${esc(x.n || '')}"><input name="pq" type="number" min="0.1" step="any" inputmode="decimal" aria-label="${t('d_part_qty')}" value="${esc(x.q || 1)}"><button type="button" class="icon-btn" data-act="part-del" aria-label="${t('d_del_part')}" title="${t('d_del_part')}">${ICON.trash}</button></div>`;
+}
+function partsEditor(id, parts, min1) {
+  const rows = parts && parts.length ? parts : min1 ? [{ n: '', q: 1 }] : [];
+  return `<div class="parts-ed" id="${id}">${rows.map(partRow).join('')}<p class="empty-parts">${t('d_none_parts')}</p></div><button type="button" class="btn sm" data-act="part-add" data-to="${id}">${ICON.plus}${t('d_add_part')}</button>`;
+}
+const readParts = root => $$('.part-row', root).map(r => ({ n: $('[name="pn"]', r).value.trim(), q: Math.max(0.1, Math.round((+$('[name="pq"]', r).value || 1) * 100) / 100) })).filter(x => x.n);
 function actionPanel(r) {
   const me = S.session.me, mine = r.technician_id === me.id, can = mine || isMgr();
   if (r.status === 'new' && me.role === 'technician') {
-    return `<section class="card">${bigTimer(r.created_at, targetsFor(r).pickup, 'tm_wait')}<button class="btn primary block big" type="button" data-act="accept">${ICON.check}${t('d_accept')}</button></section>`;
+    return `<section class="card">${bigTimer(r.offered_at || r.created_at, pickupTarget(r), 'tm_wait')}
+      <button class="btn primary block big" type="button" data-act="accept">${ICON.check}${t('d_accept')}</button>
+      <button class="btn block" type="button" data-act="accept-busy">${ICON.pause}${t('d_accept_busy')}</button></section>`;
   }
   if (r.status === 'accepted' && can) {
-    return `<section class="card">${bigTimer(r.accepted_at, r.target_arrive, 'tm_way')}
+    if (r.hold_kind) return pausedPanel(r, holdInfo(r), `<button class="btn primary block big" type="button" data-act="go-now">${ICON.play}${t('d_go_now')}</button>`);
+    return `<section class="card">${bigTimer(isoPlus(r.accepted_at, secs(r.paused_arrive)), r.target_arrive, 'tm_way', arriveTargetNote(r))}
       <button class="btn primary block big" type="button" data-act="scan">${ICON.qr}${t('d_arrive')}</button>
       <details class="more"><summary>${t('d_arrive_manual')}</summary>
         <form class="form" data-form="arrive-manual" novalidate><div class="field"><label for="am-n">${t('d_manual_reason')}</label><textarea id="am-n" name="note" rows="2" maxlength="300"></textarea><p class="warn-line">${ICON.alert}${t('d_manual_warn')}</p><p class="err" data-err="note"></p></div>
-        <button class="btn block" type="submit">${t('d_manual_submit')}</button></form></details></section>`;
+        <button class="btn block" type="submit">${t('d_manual_submit')}</button></form></details>
+      <div class="row pause-row"><button class="btn sm" type="button" data-act="pause-busy">${ICON.pause}${t('d_pause_busy')}</button><button class="btn sm" type="button" data-act="pause-access">${ICON.calendar}${t('d_pause_access')}</button></div></section>`;
   }
   if (r.status === 'onsite' && can) {
-    return `<section class="card">${bigTimer(r.arrived_at, r.target_work, 'tm_work')}
+    const esc8 = r.stage === 'hm' ? `<button class="btn block" type="button" data-act="escalate">${ICON.handover}${t('d_escalate')}</button>` : '';
+    if (r.hold_kind) {
+      return pausedPanel(r, holdInfo(r), `<button class="btn primary block big" type="button" data-act="resume-scan">${ICON.qr}${t('d_resume_scan')}</button>
+        <details class="more"><summary>${t('d_resume_manual')}</summary>
+          <form class="form" data-form="resume-manual" novalidate><div class="field"><label for="rm-n">${t('d_manual_reason')}</label><textarea id="rm-n" name="note" rows="2" maxlength="300"></textarea><p class="warn-line">${ICON.alert}${t('d_manual_warn')}</p><p class="err" data-err="note"></p></div>
+          <button class="btn block" type="submit">${t('d_resume_submit')}</button></form></details>${esc8}`);
+    }
+    return `<section class="card">${bigTimer(isoPlus(r.arrived_at, secs(r.paused_work)), r.target_work, 'tm_work')}
       <form class="form" data-form="finish" novalidate><h3>${t('d_finish_title')}</h3>
         <div class="field"><span class="lbl">${t('d_after_photo')} <i class="must">*</i></span>${photoField('after:' + r.id, 'fin-photo')}<p class="err" data-err="photo"></p></div>
-        <div class="field"><label for="fin-n">${t('d_note')} <span class="opt">(${t('optional')})</span></label><textarea id="fin-n" name="note" rows="2" maxlength="500" placeholder="${esc(t('d_note_ph'))}"></textarea></div>
-        <button class="btn primary block big" type="submit">${ICON.check}${t('d_finish')}</button></form></section>`;
+        <div class="field"><label for="fin-n">${t('d_report')} <i class="must">*</i></label><textarea id="fin-n" name="note" rows="3" maxlength="1500" placeholder="${esc(t('d_report_ph'))}"></textarea><p class="err" data-err="note"></p></div>
+        <div class="field"><span class="lbl">${t('d_parts_used')}</span>${partsEditor('fin-parts', r.hold_parts || [], false)}</div>
+        <button class="btn primary block big" type="submit">${ICON.check}${t('d_finish')}</button></form>
+      <div class="row pause-row"><button class="btn sm" type="button" data-act="hold-parts">${ICON.box}${t('d_hold_parts')}</button><button class="btn sm" type="button" data-act="hold-other">${ICON.pause}${t('d_hold_other')}</button></div>
+      ${esc8}</section>`;
   }
   if (r.status === 'finished' && can) {
     const mineReq = DEMO ? myRequests().find(x => x.id === r.id) : null;
@@ -1259,29 +1497,50 @@ function actionPanel(r) {
           <button class="btn primary block" type="submit">${t('d_close_req')}</button>
         </form></details></section>`;
   }
+  if (isMgr() && r.hold_kind && ['accepted', 'onsite'].includes(r.status)) return pausedPanel(r, holdInfo(r), '');
   return '';
 }
 function timesTable(r) {
-  const T = targetsFor(r), open = !['closed', 'cancelled'].includes(r.status);
+  const open = !['closed', 'cancelled'].includes(r.status), held = !!r.hold_kind;
+  const pa = secs(r.paused_arrive), pw = secs(r.paused_work);
   const rows = [
-    ['tm_pickup', r.created_at, r.accepted_at, T.pickup, r.status === 'new', ''],
-    ['tm_way', r.accepted_at, r.arrived_at, r.target_arrive, r.status === 'accepted', r.arrival_method ? t(r.arrival_method === 'qr' ? 'd_by_qr' : 'd_by_manual') : ''],
-    ['tm_work', r.arrived_at, r.finished_at, r.target_work, r.status === 'onsite', ''],
-    ['tm_sign', r.finished_at, r.signed_at || r.closed_at, null, r.status === 'finished', ''],
-    ['tm_total', r.created_at, r.closed_at || r.cancelled_at, null, open, '']
+    { k: 'tm_pickup', a: r.offered_at || r.created_at, b: r.accepted_at, tg: pickupTarget(r), live: r.status === 'new', p: 0 },
+    { k: 'tm_way', a: r.accepted_at, b: r.arrived_at, tg: r.target_arrive, live: r.status === 'accepted', p: pa,
+      note: [r.arrival_method ? t(r.arrival_method === 'qr' ? 'd_by_qr' : 'd_by_manual') : '', r.accepted_at ? arriveTargetNote(r).replace(/^[^·]*· ?/, '') : ''].filter(Boolean).join(' · ') },
+    { k: 'tm_work', a: r.arrived_at, b: r.finished_at, tg: r.target_work, live: r.status === 'onsite', p: pw },
+    { k: 'tm_sign', a: r.finished_at, b: r.signed_at || r.closed_at, tg: null, live: r.status === 'finished', p: 0 },
+    { k: 'tm_total', a: r.created_at, b: r.closed_at || r.cancelled_at, tg: null, live: open, p: 0 }
   ];
-  return `<table class="times"><tbody>${rows.map(([k, a, b, tg, live, note]) => {
+  return `<table class="times"><tbody>${rows.map(x => {
     let val = '—', cls = '';
-    if (a && b) { const d = ms(a, b); val = `<span class="num">${fDur(d)}</span>`; if (tg) cls = d <= tg * 60000 ? 'ok' : 'over'; }
-    else if (a && live) val = `<span data-tick="${esc(a)}" data-target="${tg || ''}"><b class="clock"></b></span>`;
-    const stamp = b ? `<small class="num">${fTime(a)} – ${fTime(b)}</small>` : '';
-    return `<tr class="${cls}"><th>${t(k)}</th><td class="v">${val}${stamp}${note ? `<small>${esc(note)}</small>` : ''}</td><td class="tg">${tg ? t('target', { m: tg + ' ' + t('min') }) : ''}</td><td class="st">${cls === 'ok' ? ICON.check : cls === 'over' ? ICON.alert : ''}</td></tr>`;
+    if (x.a && x.b) { const d = ms(x.a, x.b) - x.p; val = `<span class="num">${fDur(d)}</span>`; if (x.tg) cls = d <= x.tg * 60000 ? 'ok' : 'over'; }
+    else if (x.a && x.live && held && x.k !== 'tm_total') val = `<span class="num">${fDur(D(r.hold_at) - D(x.a) - x.p)}</span> <span class="paused-tag">${ICON.pause}${t('tm_paused')}</span>`;
+    else if (x.a && x.live) val = `<span data-tick="${esc(isoPlus(x.a, x.p))}" data-target="${x.tg || ''}"><b class="clock"></b></span>`;
+    const stamp = x.b ? `<small class="num">${fTime(x.a)} – ${fTime(x.b)}</small>` : '';
+    const pnote = x.p > 60000 ? `<small class="paused-note">${ICON.pause}${esc(t('paused_note', { d: fDur(x.p) }))}</small>` : '';
+    return `<tr class="${cls}"><th>${t(x.k)}</th><td class="v">${val}${stamp}${pnote}${x.note ? `<small>${esc(x.note)}</small>` : ''}</td><td class="tg">${x.tg ? t('target', { m: x.tg + ' ' + t('min') }) : ''}</td><td class="st">${cls === 'ok' ? ICON.check : cls === 'over' ? ICON.alert : ''}</td></tr>`;
   }).join('')}</tbody></table>`;
+}
+function legsCard(r) {
+  if (!r.legs || !r.legs.length) return '';
+  const L2 = legsOf(r);
+  const row = l => {
+    const out = l.current ? (r.status === 'new' ? '' : t('leg_' + (l.outcome === 'open' ? 'open' : l.outcome))) : t('leg_' + l.outcome);
+    const bits = [];
+    if (l.arrive != null) bits.push(`${t('tm_way')} <b class="${l.arrOk === false ? 'bad' : ''}">${fDur(l.arrive)}</b> / ${l.t_arrive} ${t('min')}`);
+    if (l.outcome === 'escalated' && l.arrived_at) bits.push(`${t('d_inspect')} <b>${fDur(D(l.ended_at) - D(l.arrived_at) - l.pw)}</b>`);
+    if (l.work != null) bits.push(`${t('tm_work')} <b class="${l.workOk === false ? 'bad' : ''}">${fDur(l.work)}</b> / ${l.t_work} ${t('min')}`);
+    return `<li class="${l.current ? 'now' : ''}"><div class="lg-h"><b>${esc(l.name || '—')}</b><span class="stage st-${l.team}">${l.team === 'hm' ? t('team_hm') : t('team_ops')}</span>${out ? `<span class="muted">${esc(out)}</span>` : ''}</div>
+      ${bits.length ? `<p class="lg-t">${bits.join(' · ')}</p>` : ''}${l.note && l.outcome === 'escalated' ? `<p class="quote">${esc(l.note)}</p>` : ''}</li>`;
+  };
+  const tail = r.technician_id ? '' : `<li class="now"><div class="lg-h"><i class="muted">${t('b_unassigned')}</i><span class="stage st-${r.stage}">${r.stage === 'hm' ? t('team_hm') : t('team_ops')}</span></div></li>`;
+  return `<section class="card"><h3>${ICON.handover}${t('d_legs')}</h3><ol class="legs">${L2.map(row).join('')}${tail}</ol></section>`;
 }
 function eventsList(evs) {
   if (!evs.length) return `<p class="muted">—</p>`;
-  const inLabel = { assigned: 1, reassigned: 1, signed_onsite: 1 };
-  return `<ol class="tline">${evs.map(e => `<li><time class="num">${fDT(e.at)}</time><div><b>${esc(t('ev_' + e.ev, { n: e.note || '' }))}</b>${e.actor ? `<small>${esc(e.actor)}</small>` : ''}${e.note && !inLabel[e.ev] ? `<p>${esc(e.note)}</p>` : ''}</div></li>`).join('')}</ol>`;
+  const inLabel = { assigned: 1, reassigned: 1, signed_onsite: 1, logged: 1, resumed_auto: 1 };
+  const label = e => (e.ev === 'logged' ? t('ev_logged', { n: t('src_' + (e.note || 'other')) }) : t('ev_' + e.ev, { n: e.note || '' }));
+  return `<ol class="tline">${evs.map(e => `<li><time class="num">${fDT(e.at)}</time><div><b>${esc(label(e))}</b>${e.actor ? `<small>${esc(e.actor)}</small>` : ''}${e.note && !inLabel[e.ev] ? `<p>${esc(e.note)}</p>` : ''}</div></li>`).join('')}</ol>`;
 }
 function closeSummary(r) {
   if (r.status === 'cancelled') return `<section class="card"><h3>${t('st_cancelled')}</h3><p class="warn-line">${ICON.alert}${esc(t('d_cancelled', { n: r.cancel_note || '' }))}</p></section>`;
@@ -1296,7 +1555,7 @@ function closeSummary(r) {
 }
 function locationBlock(r) {
   if (r.arrival_lat == null || r.arrival_lng == null || !isMgr()) return '';
-  const b = ((S.settings || {}).buildings || {})[r.building_code] || {};
+  const b = bMeta(r.building_code);
   const dist = b.lat != null && b.lng != null && b.lat !== '' ? haversine(+b.lat, +b.lng, r.arrival_lat, r.arrival_lng) : null;
   const url = `https://www.google.com/maps?q=${r.arrival_lat},${r.arrival_lng}`;
   return `<section class="card"><h3>${ICON.pin}${t('d_location')}</h3>
@@ -1304,11 +1563,22 @@ function locationBlock(r) {
     <p class="mono" dir="ltr">${(+r.arrival_lat).toFixed(5)}, ${(+r.arrival_lng).toFixed(5)}</p>
     <a href="${url}" target="_blank" rel="noopener">${t('d_map')}</a></section>`;
 }
+function techOptions(team, selected, building, stage) {
+  const techs = (team || []).filter(s => s.active && s.role === 'technician');
+  const hm = techs.filter(s => s.team === 'hm').sort((a, b) => ((b.sites || []).includes(building) - (a.sites || []).includes(building)) || a.name.localeCompare(b.name));
+  const ops = techs.filter(s => s.team !== 'hm');
+  const opt = s => `<option value="${esc(s.id)}" ${s.id === selected ? 'selected' : ''}>${esc(s.name)}${s.team === 'hm' && (s.sites || []).length ? ' · ' + esc((s.sites || []).map(bLabel).join('، ')) : ''}</option>`;
+  const g1 = hm.length ? `<optgroup label="${esc(t('team_hm'))}">${hm.map(opt).join('')}</optgroup>` : '', g2 = ops.length ? `<optgroup label="${esc(t('team_ops'))}">${ops.map(opt).join('')}</optgroup>` : '';
+  return (selected ? '' : `<option value="" selected disabled>${esc(t('d_pick_tech'))}</option>`) + (stage === 'ops' ? g2 + g1 : g1 + g2);
+}
 function mgrPanel(r, team) {
   if (!isMgr() || ['closed', 'cancelled'].includes(r.status)) return '';
   const techs = (team || []).filter(s => s.active && s.role === 'technician');
+  const hasHm = techs.some(s => s.team === 'hm' && (s.sites || []).includes(r.building_code)) && (bMeta(r.building_code).type || 'res') === 'res';
+  const stageBtns = r.status === 'new' ? `<div class="field"><span class="lbl">${esc(t('d_stage_now', { s: r.stage === 'hm' ? t('stage_hm') : t('stage_ops') }))}</span><div class="row">${r.stage === 'hm' ? `<button class="btn sm" type="button" data-act="stage" data-v="ops">${ICON.handover}${t('d_send_ops')}</button>` : hasHm ? `<button class="btn sm" type="button" data-act="stage" data-v="hm">${ICON.handover}${t('d_send_hm')}</button>` : ''}</div></div>` : '';
+  const assign = r.status !== 'finished' ? (techs.length ? `<form class="form" data-form="assign"><div class="field"><label for="as-s">${r.technician_id ? t('d_reassign') : t('d_assign')}</label><div class="row"><select id="as-s" name="staff">${techOptions(team, r.technician_id, r.building_code, r.stage)}</select><button class="btn" type="submit">${t('d_assign_btn')}</button></div></div></form>` : `<p class="muted small">${t('d_no_techs')}</p>`) : '';
   return `<section class="card mgr no-print"><h3>${t('d_mgr')}</h3>
-    ${techs.length ? `<form class="form" data-form="assign"><div class="field"><label for="as-s">${r.technician_id ? t('d_reassign') : t('d_assign')}</label><div class="row"><select id="as-s" name="staff">${techs.map(s => `<option value="${esc(s.id)}" ${s.id === r.technician_id ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select><button class="btn" type="submit">${t('d_assign_btn')}</button></div></div></form>` : `<p class="muted small">${t('d_no_techs')}</p>`}
+    ${stageBtns}${assign}
     <div class="field"><span class="lbl">${t('d_priority')}</span><div class="seg">${['urgent', 'normal'].map(p => `<button type="button" data-act="prio" data-v="${p}" class="${r.priority === p ? 'on' : ''}">${t('pr_' + p)}</button>`).join('')}</div></div>
     <div class="row">${r.status !== 'new' ? `<button class="btn sm" type="button" data-act="mclose">${t('d_manual_close')}</button>` : ''}<button class="btn sm danger" type="button" data-act="mcancel">${t('d_cancel_req')}</button></div>
   </section>`;
@@ -1321,8 +1591,43 @@ function reasonModal(title, fn, danger) {
   m._reason = fn;
   setTimeout(() => { const ta = $('textarea', m); if (ta) ta.focus(); }, 60);
 }
+// Muscat date or date-time from a form input, as an ISO instant
+function muscatIso(v) {
+  const m = String(v || '').match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?$/);
+  if (!m) return null;
+  return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], m[4] != null ? +m[4] : 12, m[5] != null ? +m[5] : 0) - OFFSET).toISOString();
+}
+function busyModal(mode) {
+  const others = (S.list || []).filter(x => x.technician_id === S.session.me.id && x.id !== S.req.id && ['accepted', 'onsite'].includes(x.status) && x.hold_kind !== 'busy');
+  const m = modal(`<form class="form" data-form="busy" novalidate><input type="hidden" name="mode" value="${mode}">
+    <div><h3>${ICON.pause} ${t('b_title')}</h3><p class="muted small">${t('b_body')}</p></div>
+    <fieldset class="field"><legend>${t('b_pick')}</legend><div class="choices one">
+      ${others.map((x, i) => `<label class="choice"><input type="radio" name="ref" value="${esc(x.id)}" ${i ? '' : 'checked'}><span><b class="num">#${x.no}</b>&nbsp;· ${esc(uName(x))} · ${esc(bName(x))}</span></label>`).join('')}
+      <label class="choice"><input type="radio" name="ref" value="" ${others.length ? '' : 'checked'}><span>${t('b_other')}</span></label></div></fieldset>
+    <div class="field other-work" ${others.length ? 'hidden' : ''}><label for="bz-n">${t('d_reason')}</label><textarea id="bz-n" name="note" rows="2" maxlength="300" placeholder="${esc(t('b_other_ph'))}"></textarea><p class="hint">${t('b_other_warn')}</p><p class="err" data-err="note"></p></div>
+    <div class="row end"><button type="button" class="btn ghost" data-act="modal-close">${t('cancel')}</button><button class="btn primary" type="submit">${mode === 'accept' ? t('b_submit') : t('b_pause_submit')}</button></div></form>`);
+  return m;
+}
+function holdModal(kind) {
+  const title = kind === 'parts' ? t('d_hold_parts') : kind === 'access' ? t('d_access_title') : t('d_hold_other');
+  const after = S.req.status === 'onsite';
+  modal(`<form class="form" data-form="hold" novalidate><input type="hidden" name="kind" value="${kind}">
+    <div><h3>${kind === 'parts' ? ICON.box : ICON.pause} ${esc(title)}</h3>${after ? `<p class="muted small">${t('d_hold_warn')}</p>` : ''}</div>
+    ${kind === 'parts' ? `<div class="field"><span class="lbl">${t('d_parts_needed')} <i class="must">*</i></span>${partsEditor('hold-parts', [], true)}<p class="err" data-err="parts"></p></div>` : ''}
+    <div class="field"><label for="hd-n">${kind === 'parts' ? t('d_hold_note') : t('d_reason')} ${kind === 'parts' ? `<span class="opt">(${t('optional')})</span>` : '<i class="must">*</i>'}</label><textarea id="hd-n" name="note" rows="2" maxlength="300" placeholder="${esc(kind === 'access' ? t('d_access_ph') : kind === 'other' ? t('d_other_ph') : '')}"></textarea><p class="err" data-err="note"></p></div>
+    <div class="field"><label for="hd-eta">${kind === 'access' ? t('d_access_when') : t('d_eta')} <span class="opt">(${t('optional')})</span></label><input id="hd-eta" name="eta" type="${kind === 'access' ? 'datetime-local' : 'date'}" dir="ltr"></div>
+    <div class="row end"><button type="button" class="btn ghost" data-act="modal-close">${t('cancel')}</button><button class="btn primary" type="submit">${t('b_pause_submit')}</button></div></form>`);
+}
+function escalateModal() {
+  modal(`<form class="form" data-form="escalate" novalidate>
+    <div><h3>${ICON.handover} ${t('d_escalate')}</h3><p class="muted small">${t('d_escalate_body')}</p></div>
+    <div class="field"><label for="es-n">${t('d_findings')} <i class="must">*</i></label><textarea id="es-n" name="note" rows="3" maxlength="500" placeholder="${esc(t('d_escalate_ph'))}"></textarea><p class="err" data-err="note"></p></div>
+    <div class="row end"><button type="button" class="btn ghost" data-act="modal-close">${t('cancel')}</button><button class="btn primary" type="submit">${t('d_escalate_submit')}</button></div></form>`);
+}
 
 /* ============================================================ views: board */
+const isHeld = r => !!r.hold_kind && r.hold_kind !== 'busy' && ['accepted', 'onsite'].includes(r.status);
+const isOpen = r => ['new', 'accepted', 'onsite', 'finished'].includes(r.status);
 async function vBoard(alive) {
   page(loadingBox(), { staff: true, nav: 'board' });
   await settings();
@@ -1331,76 +1636,157 @@ async function vBoard(alive) {
   page(`<div class="wrap wide">
     <div id="push-slot"></div>
     <div id="kpis">${boardKpis(list)}</div>
-    <div class="toolbar"><div class="seg" id="btabs">${boardTabs()}</div><input class="search" id="b-q" type="search" placeholder="${esc(t('b_search'))}" aria-label="${esc(t('b_search'))}" value="${esc(S.q)}" data-input="q"></div>
+    <div class="toolbar"><div class="seg" id="btabs">${boardTabs()}</div>
+      <div class="tb-r"><select id="b-bld" aria-label="${esc(t('r_f_building'))}">${buildingOptions(S.bf, t('b_all_buildings'))}</select>
+      <a class="btn primary" href="#/new">${ICON.plus}${t('b_new_req')}</a></div></div>
+    <input class="search" id="b-q" type="search" placeholder="${esc(t('b_search'))}" aria-label="${esc(t('b_search'))}" value="${esc(S.q)}" data-input="q">
     <div id="blist">${boardList(list)}</div>
   </div>`, { staff: true, nav: 'board' });
   fillPushSlot();
-  listPoll(() => { const k = $('#kpis'), b = $('#blist'); if (k) k.innerHTML = boardKpis(S.list); if (b) b.innerHTML = boardList(S.list); tick(); });
+  listPoll(() => refreshBoard());
 }
-const boardTabs = () => ['open', 'closed', 'all'].map(k => `<button type="button" data-act="btab" data-v="${k}" class="${S.boardTab === k ? 'on' : ''}">${t('b_' + k)}</button>`).join('');
+function refreshBoard() { const k = $('#kpis'), b = $('#blist'); if (k) k.innerHTML = boardKpis(S.list || []); if (b) b.innerHTML = boardList(S.list || []); tick(); }
+function buildingOptions(sel, allLabel) {
+  return `<option value="">${esc(allLabel)}</option>` + bCodes().map(c => `<option value="${esc(c)}" ${c === sel ? 'selected' : ''}>${esc(bLabel(c))}</option>`).join('');
+}
+const boardTabs = () => ['open', 'hold', 'closed', 'all'].map(k => `<button type="button" data-act="btab" data-v="${k}" class="${S.boardTab === k ? 'on' : ''}">${t('b_' + k)}</button>`).join('');
 function boardKpis(list) {
-  const open = list.filter(r => ['new', 'accepted', 'onsite', 'finished'].includes(r.status));
-  const late = open.filter(isLate).length;
+  list = list.filter(r => !S.bf || r.building_code === S.bf);
+  const open = list.filter(isOpen);
+  const late = open.filter(isLate).length, held = open.filter(isHeld).length;
   const today = list.filter(r => r.closed_at && D(r.closed_at) >= dayStart()).length;
   const k = (v, l, cls) => `<div class="kpi ${cls || ''}"><span class="v">${v}</span><span class="l">${l}</span></div>`;
-  return `<div class="kpis tight">${k(open.filter(r => r.status === 'new').length, t('b_k_new'))}${k(open.filter(r => r.status === 'accepted' || r.status === 'onsite').length, t('b_k_progress'))}${k(open.filter(r => r.status === 'finished').length, t('b_k_sign'))}${k(late, t('b_k_late'), late ? 'attn bad' : '')}${k(today, t('b_k_today'))}</div>`;
+  return `<div class="kpis tight">${k(open.filter(r => r.status === 'new').length, t('b_k_new'))}${k(open.filter(r => (r.status === 'accepted' || r.status === 'onsite') && !isHeld(r)).length, t('b_k_progress'))}${k(held, t('b_k_hold'), held ? 'attn warn' : '')}${k(open.filter(r => r.status === 'finished').length, t('b_k_sign'))}${k(late, t('b_k_late'), late ? 'attn bad' : '')}${k(today, t('b_k_today'))}</div>`;
 }
 function boardList(list) {
   const q = S.q.trim().toLowerCase();
-  let rows = list.filter(r => {
-    const open = ['new', 'accepted', 'onsite', 'finished'].includes(r.status);
-    return S.boardTab === 'all' || (S.boardTab === 'open' ? open : !open);
-  });
+  let rows = list.filter(r => (!S.bf || r.building_code === S.bf) && (S.boardTab === 'all' || (S.boardTab === 'open' ? isOpen(r) : S.boardTab === 'hold' ? isHeld(r) : !isOpen(r))));
   if (q) rows = rows.filter(r => [r.no, r.unit_ar, r.unit_en, r.building_ar, r.building_en, r.technician, issueLabel(r.issue_type), r.description].join(' ').toLowerCase().includes(q.replace(/^#/, '')));
-  rows.sort(S.boardTab === 'open' ? byUrgency : (a, b) => D(b.closed_at || b.cancelled_at || b.created_at) - D(a.closed_at || a.cancelled_at || a.created_at));
+  rows.sort(S.boardTab === 'open' || S.boardTab === 'hold' ? byUrgency : (a, b) => D(b.closed_at || b.cancelled_at || b.created_at) - D(a.closed_at || a.cancelled_at || a.created_at));
   return rows.length ? `<div class="cards">${rows.slice(0, 200).map(reqCard).join('')}</div>` : `<p class="empty-line">${t('b_none')}</p>`;
 }
 
-/* ============================================================ views: evaluation */
-function metrics(rs, repeatOf) {
-  const arr = rs.filter(r => r.accepted_at && r.arrived_at), fin = rs.filter(r => r.arrived_at && r.finished_at), acc = rs.filter(r => r.accepted_at);
-  const rated = rs.filter(r => r.rating);
+/* ============================================================ views: the desk logs a request */
+async function vNewReq(alive) {
+  page(loadingBox(), { staff: true, nav: 'board' });
+  const [st, units] = await Promise.all([settings(), srpc('admin_units')]);
+  if (!alive()) return;
+  S.units = units;
+  const codes = bCodes().filter(c => units.some(u => u.building_code === c && u.active));
+  units.forEach(u => { if (u.active && !codes.includes(u.building_code)) codes.push(u.building_code); });
+  const d = S.draft.desk || (S.draft.desk = { b: codes[0] || '', u: '', issue: '', desc: '', cname: '', cphone: '', src: 'phone' });
+  if (!codes.includes(d.b)) d.b = codes[0] || '';
+  page(`<div class="wrap narrow">
+    <a class="back" href="#/board">${ICON.back}${t('back')}</a>
+    <form class="card form" data-form="desk-req" novalidate>
+      <div><h1>${t('n_title')}</h1><p class="muted small">${t('n_sub')}</p></div>
+      <fieldset class="field"><legend>${t('n_source')}</legend><div class="seg">${['phone', 'whatsapp', 'walkin', 'email', 'other'].map(k => `<button type="button" data-act="src" data-v="${k}" class="${d.src === k ? 'on' : ''}">${t('src_' + k)}</button>`).join('')}</div></fieldset>
+      <div class="grid2">
+        <div class="field"><label for="nr-b">${t('n_building')}</label><select id="nr-b" name="b">${codes.map(c => `<option value="${esc(c)}" ${c === d.b ? 'selected' : ''}>${esc(bLabel(c) || c)}</option>`).join('')}</select></div>
+        <div class="field"><label for="nr-u">${t('n_unit')}</label><select id="nr-u" name="u">${unitOptions(d.b, d.u)}</select><p class="err" data-err="u"></p></div>
+      </div>
+      <fieldset class="field"><legend>${t('t_issue')} <i class="must">*</i></legend>
+        <div class="choices">${issueList().map((i, n) => `<label class="choice"><input type="radio" name="issue" id="nr-is-${n}" value="${esc(i.k)}" ${d.issue === i.k ? 'checked' : ''}><span>${esc(i[LANG] || i.ar)}${i.p === 'urgent' ? `<em class="urg" title="${esc(t('pr_urgent'))}">${ICON.alert}<i class="vh">${t('pr_urgent')}</i></em>` : ''}</span></label>`).join('')}</div>
+        <p class="err" data-err="issue"></p></fieldset>
+      <div class="field"><label for="nr-desc">${t('t_desc')} <i class="must">*</i></label><textarea id="nr-desc" name="desc" rows="3" maxlength="1000">${esc(d.desc)}</textarea><p class="err" data-err="desc"></p></div>
+      <div class="grid2">
+        <div class="field"><label for="nr-name">${t('n_requester')} <span class="opt">(${t('optional')})</span></label><input id="nr-name" name="cname" maxlength="80" value="${esc(d.cname)}"></div>
+        <div class="field"><label for="nr-phone">${t('t_phone')} <span class="opt">(${t('optional')})</span></label><input id="nr-phone" name="cphone" type="tel" inputmode="tel" dir="ltr" maxlength="20" value="${esc(d.cphone)}"></div>
+      </div>
+      <div class="field"><span class="lbl">${t('n_photo')} <span class="opt">(${t('optional')})</span></span>${photoField('before:desk', 'nr-photo')}</div>
+      <button class="btn primary block big" type="submit">${t('n_submit')}</button>
+    </form>
+  </div>`, { staff: true, nav: 'board' });
+}
+function unitOptions(code, sel) {
+  return (S.units || []).filter(u => u.building_code === code && u.active).sort((a, b) => a.sort - b.sort)
+    .map(u => `<option value="${esc(u.id)}" ${u.id === sel ? 'selected' : ''}>${esc(LANG === 'ar' ? u.label_ar : u.label_en)}</option>`).join('');
+}
+function deskDone(res, phone) {
+  const url = APP_URL + '#/t/' + res.id + '/' + res.code;
+  const text = t('n_wa_text', { no: res.no, o: org() || t('app'), u: url });
+  const digits = String(phone || '').replace(/\D/g, '');
+  const wa = 'https://wa.me/' + (digits.length === 8 ? '968' + digits : digits) + '?text=' + encodeURIComponent(text);
+  modal(`<div class="success">${ICON.check}<div><b>${esc(t('n_done', { no: res.no }))}</b><p>${t('n_share')}</p></div></div>
+    <p class="mono" dir="ltr">${esc(url)}</p>
+    <div class="row">${EMB ? '' : `<a class="btn primary" href="${esc(wa)}" target="_blank" rel="noopener">${ICON.send}${t('n_wa')}</a>`}<button class="btn" type="button" data-act="copy" data-v="${esc(url)}">${ICON.copy}${t('q_copy')}</button><a class="btn ghost" href="#/r/${esc(res.id)}" data-act="modal-close-go">${t('n_open')}</a></div>`);
+}
+
+/* ============================================================ visits (legs) and measures */
+// Every request is one or more visits: the handyman's, then the operations room's, or a replaced technician's.
+function legsOf(r) {
+  const out = (r.legs || []).map(l => ({
+    staff_id: l.staff_id, name: l.name, team: l.team || 'ops', offered_at: l.offered_at || r.created_at, accepted_at: l.accepted_at, accept_method: l.accept_method,
+    arrived_at: l.arrived_at, arrival_method: l.arrival_method, ended_at: l.ended_at, outcome: l.outcome, note: l.note,
+    t_arrive: l.target_arrive, t_work: l.target_work, origin: l.origin, pa: secs(l.paused_arrive), pw: secs(l.paused_work), current: false, finished: false, r
+  }));
+  if (r.technician_id) out.push({
+    staff_id: r.technician_id, name: r.technician, team: r.stage || 'ops', offered_at: r.offered_at || r.created_at, accepted_at: r.accepted_at, accept_method: r.accept_method,
+    arrived_at: r.arrived_at, arrival_method: r.arrival_method, ended_at: r.finished_at || r.closed_at || r.cancelled_at || null,
+    outcome: r.finished_at ? 'finished' : r.status === 'cancelled' ? 'cancelled' : r.status === 'closed' ? 'closed' : 'open',
+    t_arrive: r.target_arrive, t_work: r.target_work, origin: r.origin, pa: secs(r.paused_arrive), pw: secs(r.paused_work), current: true, finished: !!r.finished_at, r
+  });
+  out.forEach(l => {
+    l.pickup = l.accepted_at ? D(l.accepted_at) - D(l.offered_at) : null;
+    l.arrive = l.accepted_at && l.arrived_at ? Math.max(0, D(l.arrived_at) - D(l.accepted_at) - l.pa) : null;
+    l.work = l.finished && l.arrived_at ? Math.max(0, D(r.finished_at) - D(l.arrived_at) - l.pw) : null;
+    l.arrOk = l.arrive == null ? null : l.arrive <= l.t_arrive * 60000;
+    l.workOk = l.work == null ? null : l.work <= l.t_work * 60000;
+    l.rating = l.finished ? r.rating || null : null;
+  });
+  return out;
+}
+function metricsL(legs, repeatOf, reqs) {
+  const arr = legs.filter(l => l.arrive != null), fin = legs.filter(l => l.work != null), acc = legs.filter(l => l.pickup != null);
+  const rated = legs.filter(l => l.rating);
   const avg = a => (a.length ? a.reduce((s, x) => s + x, 0) / a.length : null);
-  const arrOn = arr.filter(r => ms(r.accepted_at, r.arrived_at) <= r.target_arrive * 60000).length;
-  const fixOn = fin.filter(r => ms(r.arrived_at, r.finished_at) <= r.target_work * 60000).length;
+  const rs = reqs || Array.from(new Set(legs.map(l => l.r)));
+  const arrOn = arr.filter(l => l.arrOk).length, fixOn = fin.filter(l => l.workOk).length;
   const m = {
-    n: rs.length, closed: rs.filter(r => r.status === 'closed').length, open: rs.filter(r => !['closed', 'cancelled'].includes(r.status)).length,
+    n: rs.length, visits: legs.length, closed: rs.filter(r => r.status === 'closed').length, open: rs.filter(r => !['closed', 'cancelled'].includes(r.status)).length,
     arrN: arr.length, arrOn, arrRate: arr.length ? arrOn / arr.length : null,
     fixN: fin.length, fixOn, fixRate: fin.length ? fixOn / fin.length : null,
-    ratedN: rated.length, rating: avg(rated.map(r => r.rating)),
-    pickup: avg(acc.map(r => ms(r.created_at, r.accepted_at))), arrive: avg(arr.map(r => ms(r.accepted_at, r.arrived_at))), work: avg(fin.map(r => ms(r.arrived_at, r.finished_at))),
-    manualArr: arr.filter(r => r.arrival_method === 'manual').length, onsite: rs.filter(r => r.signoff_method === 'onsite').length,
-    manualClose: rs.filter(r => r.close_method === 'manual').length, repeats: rs.filter(r => repeatOf.has(r.id)).length
+    ratedN: rated.length, rating: avg(rated.map(l => l.rating)),
+    pickup: avg(acc.map(l => l.pickup)), arrive: avg(arr.map(l => l.arrive)), work: avg(fin.map(l => l.work)),
+    manualArr: arr.filter(l => l.arrival_method === 'manual').length, onsite: legs.filter(l => l.finished && l.r.signoff_method === 'onsite').length,
+    manualClose: legs.filter(l => l.current && l.r.close_method === 'manual').length, repeats: legs.filter(l => l.finished && repeatOf.has(l.r.id)).length,
+    paused: legs.reduce((s, l) => s + l.pa + l.pw, 0), handed: legs.filter(l => l.outcome === 'escalated').length, selfFixed: legs.filter(l => l.finished).length
   };
   const parts = [[0.4, m.arrRate], [0.3, m.fixRate], [0.3, m.rating != null ? m.rating / 5 : null]].filter(x => x[1] != null);
   const w = parts.reduce((s, x) => s + x[0], 0);
   m.score = w ? Math.round((100 * parts.reduce((s, x) => s + x[0] * x[1], 0)) / w) : null;
   return m;
 }
-function evaluate(list, from, to, st) {
-  const rep = (st.repeatDays || 30) * 864e5;
-  const month = list.filter(r => D(r.created_at) >= from && D(r.created_at) < to);
-  const real = month.filter(r => r.status !== 'cancelled');
-  const repeatOf = new Set();
+function repeatsIn(real, list, st) {
+  const rep = (st.repeatDays || 30) * 864e5, out = new Set();
   real.forEach(r => {
     if (!r.closed_at) return;
     const c = D(r.closed_at).getTime();
-    if (list.some(x => x.id !== r.id && x.status !== 'cancelled' && x.unit_id === r.unit_id && x.issue_type === r.issue_type && D(x.created_at) > c && D(x.created_at) - c <= rep)) repeatOf.add(r.id);
+    if (list.some(x => x.id !== r.id && x.status !== 'cancelled' && x.unit_id === r.unit_id && x.issue_type === r.issue_type && D(x.created_at) > c && D(x.created_at) - c <= rep)) out.add(r.id);
   });
+  return out;
+}
+function evaluate(list, from, to, st) {
+  const month = list.filter(r => D(r.created_at) >= from && D(r.created_at) < to);
+  const real = month.filter(r => r.status !== 'cancelled');
+  const repeatOf = repeatsIn(real, list, st);
+  const legs = [];
+  real.forEach(r => legsOf(r).forEach(l => legs.push(l)));
   const groups = {};
-  real.forEach(r => { if (!r.technician_id) return; (groups[r.technician_id] = groups[r.technician_id] || { id: r.technician_id, name: r.technician, rs: [] }).rs.push(r); });
-  const techs = Object.values(groups).map(g => Object.assign({ id: g.id, name: g.name }, metrics(g.rs, repeatOf)))
-    .sort((a, b) => (b.score == null ? -1 : b.score) - (a.score == null ? -1 : a.score) || b.n - a.n);
-  const late = real.filter(r => (r.arrived_at && ms(r.accepted_at, r.arrived_at) > r.target_arrive * 60000) || (r.finished_at && ms(r.arrived_at, r.finished_at) > r.target_work * 60000));
+  legs.forEach(l => { if (!l.staff_id) return; const g = groups[l.staff_id] || (groups[l.staff_id] = { id: l.staff_id, name: l.name, team: l.team, legs: [], b: {} }); g.legs.push(l); if (l.current) g.team = l.team; g.b[l.r.building_code] = (g.b[l.r.building_code] || 0) + 1; });
+  const techs = Object.values(groups).map(g => Object.assign({ id: g.id, name: g.name, team: g.team, bld: Object.keys(g.b).sort((x, y) => g.b[y] - g.b[x])[0] }, metricsL(g.legs, repeatOf)))
+    .sort((a, b) => (b.score == null ? -1 : b.score) - (a.score == null ? -1 : a.score) || b.visits - a.visits);
+  const late = legs.filter(l => l.arrOk === false || l.workOk === false);
+  const byTeam = k => legs.filter(l => (l.team === 'hm') === (k === 'hm'));
   return {
-    month, real, repeatOf, techs, late, cancelled: month.length - real.length, all: metrics(real, repeatOf),
-    pri: { urgent: metrics(real.filter(r => r.priority === 'urgent'), repeatOf), normal: metrics(real.filter(r => r.priority === 'normal'), repeatOf) }
+    month, real, repeatOf, legs, techs, late, cancelled: month.length - real.length, all: metricsL(legs, repeatOf, real),
+    team: { hm: metricsL(byTeam('hm'), repeatOf), ops: metricsL(byTeam('ops'), repeatOf) },
+    pri: { urgent: metricsL(legs.filter(l => l.r.priority === 'urgent'), repeatOf, real.filter(r => r.priority === 'urgent')), normal: metricsL(legs.filter(l => l.r.priority === 'normal'), repeatOf, real.filter(r => r.priority === 'normal')) }
   };
 }
-function lateRow(r) {
-  const a = ms(r.accepted_at, r.arrived_at), w = ms(r.arrived_at, r.finished_at);
+function lateRow(l) {
   const part = (v, tg, k) => (v == null ? '' : `<span class="${v > tg * 60000 ? 'bad' : ''}">${t(k)} ${fDur(v)} <small>/ ${tg} ${t('min')}</small></span>`);
-  return `<a class="late-row" href="#/r/${esc(r.id)}"><b class="num">#${r.no}</b><span class="lr-w">${esc(uName(r))} · ${esc(r.technician || '—')}<small>${esc(issueLabel(r.issue_type))} · ${fDay(r.created_at)}</small></span><span class="lr-t">${part(a, r.target_arrive, 'tm_way')}${part(w, r.target_work, 'tm_work')}</span></a>`;
+  return `<a class="late-row" href="#/r/${esc(l.r.id)}"><b class="num">#${l.r.no}</b><span class="lr-w">${esc(uName(l.r))} · ${esc(l.name || '—')}<small>${esc(issueLabel(l.r.issue_type))} · ${esc(bName(l.r))} · ${fDay(l.r.created_at)}</small></span><span class="lr-t">${part(l.arrive, l.t_arrive, 'tm_way')}${part(l.work, l.t_work, 'tm_work')}</span></a>`;
 }
 const scoreCls = s => (s == null ? 'none' : s >= 85 ? 'good' : s >= 70 ? 'mid' : 'low');
 function kpiGrid(m) {
@@ -1411,6 +1797,7 @@ function kpiGrid(m) {
     ${k(pct(m.fixRate), t('e_fix_on'), m.fixN ? m.fixOn + ' / ' + m.fixN : '')}
     ${k(m.rating == null ? '—' : m.rating.toFixed(1), t('e_rating'), m.ratedN ? t('e_rated', { n: m.ratedN }) : '')}
     ${k(fDur(m.pickup), t('e_avg_pickup'))}${k(fDur(m.arrive), t('e_avg_arrive'))}${k(fDur(m.work), t('e_avg_work'))}
+    ${m.paused ? k(fDur(m.paused), t('e_paused')) : ''}
   </div>`;
 }
 function flagsOf(m) {
@@ -1421,18 +1808,31 @@ function flagsOf(m) {
   if (m.repeats) f.push(t('e_repeat', { n: m.repeats }));
   return f.length ? `<div class="flags">${f.map(x => `<span class="flag">${ICON.alert}${esc(x)}</span>`).join('')}</div>` : '';
 }
+function techCard(m) {
+  const who = m.team === 'hm' ? t('team_hm') + (m.bld ? ' · ' + bLabel(m.bld) : '') : t('team_ops');
+  return `<article class="tech-card">
+    <header><div><b>${esc(m.name || '—')}</b><small class="muted">${esc(who)}</small></div><span class="score ${scoreCls(m.score)}">${m.score == null ? '—' : m.score}</span></header>
+    <div class="meter"><i style="width:${m.score || 0}%"></i></div>
+    <dl><div><dt>${t('e_visits')}</dt><dd>${m.visits}</dd></div><div><dt>${t('e_rating')}</dt><dd>${m.rating == null ? '—' : m.rating.toFixed(1)}</dd></div>
+      <div><dt>${t('e_arr_on')}</dt><dd>${pct(m.arrRate)}</dd></div><div><dt>${t('e_fix_on')}</dt><dd>${pct(m.fixRate)}</dd></div>
+      <div><dt>${t('e_avg_arrive')}</dt><dd>${fDur(m.arrive)}</dd></div><div><dt>${t('e_avg_work')}</dt><dd>${fDur(m.work)}</dd></div>
+      ${m.team === 'hm' ? `<div><dt>${t('e_self_fixed')}</dt><dd>${m.selfFixed} / ${m.selfFixed + m.handed}</dd></div>` : ''}
+      ${m.paused ? `<div><dt>${t('e_paused')}</dt><dd>${fDur(m.paused)}</dd></div>` : ''}</dl>
+    ${flagsOf(m)}</article>`;
+}
 async function vEval(ym, alive) {
   ym = /^\d{4}-\d{2}$/.test(ym || '') ? ym : defaultEvalYm();
   page(loadingBox(), { staff: true, nav: 'eval' });
   const st = await settings();
   const [from, to] = ymRange(ym);
   const until = new Date(to.getTime() + (st.repeatDays || 30) * 864e5);
-  const list = await srpc('staff_requests', { p_from: from.toISOString(), p_to: until.toISOString() });
+  const list = await srpc('report_requests', { p_from: from.toISOString(), p_to: until.toISOString() });
   if (!alive()) return;
   const ev = evaluate(list, from, to, st);
   S.evalData = { ym, ev, st };
   const cname = (st.contractor && (st.contractor[LANG] || st.contractor.ar)) || '';
-  const prow = (p, m) => `<tr><th>${t('pr_' + p)}</th><td>${m.n}</td><td>${pct(m.arrRate)}</td><td>${pct(m.fixRate)}</td><td>${fDur(m.arrive)}</td><td>${fDur(m.work)}</td><td>${m.rating == null ? '—' : m.rating.toFixed(1)}</td></tr>`;
+  const prow = (label, m, extra) => `<tr><th>${label}</th><td>${m.visits}</td><td>${pct(m.arrRate)}</td><td>${pct(m.fixRate)}</td><td>${fDur(m.arrive)}</td><td>${fDur(m.work)}</td><td>${m.rating == null ? '—' : m.rating.toFixed(1)}</td>${extra != null ? `<td>${extra}</td>` : ''}</tr>`;
+  const hmT = ev.techs.filter(x => x.team === 'hm'), opsT = ev.techs.filter(x => x.team !== 'hm');
   page(`<div class="wrap wide">
     <div class="eval-h">
       <div><h1>${t('e_title')}</h1>${cname ? `<p class="muted">${esc(t('e_contractor', { n: cname }))}</p>` : ''}</div>
@@ -1445,57 +1845,201 @@ async function vEval(ym, alive) {
       <button class="x-btn" type="button" data-act="x-excel"><b>Excel</b><span>${t('x_excel_d')}</span></button>
       <button class="x-btn" type="button" data-act="x-pdf"><b>PDF</b><span>${t('x_pdf_d')}</span></button>
       <button class="x-btn" type="button" data-act="x-pptx"><b>PowerPoint</b><span>${t('x_pptx_d')}</span></button></div></section>`}
-    <section class="card"><h3>${t('e_by_priority')}</h3><div class="ptable-wrap"><table class="ptable"><thead><tr><th></th><th>${t('e_col_count')}</th><th>${t('e_arr_on')}</th><th>${t('e_fix_on')}</th><th>${t('e_avg_arrive')}</th><th>${t('e_avg_work')}</th><th>${t('e_rating')}</th></tr></thead><tbody>${prow('urgent', ev.pri.urgent)}${prow('normal', ev.pri.normal)}</tbody></table></div>
+    <section class="card"><h3>${t('e_by_team')}</h3><div class="ptable-wrap"><table class="ptable"><thead><tr><th></th><th>${t('e_visits')}</th><th>${t('e_arr_on')}</th><th>${t('e_fix_on')}</th><th>${t('e_avg_arrive')}</th><th>${t('e_avg_work')}</th><th>${t('e_rating')}</th><th>${t('e_paused')}</th></tr></thead><tbody>
+      ${prow(t('e_hm_group'), ev.team.hm, fDur(ev.team.hm.paused))}${prow(t('e_ops_group'), ev.team.ops, fDur(ev.team.ops.paused))}</tbody></table></div>
+      ${ev.team.hm.visits ? `<p class="muted small">${esc(t('r_hm_fixed'))}: <b>${ev.team.hm.selfFixed}</b> · ${esc(t('r_hm_handed'))}: <b>${ev.team.hm.handed}</b></p>` : ''}</section>
+    <section class="card"><h3>${t('e_by_priority')}</h3><div class="ptable-wrap"><table class="ptable"><thead><tr><th></th><th>${t('e_visits')}</th><th>${t('e_arr_on')}</th><th>${t('e_fix_on')}</th><th>${t('e_avg_arrive')}</th><th>${t('e_avg_work')}</th><th>${t('e_rating')}</th></tr></thead><tbody>${prow(t('pr_urgent'), ev.pri.urgent)}${prow(t('pr_normal'), ev.pri.normal)}</tbody></table></div>
       ${flagsOf(ev.all)}${ev.cancelled ? `<p class="muted small">${t('e_cancelled', { n: ev.cancelled })}</p>` : ''}</section>
-    <h2 class="sec">${t('e_techs')}<span class="count">${ev.techs.length}</span></h2>
-    <div class="tech-grid">${ev.techs.map(m => `<article class="tech-card">
-      <header><b>${esc(m.name || '—')}</b><span class="score ${scoreCls(m.score)}">${m.score == null ? '—' : m.score}</span></header>
-      <div class="meter"><i style="width:${m.score || 0}%"></i></div>
-      <dl><div><dt>${t('e_jobs')}</dt><dd>${m.n}</dd></div><div><dt>${t('e_rating')}</dt><dd>${m.rating == null ? '—' : m.rating.toFixed(1)}</dd></div>
-        <div><dt>${t('e_arr_on')}</dt><dd>${pct(m.arrRate)}</dd></div><div><dt>${t('e_fix_on')}</dt><dd>${pct(m.fixRate)}</dd></div>
-        <div><dt>${t('e_avg_arrive')}</dt><dd>${fDur(m.arrive)}</dd></div><div><dt>${t('e_avg_work')}</dt><dd>${fDur(m.work)}</dd></div></dl>
-      ${flagsOf(m)}</article>`).join('')}</div>
-    ${ev.late.length ? `<section class="card"><h3>${ICON.alert}${t('e_late_list')}<span class="count">${ev.late.length}</span></h3><div class="late-list">${ev.late.sort((a, b) => D(b.created_at) - D(a.created_at)).map(lateRow).join('')}</div></section>` : ''}
+    ${hmT.length ? `<h2 class="sec">${t('e_hm_group')}<span class="count">${hmT.length}</span></h2><div class="tech-grid">${hmT.map(techCard).join('')}</div>` : ''}
+    ${opsT.length ? `<h2 class="sec">${t('e_ops_group')}<span class="count">${opsT.length}</span></h2><div class="tech-grid">${opsT.map(techCard).join('')}</div>` : ''}
+    ${ev.late.length ? `<section class="card"><h3>${ICON.alert}${t('e_late_list')}<span class="count">${ev.late.length}</span></h3><div class="late-list">${ev.late.slice().sort((a, b) => D(b.r.created_at) - D(a.r.created_at)).map(lateRow).join('')}</div></section>` : ''}
     <p class="muted small">${t('e_formula', { d: st.repeatDays || 30 })}</p>
     ${EMB ? `<div class="row no-print"><button class="btn" type="button" data-act="csv">${ICON.copy}${t('e_csv_copy')}</button></div>` : ''}`}
   </div>`, { staff: true, nav: 'eval' });
 }
 function evalCsv() {
   const { ev, ym } = S.evalData;
-  const mins = (a, b) => (a && b ? Math.round(ms(a, b) / 60000) : '');
   const head = ['no', 'date', 'building', 'unit', 'issue', 'priority', 'tech', 'status', 'pickup', 'arrive', 'arrive_t', 'arrive_ok', 'work', 'work_t', 'work_ok', 'total', 'qr', 'rating', 'close'].map(k => t('col_' + k));
   const rows = ev.month.slice().sort((a, b) => a.no - b.no).map(r => {
-    const a = mins(r.accepted_at, r.arrived_at), w = mins(r.arrived_at, r.finished_at);
-    return [r.no, fmt(r.created_at, { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }), bName(r), uName(r), issueLabel(r.issue_type), t('pr_' + r.priority), r.technician || '', t('st_' + r.status),
-      mins(r.created_at, r.accepted_at), a, r.target_arrive, a === '' ? '' : a <= r.target_arrive ? 1 : 0, w, r.target_work, w === '' ? '' : w <= r.target_work ? 1 : 0,
-      mins(r.created_at, r.closed_at || r.cancelled_at), r.arrival_method ? (r.arrival_method === 'qr' ? 1 : 0) : '', r.rating || '', r.close_method === 'manual' ? t('cm_manual') : r.signoff_method ? t('cm_' + r.signoff_method) : ''];
+    const x = reqRow(r, ev.repeatOf);
+    return [r.no, fmt(r.created_at, { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }), bName(r), uName(r), issueLabel(r.issue_type), t('pr_' + r.priority), x.by, statusText(r),
+      x.pickup == null ? '' : x.pickup, x.arr == null ? '' : x.arr, x.arrT || '', x.arrOk == null ? '' : x.arrOk ? 1 : 0, x.work == null ? '' : x.work, x.workT || '', x.workOk == null ? '' : x.workOk ? 1 : 0,
+      x.total == null ? '' : x.total, r.arrival_method ? (r.arrival_method === 'qr' ? 1 : 0) : '', r.rating || '', closedBy(r)];
   });
   const cell = v => { const s = String(v == null ? '' : v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
   return { name: 'rasd-' + ym + '.csv', text: [head].concat(rows).map(r => r.map(cell).join(',')).join('\r\n') };
+}
+// one row per request for tables and exports: the visit that fixed it, net of paused time
+function reqRow(r, repeatOf) {
+  const legs = legsOf(r), last = legs[legs.length - 1] || null, fin = legs.find(l => l.finished) || null, hm = legs.find(l => l.team === 'hm') || null;
+  return {
+    r, legs, last, fin, hm, handed: legs.some(l => l.outcome === 'escalated'),
+    by: (fin || last || {}).name || '', team: (fin || last || {}).team || r.stage || 'ops',
+    pickup: legs.length ? minsOf(legs[0].pickup) : null,
+    arr: last ? minsOf(last.arrive) : null, arrT: last ? last.t_arrive : r.target_arrive, arrOk: last ? last.arrOk : null,
+    work: fin ? minsOf(fin.work) : null, workT: r.target_work, workOk: fin ? fin.workOk : null,
+    pa: minsOf(legs.reduce((s, l) => s + l.pa, 0)), pw: minsOf(legs.reduce((s, l) => s + l.pw, 0)),
+    total: minsOf(ms(r.created_at, r.closed_at || r.cancelled_at)), repeat: repeatOf ? repeatOf.has(r.id) : false
+  };
+}
+const statusText = r => (r.hold_kind && ['accepted', 'onsite'].includes(r.status) ? (r.hold_kind === 'busy' ? t('st_queued') : t('st_hold') + ': ' + holdLabel(r)) : t('st_' + r.status));
+const partsText = p => (p || []).map(x => x.n + (+x.q !== 1 ? ' ×' + x.q : '')).join('، ');
+
+/* ============================================================ views: reports (day, week, month) */
+function keyMs(k) { const [y, m, d] = k.split('-').map(Number); return Date.UTC(y, m - 1, d || 1) - OFFSET; }
+const addDays = (k, n) => dayKey(keyMs(k) + n * 864e5 + 6 * 3600e3);
+function weekOf(k) { const dow = new Date(keyMs(k) + OFFSET).getUTCDay(); return addDays(k, -dow); }
+function rPeriod(mode, key) {
+  const today = dayKey(Date.now());
+  if (mode === 'month') {
+    const ym = /^\d{4}-\d{2}$/.test(key || '') ? key : today.slice(0, 7), [from, to] = ymRange(ym);
+    return { mode, key: ym, from, to, label: ymLabel(ym), prev: ymShift(ym, -1), next: ymShift(ym, 1), unit: 'month', trendFrom: ymRange(ymShift(ym, -5))[0], buckets: [5, 4, 3, 2, 1, 0].map(i => ymShift(ym, -i) + '-01'), cur: ym + '-01', prevBucket: ymShift(ym, -1) + '-01', isNow: ym === today.slice(0, 7) };
+  }
+  if (mode === 'week') {
+    const k = weekOf(/^\d{4}-\d{2}-\d{2}$/.test(key || '') ? key : today), from = new Date(keyMs(k)), to = new Date(keyMs(addDays(k, 7)));
+    return { mode, key: k, from, to, label: t('r_week_of', { a: fmt(from, { day: 'numeric', month: 'short' }), b: fmt(to.getTime() - 3600e3, { day: 'numeric', month: 'short', year: 'numeric' }) }), prev: addDays(k, -7), next: addDays(k, 7), unit: 'week', trendFrom: new Date(keyMs(addDays(k, -49))), buckets: [7, 6, 5, 4, 3, 2, 1, 0].map(i => addDays(k, -7 * i)), cur: k, prevBucket: addDays(k, -7), isNow: k === weekOf(today) };
+  }
+  const k = /^\d{4}-\d{2}-\d{2}$/.test(key || '') ? key : today, from = new Date(keyMs(k)), to = new Date(keyMs(addDays(k, 1)));
+  return { mode: 'day', key: k, from, to, label: fmt(from, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }), prev: addDays(k, -1), next: addDays(k, 1), unit: 'day', trendFrom: new Date(keyMs(addDays(k, -13))), buckets: Array.from({ length: 14 }, (x, i) => addDays(k, i - 13)), cur: k, prevBucket: addDays(k, -1), isNow: k === today };
+}
+const bucketLabel = (P, k) => (P.unit === 'month' ? fmt(keyMs(k) + 15 * 864e5, { month: 'short' }) : P.unit === 'week' ? fmt(keyMs(k) + 6 * 3600e3, { day: 'numeric', month: 'short' }) : fmt(keyMs(k) + 6 * 3600e3, { day: 'numeric' }));
+function rGroup(r) { return r.status === 'cancelled' ? 'cancel' : ['finished', 'closed'].includes(r.status) ? 'done' : isHeld(r) ? 'hold' : 'progress'; }
+async function vReports(mode, key, alive) {
+  mode = ['day', 'week', 'month'].includes(mode) ? mode : 'day';
+  const P = rPeriod(mode, key);
+  page(loadingBox(), { staff: true, nav: 'reports' });
+  const st = await settings();
+  const [list, counts] = await Promise.all([
+    srpc('report_requests', { p_from: P.from.toISOString(), p_to: P.to.toISOString() }),
+    srpc('report_counts', { p_from: P.trendFrom.toISOString(), p_to: P.to.toISOString(), p_unit: P.unit, p_building: S.rf.b || null })
+  ]);
+  if (!alive()) return;
+  S.repData = { P, list, counts, st };
+  page(`<div class="wrap wide" id="rep">${reportBody()}</div>`, { staff: true, nav: 'reports' });
+}
+function repModel() {
+  const { P, list, counts, st } = S.repData, f = S.rf;
+  const scoped = list.filter(r => (!f.b || r.building_code === f.b) && (!f.p || r.priority === f.p));
+  const inP = scoped.filter(r => D(r.created_at) >= P.from);
+  const carried = scoped.filter(r => D(r.created_at) < P.from);
+  const groups = { done: 0, progress: 0, hold: 0, cancel: 0 };
+  inP.forEach(r => groups[rGroup(r)]++);
+  const shown = (f.st ? inP.concat(carried).filter(r => rGroup(r) === f.st || (f.st === 'progress' && r.status === 'new')) : inP).slice().sort((a, b) => D(a.created_at) - D(b.created_at));
+  const legs = [];
+  inP.filter(r => r.status !== 'cancelled').forEach(r => legsOf(r).forEach(l => legs.push(l)));
+  const m = metricsL(legs, new Set(), inP.filter(r => r.status !== 'cancelled'));
+  const hmReqs = inP.filter(r => { const L2 = legsOf(r); return L2.length && L2[0].team === 'hm'; });
+  const hmFixed = hmReqs.filter(r => legsOf(r).some(l => l.finished && l.team === 'hm')).length, hmHanded = hmReqs.filter(r => legsOf(r).some(l => l.outcome === 'escalated')).length;
+  const cmap = {}; (counts || []).forEach(c => { cmap[c.d] = c; });
+  const trend = P.buckets.map(k => Object.assign({ d: k, n: 0, urgent: 0, done: 0, cancelled: 0 }, cmap[k] || {}));
+  const curN = (cmap[P.cur] || {}).n || 0, prevN = (cmap[P.prevBucket] || {}).n || 0;
+  // distribution by priority and type
+  const types = {};
+  inP.forEach(r => { const k = r.issue_type, x = types[k] || (types[k] = { k, p: r.priority, n: 0, open: 0, done: 0, work: [], urgent: 0 }); x.n++; if (r.priority === 'urgent') x.urgent++; if (['finished', 'closed'].includes(r.status)) x.done++; else if (r.status !== 'cancelled') x.open++; const fin = legsOf(r).find(l => l.finished); if (fin && fin.work != null) x.work.push(fin.work); });
+  const blds = {};
+  inP.forEach(r => { const k = r.building_code, x = blds[k] || (blds[k] = { k, name: bName(r), n: 0, done: 0, hold: 0, open: 0, arr: [] }); x.n++; const g = rGroup(r); if (g === 'done') x.done++; else if (g === 'hold') x.hold++; else if (g === 'progress') x.open++; legsOf(r).forEach(l => { if (l.arrive != null) x.arr.push(l.arrive); }); });
+  const team = { hmFixed, hmHanded, opsDirect: inP.filter(r => { const L2 = legsOf(r); return r.status !== 'cancelled' && (L2.length ? L2[0].team !== 'hm' : r.stage === 'ops'); }).length, opsFixed: inP.filter(r => legsOf(r).some(l => l.finished && l.team !== 'hm')).length };
+  const holds = scoped.filter(isHeld).sort((a, b) => D(a.hold_at) - D(b.hold_at));
+  return { P, st, scoped, inP, carried, groups, shown, m, trend, curN, prevN, types: Object.values(types), blds: Object.values(blds), team, holds, firstLine: hmFixed + hmHanded ? hmFixed / (hmFixed + hmHanded) : null };
+}
+function trendChart(M) {
+  const P = M.P, data = M.trend, max = Math.max(1, ...data.map(x => x.n));
+  const step = max <= 5 ? 1 : max <= 10 ? 2 : max <= 25 ? 5 : max <= 50 ? 10 : Math.ceil(max / 50) * 10, top = Math.ceil(max / step) * step;
+  const ticks = []; for (let v = step; v <= top; v += step) ticks.push(v);
+  const cols = data.map(x => {
+    const cur = x.d === P.cur, show = cur || x.d === P.prevBucket || (x.n === max && x.n > 0);
+    const label = `${bucketLabel(P, x.d)}: ${x.n} · ${t('pr_urgent')} ${x.urgent} · ${t('r_done')} ${x.done}`;
+    return `<div class="tc-col ${cur ? 'cur' : ''}" tabindex="0" role="img" aria-label="${esc(label)}" title="${esc(label)}"><div class="tc-bar"><i style="height:${((x.n / top) * 100).toFixed(1)}%">${show ? `<span class="tc-v">${x.n}</span>` : ''}</i></div><span class="tc-l">${esc(bucketLabel(P, x.d))}</span></div>`;
+  }).join('');
+  return `<div class="tchart"><div class="tc-plot">${ticks.map(v => `<span class="tc-g" style="bottom:${((v / top) * 100).toFixed(1)}%"><em>${v}</em></span>`).join('')}<div class="tc-cols">${cols}</div></div></div>
+    <details class="tbl-view"><summary>${t('r_table')}</summary><div class="ptable-wrap"><table class="ptable"><thead><tr><th></th><th>${t('r_total')}</th><th>${t('pr_urgent')}</th><th>${t('r_done')}</th><th>${t('r_cancel')}</th></tr></thead><tbody>${data.map(x => `<tr><th>${esc(bucketLabel(P, x.d))}</th><td>${x.n}</td><td>${x.urgent}</td><td>${x.done}</td><td>${x.cancelled}</td></tr>`).join('')}</tbody></table></div></details>`;
+}
+function deltaText(M) {
+  const d = M.curN - M.prevN, P = M.P, ref = t('r_prev_' + P.unit);
+  if (!d) return t('r_same', { p: ref.replace(/^(عن|vs) /, '') });
+  return `<span class="delta ${d > 0 ? 'up' : 'down'}">${d > 0 ? '▲' : '▼'} ${Math.abs(d)}</span> ${esc(ref)}`;
+}
+function reportBody() {
+  const M = repModel(), P = M.P, f = S.rf;
+  const nav = k => `#/reports/${P.mode}/${k}`;
+  const now = P.mode === 'month' ? dayKey(Date.now()).slice(0, 7) : dayKey(Date.now());
+  const k = (v, l, s, cls) => `<div class="kpi ${cls || ''}"><span class="v">${v}</span><span class="l">${l}</span>${s ? `<span class="s">${s}</span>` : ''}</div>`;
+  const tsel = (name, opts, cur) => `<select data-rf="${name}" aria-label="${esc(t('r_f_' + (name === 'b' ? 'building' : name === 'p' ? 'priority' : 'status')))}">${opts.map(o => `<option value="${esc(o[0])}" ${o[0] === cur ? 'selected' : ''}>${esc(o[1])}</option>`).join('')}</select>`;
+  const pType = p => M.types.filter(x => x.p === p).sort((a, b) => b.n - a.n);
+  const typeRows = p => pType(p).map(x => `<tr><th>${esc(issueLabel(x.k))}</th><td>${x.n}<span class="share"><i style="width:${Math.round((x.n / Math.max(1, M.inP.length)) * 100)}%"></i></span></td><td>${x.done}</td><td>${x.open}</td><td>${x.work.length ? fDur(x.work.reduce((s, v) => s + v, 0) / x.work.length) : '—'}</td></tr>`).join('');
+  const sumP = p => M.inP.filter(r => r.priority === p).length;
+  return `
+    <div class="eval-h"><div><h1>${t('r_title')}</h1><p class="muted">${esc(org())}</p></div>
+      <div class="seg" role="tablist">${['day', 'week', 'month'].map(x => `<a role="tab" class="${P.mode === x ? 'on' : ''}" href="#/reports/${x}">${t('r_' + x)}</a>`).join('')}</div></div>
+    <div class="rep-bar no-print">
+      <div class="month-pick"><a class="icon-btn" href="${nav(P.prev)}" aria-label="-1">${ICON.prev}</a><b>${esc(P.label)}</b><a class="icon-btn" href="${nav(P.next)}" aria-label="+1">${ICON.next}</a>${P.isNow ? '' : `<a class="btn sm ghost" href="#/reports/${P.mode}">${t(P.mode === 'day' ? 'r_today' : P.mode === 'week' ? 'r_this_week' : 'r_this_month')}</a>`}</div>
+      <div class="filters">${tsel('b', [['', t('b_all_buildings')]].concat(bCodes().map(c => [c, bLabel(c)])), f.b)}${tsel('p', [['', t('r_f_priority') + ': ' + t('r_all')], ['urgent', t('pr_urgent')], ['normal', t('pr_normal')]], f.p)}${tsel('st', [['', t('r_f_status') + ': ' + t('r_all')], ['done', t('r_s_done')], ['progress', t('r_s_open')], ['hold', t('r_s_hold')], ['cancel', t('r_s_cancel')]], f.st)}</div>
+    </div>
+    <div class="kpis rep-kpis">
+      ${k(M.inP.length, t('r_total'), deltaText(M), 'lead')}${k(M.groups.done, t('r_done'))}${k(M.groups.progress, t('r_progress'))}${k(M.groups.hold, t('r_hold'), '', M.groups.hold ? 'attn warn' : '')}${k(M.groups.cancel, t('r_cancel'))}
+      ${k(M.carried.filter(isOpen).length, t('r_carried'), t('r_carried_s'))}${k(pct(M.m.arrRate), t('r_arr_on'), M.m.arrN ? M.m.arrOn + ' / ' + M.m.arrN : '')}${k(pct(M.m.fixRate), t('r_fix_on'), M.m.fixN ? M.m.fixOn + ' / ' + M.m.fixN : '')}${M.firstLine != null ? k(pct(M.firstLine), t('r_first_line'), M.team.hmFixed + ' / ' + (M.team.hmFixed + M.team.hmHanded)) : ''}
+    </div>
+    ${EMB ? '' : `<section class="card export no-print"><h3>${ICON.download}${esc(t('r_export', { p: P.label }))}</h3><div class="x-grid">
+      <button class="x-btn" type="button" data-act="r-excel"><b>Excel</b><span>${t('x_period_excel_d')}</span></button>
+      <button class="x-btn" type="button" data-act="r-pdf"><b>PDF</b><span>${t('x_period_pdf_d')}</span></button></div></section>`}
+    <section class="card"><h3>${ICON.chart}${t('r_trend_' + P.unit)}</h3>${trendChart(M)}</section>
+    <div class="rep-grid">
+      <section class="card"><h3>${t('r_by_type')}</h3>${M.inP.length ? `<div class="ptable-wrap"><table class="ptable dist"><thead><tr><th>${t('r_col_type')}</th><th>${t('col_count')}</th><th>${t('r_done')}</th><th>${t('r_col_open')}</th><th>${t('r_col_avg_fix')}</th></tr></thead>
+        ${['urgent', 'normal'].map(p => pType(p).length ? `<tbody><tr class="grp"><th colspan="5">${prBadge(p)} <b class="num">${sumP(p)}</b></th></tr>${typeRows(p)}</tbody>` : '').join('')}</table></div>` : `<p class="muted">—</p>`}</section>
+      <section class="card"><h3>${t('r_by_building')}</h3>${M.blds.length ? `<div class="ptable-wrap"><table class="ptable"><thead><tr><th>${t('col_building')}</th><th>${t('col_count')}</th><th>${t('r_done')}</th><th>${t('r_hold')}</th><th>${t('r_col_avg_arr')}</th></tr></thead><tbody>
+        ${M.blds.sort((a, b) => b.n - a.n).map(x => `<tr><th>${esc(x.name)}</th><td>${x.n}</td><td>${x.done}</td><td>${x.hold}</td><td>${x.arr.length ? fDur(x.arr.reduce((s, v) => s + v, 0) / x.arr.length) : '—'}</td></tr>`).join('')}</tbody></table></div>` : `<p class="muted">—</p>`}
+        <h3 class="sub">${t('r_by_team')}</h3>
+        <ul class="team-dist"><li><span>${t('r_hm_fixed')}</span><b>${M.team.hmFixed}</b></li><li><span>${t('r_hm_handed')}</span><b>${M.team.hmHanded}</b></li><li><span>${t('r_ops_direct')}</span><b>${M.team.opsDirect}</b></li><li><span>${t('r_ops_fixed')}</span><b>${M.team.opsFixed}</b></li></ul></section>
+    </div>
+    ${M.holds.length ? `<section class="card"><h3>${ICON.pause}${t('r_holds')}<span class="count">${M.holds.length}</span></h3><div class="late-list">${M.holds.map(r => `<a class="late-row" href="#/r/${esc(r.id)}"><b class="num">#${r.no}</b><span class="lr-w">${esc(uName(r))} · ${esc(bName(r))}<small>${esc(holdLabel(r))}${r.hold_note ? ' · ' + esc(r.hold_note) : ''}${r.hold_parts && r.hold_parts.length && r.hold_kind === 'parts' ? ' · ' + esc(partsText(r.hold_parts)) : ''}</small></span><span class="lr-t"><span>${esc(t('d_held_since', { d: fDur(Date.now() - D(r.hold_at)) }))}</span>${r.hold_eta ? `<span>${esc(t('d_held_eta', { d: fmt(r.hold_eta, { day: 'numeric', month: 'short' }) }))}</span>` : ''}</span></a>`).join('')}</div></section>` : ''}
+    <section class="card"><h3>${ICON.list}${t('r_list')}<span class="count">${M.shown.length}</span></h3>
+      ${M.shown.length ? `<div class="rep-list">${M.shown.map(r => repRow(r, P.mode)).join('')}</div>` : `<p class="empty-line">${t('r_none')}</p>`}</section>`;
+}
+function repRow(r, mode) {
+  const x = reqRow(r);
+  const times = [x.arr != null ? `${t('tm_way')} <b class="${x.arrOk === false ? 'bad' : ''}">${fDur(x.arr * 60000)}</b>` : '', x.work != null ? `${t('tm_work')} <b class="${x.workOk === false ? 'bad' : ''}">${fDur(x.work * 60000)}</b>` : ''].filter(Boolean).join(' · ');
+  return `<a class="rep-row" href="#/r/${esc(r.id)}">
+    <span class="rr-no num">#${r.no}<small>${mode && mode !== 'day' ? fmt(r.created_at, { day: 'numeric', month: 'short' }) + ' · ' : ''}${fTime(r.created_at)}</small></span>
+    <span class="rr-m"><span class="rr-t"><b>${esc(issueLabel(r.issue_type))}</b>${r.priority === 'urgent' ? prBadge('urgent') : ''}</span><small>${esc(uName(r))} · ${esc(bName(r))}${x.by ? ' · ' + esc(x.by) : ''}${x.handed ? ' · ' + ICON.handover : ''}</small>${r.tech_note ? `<small class="rr-note">${esc(r.tech_note)}</small>` : ''}${r.parts && r.parts.length ? `<small class="rr-note">${ICON.box}${esc(partsText(r.parts))}</small>` : ''}</span>
+    <span class="rr-s">${statusChip(r)}${times ? `<small>${times}</small>` : ''}</span></a>`;
 }
 
 /* ============================================================ views: team */
 async function vTeam(alive) {
   page(loadingBox(), { staff: true, nav: 'team' });
-  const team = await srpc('team_list');
+  const [team] = await Promise.all([srpc('team_list'), settings()]);
   if (!alive()) return;
   S.team = team;
   const admin = isAdmin();
+  const member = s => `<div class="member ${s.active ? '' : 'off'}"><div class="av">${initials(s.name)}</div><div class="mi"><b>${esc(s.name)}</b><small>${esc(teamLine(s))} · <span dir="ltr" class="num">${esc(fPhone(s.phone))}</span>${s.active ? '' : ' · ' + t('tm_inactive')}${s.locked ? ' · ' + t('tm_locked') : ''}</small></div>${LIVE ? `<span class="bell ${s.push ? 'on' : ''}" title="${s.push ? t('pu_on') : t('pu_off')}">${ICON.bell}<span class="vh">${s.push ? t('pu_on') : t('pu_off')}</span></span>` : ''}${admin ? `<button class="btn sm ghost" type="button" data-act="staff-edit" data-id="${esc(s.id)}">${t('tm_edit')}</button>` : ''}</div>`;
+  const groups = [
+    [t('e_hm_group'), team.filter(s => s.role === 'technician' && s.team === 'hm')],
+    [t('e_ops_group'), team.filter(s => s.role === 'technician' && s.team !== 'hm')],
+    [t('dm_sup') + ' · ' + t('role_admin'), team.filter(s => s.role !== 'technician')]
+  ].filter(g => g[1].length);
   page(`<div class="wrap">
     <div class="sec-h"><h1>${t('tm_title')}</h1>${admin ? `<button class="btn primary" type="button" data-act="staff-edit" data-id="">${ICON.plus}${t('tm_add')}</button>` : ''}</div>
     ${admin ? '' : `<p class="muted">${t('tm_readonly')}</p>`}
-    <section class="card list">${team.map(s => `<div class="member ${s.active ? '' : 'off'}"><div class="av">${initials(s.name)}</div><div class="mi"><b>${esc(s.name)}</b><small>${t('role_' + s.role)} · <span dir="ltr" class="num">${esc(fPhone(s.phone))}</span>${s.active ? '' : ' · ' + t('tm_inactive')}${s.locked ? ' · ' + t('tm_locked') : ''}</small></div>${LIVE ? `<span class="bell ${s.push ? 'on' : ''}" title="${s.push ? t('pu_on') : t('pu_off')}">${ICON.bell}<span class="vh">${s.push ? t('pu_on') : t('pu_off')}</span></span>` : ''}${admin ? `<button class="btn sm ghost" type="button" data-act="staff-edit" data-id="${esc(s.id)}">${t('tm_edit')}</button>` : ''}</div>`).join('')}</section>
+    ${groups.map(g => `<h2 class="sec">${esc(g[0])}<span class="count">${g[1].length}</span></h2><section class="card list">${g[1].map(member).join('')}</section>`).join('')}
     <section class="card"><h3>${t('tm_share')}</h3><p class="mono" dir="ltr">${esc(APP_URL)}</p><div class="row"><button class="btn sm" type="button" data-act="copy" data-v="${esc(APP_URL)}">${ICON.copy}${t('q_copy')}</button></div></section>
   </div>`, { staff: true, nav: 'team' });
 }
 const genPin = () => { let p = ''; const a = new Uint32Array(6); (window.crypto || {}).getRandomValues ? crypto.getRandomValues(a) : a.forEach((x, i) => (a[i] = Math.random() * 1e9)); a.forEach(x => (p += x % 10)); return p; };
 function staffModal(s) {
-  const roles = ['technician', 'supervisor', 'admin'];
+  const kind = s ? (s.role === 'technician' ? (s.team === 'hm' ? 'hm' : 'ops') : s.role) : 'hm';
+  const sites = (s && s.sites) || [];
+  const res = bCodes().filter(c => (bMeta(c).type || 'res') === 'res');
   modal(`<form class="form" data-form="staff" novalidate><input type="hidden" name="id" value="${s ? esc(s.id) : ''}">
     <h3>${s ? t('tm_edit') : t('tm_add')}</h3>
     <div class="field"><label for="st-n">${t('tm_name')}</label><input id="st-n" name="name" maxlength="80" value="${s ? esc(s.name) : ''}"></div>
     <div class="field"><label for="st-p">${t('tm_phone')}</label><input id="st-p" name="phone" type="tel" inputmode="tel" dir="ltr" value="${s ? esc(fPhone(s.phone)) : ''}"></div>
-    <div class="field"><label for="st-r">${t('tm_role')}</label><select id="st-r" name="role">${roles.map(r => `<option value="${r}" ${(s ? s.role : 'technician') === r ? 'selected' : ''}>${t('role_' + r)}</option>`).join('')}</select></div>
+    <div class="field"><label for="st-r">${t('tm_role')}</label><select id="st-r" name="kind">
+      <option value="hm" ${kind === 'hm' ? 'selected' : ''}>${t('team_hm')}</option>
+      <option value="ops" ${kind === 'ops' ? 'selected' : ''}>${t('tech_ops')}</option>
+      <option value="supervisor" ${kind === 'supervisor' ? 'selected' : ''}>${t('dm_sup')}</option>
+      <option value="admin" ${kind === 'admin' ? 'selected' : ''}>${t('role_admin')}</option></select></div>
+    <fieldset class="field sites" ${kind === 'hm' ? '' : 'hidden'}><legend>${t('tm_sites')}</legend><p class="hint">${t('tm_hm_hint')}</p>
+      <div class="chips">${res.map(c => `<label class="chip-check"><input type="checkbox" name="site" value="${esc(c)}" ${sites.includes(c) ? 'checked' : ''}><span>${esc(bLabel(c))}</span></label>`).join('')}</div></fieldset>
     ${s ? `<label class="check"><input type="checkbox" name="active" ${s.active ? 'checked' : ''}> ${t('tm_active')}</label>` : ''}
     <div class="field"><label for="st-pin">${s ? t('tm_pin_new') : t('tm_pin')}</label><div class="row"><input id="st-pin" name="pin" inputmode="numeric" maxlength="6" dir="ltr" value="${s ? '' : genPin()}"><button type="button" class="btn sm" data-act="gen-pin">${t('tm_gen')}</button></div></div>
     <p class="err" data-err="form"></p>
@@ -1508,8 +2052,8 @@ async function vSettings(alive) {
   page(loadingBox(), { staff: true, nav: 'settings' });
   const [st, units] = await Promise.all([settings(true), srpc('admin_units')]);
   if (!alive()) return;
-  const blds = [];
-  units.forEach(u => { if (!blds.find(b => b.code === u.building_code)) blds.push({ code: u.building_code, ar: u.building_ar, en: u.building_en }); });
+  const codes = bCodes();
+  units.forEach(u => { if (!codes.includes(u.building_code)) codes.push(u.building_code); });
   const tg = st.targets || {};
   const val = v => (v == null ? '' : esc(v));
   page(`<form class="wrap" data-form="settings" novalidate>
@@ -1518,12 +2062,12 @@ async function vSettings(alive) {
     <section class="card"><h3>${ICON.clock}${t('se_targets')}</h3>
       <div class="ptable-wrap"><table class="tgt"><thead><tr><th></th><th>${t('se_pickup')}</th><th>${t('se_arrive')}</th><th>${t('se_work')}</th></tr></thead><tbody>
       ${['urgent', 'normal'].map(p => `<tr><th>${t('pr_' + p)}</th>${['pickup', 'arrive', 'work'].map(k => `<td><input type="number" min="1" max="10080" inputmode="numeric" name="tg_${p}_${k}" id="tg-${p}-${k}" aria-label="${t('pr_' + p)} ${t('se_' + k)}" value="${val((tg[p] || {})[k])}"></td>`).join('')}</tr>`).join('')}
-      </tbody></table></div><p class="hint">${t('se_note')}</p></section>
-    <section class="card"><h3>${ICON.building}${t('se_buildings')}</h3>
-      ${blds.map(b => { const bs = (st.buildings || {})[b.code] || {}; const ba = bs.arrive || {}; return `<div class="bld"><b>${esc(LANG === 'ar' ? b.ar : b.en)} <span class="muted mono">${esc(b.code)}</span></b>
-        <p class="hint">${t('se_b_arrive')}</p>
-        <div class="grid2"><div class="field"><label for="b-${b.code}-u">${t('pr_urgent')}</label><input type="number" min="1" inputmode="numeric" id="b-${b.code}-u" name="b_${b.code}_urgent" value="${val(ba.urgent)}"></div><div class="field"><label for="b-${b.code}-n">${t('pr_normal')}</label><input type="number" min="1" inputmode="numeric" id="b-${b.code}-n" name="b_${b.code}_normal" value="${val(ba.normal)}"></div></div>
-        <div class="field"><span class="lbl">${t('se_b_loc')}</span><div class="row"><input name="b_${b.code}_lat" id="b-${b.code}-lat" aria-label="${t('se_lat')}" placeholder="${t('se_lat')}" dir="ltr" value="${val(bs.lat)}"><input name="b_${b.code}_lng" id="b-${b.code}-lng" aria-label="${t('se_lng')}" placeholder="${t('se_lng')}" dir="ltr" value="${val(bs.lng)}">${EMB ? '' : `<button type="button" class="btn sm" data-act="here" data-code="${esc(b.code)}">${ICON.pin}${t('se_b_here')}</button>`}</div></div></div>`; }).join('')}
+      </tbody></table></div><p class="hint">${t('se_hm_note')}</p><p class="hint">${t('se_note')}</p></section>
+    <section class="card"><h3>${ICON.building}${t('se_buildings')}</h3><p class="hint">${t('se_b_hint')}</p>
+      ${codes.map(c => { const b = bMeta(c), u = units.find(x => x.building_code === c) || {}; const name = (LANG === 'ar' ? b.ar || u.building_ar : b.en || u.building_en) || c; return `<div class="bld" data-code="${esc(c)}"><b>${esc(name)} <span class="muted mono">${esc(c)}</span></b>
+        <div class="grid2"><div class="field"><label for="b-${c}-t">${t('se_b_type')}</label><select id="b-${c}-t" name="b_${c}_type"><option value="res" ${(b.type || 'res') === 'res' ? 'selected' : ''}>${t('type_res')}</option><option value="com" ${b.type === 'com' ? 'selected' : ''}>${t('type_com')}</option></select></div>
+        <div class="field"><label for="b-${c}-o">${t('se_b_ops')}</label><input type="number" min="5" max="1440" inputmode="numeric" id="b-${c}-o" name="b_${c}_ops" value="${val(b.ops)}"></div></div>
+        <div class="field"><span class="lbl">${t('se_b_loc')}</span><div class="row"><input name="b_${c}_lat" id="b-${c}-lat" aria-label="${t('se_lat')}" placeholder="${t('se_lat')}" dir="ltr" value="${val(b.lat)}"><input name="b_${c}_lng" id="b-${c}-lng" aria-label="${t('se_lng')}" placeholder="${t('se_lng')}" dir="ltr" value="${val(b.lng)}">${EMB ? '' : `<button type="button" class="btn sm" data-act="here" data-code="${esc(c)}">${ICON.pin}${t('se_b_here')}</button>`}</div></div></div>`; }).join('')}
     </section>
     <section class="card"><div class="sec-h"><h3>${t('se_issues')}</h3><button type="button" class="btn sm" data-act="issue-add">${ICON.plus}${t('se_add_issue')}</button></div><div id="issues">${(st.issueTypes || []).map(issueRow).join('')}</div></section>
     ${LIVE ? `<section class="card"><h3>${ICON.bell}${t('pu_sys')}</h3><div id="push-admin"><div class="spin"></div></div></section>` : ''}
@@ -1531,6 +2075,7 @@ async function vSettings(alive) {
     <p class="err" data-err="form"></p>
     <button class="btn primary big" type="submit">${t('save')}</button>
   </form>`, { staff: true, nav: 'settings' });
+  S.unitsForSettings = units;
   fillPushAdmin();
 }
 let ISSUE_SEQ = 0;
@@ -1542,12 +2087,14 @@ function issueRow(i) {
 /* ============================================================ views: QR */
 async function vQr(alive) {
   page(loadingBox(), { staff: true, nav: 'qr' });
-  const units = await srpc('admin_units');
+  const [units] = await Promise.all([srpc('admin_units'), settings()]);
   await loadScript(VENDOR.qrcode).catch(() => {});
   if (!alive()) return;
   S.units = units;
+  const order = bCodes();
   const groups = [];
   units.forEach(u => { let g = groups.find(x => x.code === u.building_code); if (!g) groups.push((g = { code: u.building_code, ar: u.building_ar, en: u.building_en, units: [] })); g.units.push(u); });
+  groups.sort((a, b) => ((order.indexOf(a.code) + 1 || 99) - (order.indexOf(b.code) + 1 || 99)));
   page(`<div class="wrap wide">
     <div class="sec-h"><h1>${t('q_title')}</h1><button class="btn primary" type="button" data-act="unit-new">${ICON.plus}${t('q_add')}</button></div>
     ${groups.map(g => `<section class="card"><div class="sec-h"><h2>${esc(LANG === 'ar' ? g.ar : g.en)} <span class="count">${g.units.length}</span></h2>${EMB ? '' : `<a class="btn sm" href="#/qr/print/${esc(g.code)}">${ICON.print}${t('q_print')}</a>`}</div>
@@ -1564,10 +2111,10 @@ async function vQrPrint(code, alive) {
   page(`<div class="wrap wide"><div class="sec-h no-print"><a class="back" href="#/qr">${ICON.back}${t('back')}</a><button class="btn primary" type="button" data-act="print">${ICON.print}${t('q_print')}</button></div><p class="muted no-print">${t('q_print_hint')}</p><div class="label-sheet">${cards}</div></div>`, { staff: true, nav: 'qr' });
 }
 function unitModal() {
-  const codes = [];
+  const codes = bCodes().map(c => ({ code: c, ar: bMeta(c).ar, en: bMeta(c).en }));
   (S.units || []).forEach(u => { if (!codes.find(c => c.code === u.building_code)) codes.push({ code: u.building_code, ar: u.building_ar, en: u.building_en }); });
   modal(`<form class="form" data-form="unit-add" novalidate><h3>${t('q_add')}</h3>
-    <div class="field"><label for="ua-b">${t('q_building')}</label><select id="ua-b" name="b">${codes.map(c => `<option value="${esc(c.code)}">${esc(LANG === 'ar' ? c.ar : c.en)}</option>`).join('')}<option value="__new">${t('q_new_building')}</option></select></div>
+    <div class="field"><label for="ua-b">${t('q_building')}</label><select id="ua-b" name="b">${codes.map(c => `<option value="${esc(c.code)}">${esc((LANG === 'ar' ? c.ar : c.en) || c.code)}</option>`).join('')}<option value="__new">${t('q_new_building')}</option></select></div>
     <div class="newb grid2" ${codes.length ? 'hidden' : ''}><div class="field"><label for="ua-c">${t('q_building_code')}</label><input id="ua-c" name="code" dir="ltr" maxlength="8" placeholder="QRM"></div><div class="field"><label for="ua-bar">${t('q_building_ar')}</label><input id="ua-bar" name="bar"></div><div class="field"><label for="ua-ben">${t('q_building_en')}</label><input id="ua-ben" name="ben" dir="ltr"></div></div>
     <div class="field"><label for="ua-k">${t('q_kind')}</label><select id="ua-k" name="kind"><option value="flat">${t('kind_flat')}</option><option value="common">${t('kind_common')}</option></select></div>
     <div class="grid2"><div class="field"><label for="ua-lar">${t('q_label_ar')}</label><input id="ua-lar" name="lar" placeholder="شقة 71"></div><div class="field"><label for="ua-len">${t('q_label_en')}</label><input id="ua-len" name="len" dir="ltr" placeholder="Flat 71"></div></div>
@@ -1579,17 +2126,24 @@ function unitModal() {
 /* ============================================================ views: demo hub */
 function vDemo() {
   const db = Demo.peek();
-  const techs = db.staff.filter(s => s.role === 'technician' && s.active);
+  S.settings = S.settings || db.settings;
+  const hm = db.staff.filter(s => s.role === 'technician' && s.team === 'hm' && s.active);
+  const ops = db.staff.filter(s => s.role === 'technician' && s.team !== 'hm' && s.active);
+  const units = db.units.filter(u => u.active);
+  const order = bCodes();
+  units.sort((a, b) => ((order.indexOf(a.building_code) + 1 || 99) - (order.indexOf(b.building_code) + 1 || 99)) || a.sort - b.sort);
   page(`<div class="wrap wide">
     <div class="demo-hero"><h1>${t('dm_title')}</h1><p class="lead">${t('dm_lead')}</p></div>
     <ol class="flow">${['dm_s1', 'dm_s2', 'dm_s3', 'dm_s4'].map(k => `<li>${t(k)}</li>`).join('')}</ol>
     <p class="muted">${t('dm_body')}</p>
     <div class="demo-grid">
       <article class="demo-role"><div class="ic-b">${ICON.door}</div><h3>${t('dm_tenant')}</h3><p>${t('dm_tenant_body')}</p>
-        <div class="field"><label class="vh" for="dm-unit">${t('q_building')}</label><select id="dm-unit">${db.units.filter(u => u.active).map(u => `<option value="${esc(u.token)}" ${myRequests().some(m => m.token === u.token) ? 'selected' : ''}>${esc(LANG === 'ar' ? u.label_ar : u.label_en)} · ${esc(LANG === 'ar' ? u.building_ar : u.building_en)}</option>`).join('')}</select></div>
+        <div class="field"><label class="vh" for="dm-unit">${t('q_building')}</label><select id="dm-unit">${order.map(c => { const us = units.filter(u => u.building_code === c); return us.length ? `<optgroup label="${esc(bLabel(c))}">${us.map(u => `<option value="${esc(u.token)}" ${myRequests().some(m => m.token === u.token) ? 'selected' : ''}>${esc(LANG === 'ar' ? u.label_ar : u.label_en)} · ${esc(LANG === 'ar' ? u.building_ar : u.building_en)}</option>`).join('')}</optgroup>` : ''; }).join('')}</select></div>
         <button class="btn primary" type="button" data-act="dm-unit">${t('dm_open_unit')}</button></article>
+      <article class="demo-role"><div class="ic-b">${ICON.building}</div><h3>${t('dm_hm')}</h3><p>${t('dm_hm_body')}</p>
+        <div class="row">${hm.map(s => `<button class="btn" type="button" data-act="dm-login" data-id="${esc(s.id)}">${esc(s.full_name)}<small class="muted">${esc((s.sites || []).map(bLabel).join('، '))}</small></button>`).join('')}</div></article>
       <article class="demo-role"><div class="ic-b">${ICON.wrench}</div><h3>${t('dm_tech')}</h3><p>${t('dm_tech_body')}</p>
-        <div class="row">${techs.map(s => `<button class="btn" type="button" data-act="dm-login" data-id="${esc(s.id)}">${esc(s.full_name)}</button>`).join('')}</div></article>
+        <div class="row">${ops.map(s => `<button class="btn" type="button" data-act="dm-login" data-id="${esc(s.id)}">${esc(s.full_name)}</button>`).join('')}</div></article>
       <article class="demo-role"><div class="ic-b">${ICON.list}</div><h3>${t('dm_sup')}</h3><p>${t('dm_sup_body')}</p><button class="btn primary" type="button" data-act="dm-login" data-id="s-sup">${t('dm_enter')}</button></article>
       <article class="demo-role"><div class="ic-b">${ICON.chartbig}</div><h3>${t('dm_admin')}</h3><p>${t('dm_admin_body')}</p><button class="btn primary" type="button" data-act="dm-login" data-id="s-admin">${t('dm_enter')}</button></article>
     </div>
@@ -1602,16 +2156,10 @@ function exportModel() {
   const { ym, ev, st } = S.evalData;
   const cname = (st.contractor && (st.contractor[LANG] || st.contractor.ar)) || '';
   const buildings = Array.from(new Set(ev.real.map(r => bName(r)))).join('، ');
-  const mins = (a, b) => (a && b ? Math.round(ms(a, b) / 60000) : null);
-  const rows = ev.month.slice().sort((a, b) => a.no - b.no).map(r => {
-    const arr = mins(r.accepted_at, r.arrived_at), work = mins(r.arrived_at, r.finished_at);
-    return {
-      r, pickup: mins(r.created_at, r.accepted_at), arr, work, total: mins(r.created_at, r.closed_at || r.cancelled_at),
-      arrOk: arr == null ? null : arr <= r.target_arrive, workOk: work == null ? null : work <= r.target_work, repeat: ev.repeatOf.has(r.id)
-    };
-  });
-  const late = rows.filter(x => x.arrOk === false || x.workOk === false)
-    .sort((a, b) => Math.max(b.arr != null ? b.arr / b.r.target_arrive : 0, b.work != null ? b.work / b.r.target_work : 0) - Math.max(a.arr != null ? a.arr / a.r.target_arrive : 0, a.work != null ? a.work / a.r.target_work : 0));
+  const rows = ev.month.slice().sort((a, b) => a.no - b.no).map(r => reqRow(r, ev.repeatOf));
+  const ratio = x => Math.max(x.arr != null && x.arrT ? x.arr / x.arrT : 0, x.work != null && x.workT ? x.work / x.workT : 0);
+  const late = ev.late.map(l => ({ r: l.r, name: l.name, team: l.team, arr: minsOf(l.arrive), arrT: l.t_arrive, arrOk: l.arrOk, work: minsOf(l.work), workT: l.t_work, workOk: l.workOk }))
+    .sort((a, b) => ratio(b) - ratio(a));
   return { ym, ev, st, cname, buildings, rows, late, month: ymLabel(ym), stamp: fmt(new Date(), { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }) };
 }
 const closedBy = r => (r.close_method === 'manual' ? t('cm_manual') : r.signoff_method ? t('cm_' + r.signoff_method) : '');
@@ -1637,7 +2185,6 @@ async function exportExcel() {
   const box = { top: edge, bottom: edge, left: edge, right: edge };
   const align = o => Object.assign({ vertical: 'middle', horizontal: rtl ? 'right' : 'left', readingOrder: rtl ? 'rtl' : 'ltr', wrapText: true }, o || {});
   const scoreFill = s => (s == null ? null : s >= 85 ? [C.okSoft, C.ok] : s >= 70 ? [C.warnSoft, C.warn] : [C.badSoft, C.bad]);
-  const minsOf = v => (v == null ? null : Math.round(v / 60000));
   const head = (row, cells) => {
     cells.forEach((v, i) => { const c = row.getCell(i + 1); c.value = v; c.font = font({ bold: true, color: { argb: C.white } }); c.fill = fill(C.gold); c.alignment = align({ horizontal: 'center' }); c.border = box; });
     row.height = 30;
@@ -1647,9 +2194,9 @@ async function exportExcel() {
 
   // summary sheet
   const s = wb.addWorksheet(t('x_summary'), { views: [{ rightToLeft: rtl, showGridLines: false }], properties: { defaultRowHeight: 20 } });
-  s.columns = [{ width: 30 }, { width: 12 }, { width: 16 }, { width: 16 }, { width: 14 }, { width: 16 }, { width: 16 }, { width: 11 }];
-  s.mergeCells('A1:H1'); s.getCell('A1').value = t('e_title') + ' · ' + m.month; s.getCell('A1').font = font({ size: 18, bold: true }); s.getCell('A1').alignment = align(); s.getRow(1).height = 34;
-  s.mergeCells('A2:H2'); s.getCell('A2').value = [m.cname ? t('e_contractor', { n: m.cname }) : '', m.buildings, t('x_generated', { d: m.stamp })].filter(Boolean).join(' · ');
+  s.columns = [{ width: 30 }, { width: 18 }, { width: 12 }, { width: 16 }, { width: 16 }, { width: 14 }, { width: 16 }, { width: 16 }, { width: 11 }];
+  s.mergeCells('A1:I1'); s.getCell('A1').value = t('e_title') + ' · ' + m.month; s.getCell('A1').font = font({ size: 18, bold: true }); s.getCell('A1').alignment = align(); s.getRow(1).height = 34;
+  s.mergeCells('A2:I2'); s.getCell('A2').value = [m.cname ? t('e_contractor', { n: m.cname }) : '', m.buildings, t('x_generated', { d: m.stamp })].filter(Boolean).join(' · ');
   s.getCell('A2').font = font({ color: { argb: C.muted } }); s.getCell('A2').alignment = align();
   let r = 4;
   const kpi = (label, value, numFmt, note, color) => {
@@ -1657,7 +2204,7 @@ async function exportExcel() {
     row.getCell(1).value = label; row.getCell(1).font = font({ bold: true }); row.getCell(1).alignment = align();
     const v = row.getCell(2); v.value = value == null ? '—' : value; if (numFmt && value != null) v.numFmt = numFmt;
     v.font = font({ bold: true, size: 13, color: { argb: color || C.ink } }); v.alignment = align({ horizontal: 'center' });
-    s.mergeCells(`C${row.number}:H${row.number}`); row.getCell(3).value = note || ''; row.getCell(3).font = font({ color: { argb: C.muted } }); row.getCell(3).alignment = align();
+    s.mergeCells(`C${row.number}:I${row.number}`); row.getCell(3).value = note || ''; row.getCell(3).font = font({ color: { argb: C.muted } }); row.getCell(3).alignment = align();
     [1, 2, 3].forEach(i => { row.getCell(i).fill = fill(C.soft); row.getCell(i).border = box; });
     row.height = 24;
   };
@@ -1670,22 +2217,35 @@ async function exportExcel() {
   kpi(t('e_avg_pickup'), minsOf(k.pickup), '0', t('x_minutes'));
   kpi(t('e_avg_arrive'), minsOf(k.arrive), '0', t('x_minutes'));
   kpi(t('e_avg_work'), minsOf(k.work), '0', t('x_minutes'));
+  kpi(t('e_paused'), minsOf(k.paused), '0', t('x_minutes'));
   kpi(t('x_f_manual'), k.manualArr, '0', t('x_f_manual_d'), k.manualArr ? C.bad : C.ok);
   kpi(t('x_f_onsite'), k.onsite, '0', t('x_f_onsite_d'), k.onsite ? C.warn : C.ok);
   kpi(t('x_f_close'), k.manualClose, '0', t('x_f_close_d'), k.manualClose ? C.warn : C.ok);
   kpi(t('x_f_repeat'), k.repeats, '0', t('x_f_repeat_d', { d: m.st.repeatDays || 30 }), k.repeats ? C.bad : C.ok);
   r++;
   s.getRow(r).getCell(1).value = t('e_techs'); s.getRow(r).getCell(1).font = font({ bold: true, size: 13 }); r++;
-  head(s.getRow(r++), [t('dm_tech'), t('e_jobs'), t('e_arr_on'), t('e_fix_on'), t('e_rating'), t('x_avg_arr_min'), t('x_avg_work_min'), t('e_score')]);
+  head(s.getRow(r++), [t('dm_tech'), t('col_team'), t('e_visits'), t('e_arr_on'), t('e_fix_on'), t('e_rating'), t('x_avg_arr_min'), t('x_avg_work_min'), t('e_score')]);
   ev.techs.forEach(x => {
     const row = s.getRow(r++);
-    [x.name || '—', x.n, x.arrRate, x.fixRate, x.rating == null ? null : +x.rating.toFixed(2), minsOf(x.arrive), minsOf(x.work), x.score].forEach((v, i) => {
-      const c = row.getCell(i + 1); c.value = v == null ? '—' : v; c.border = box; c.font = font({ bold: i === 0 || i === 7 });
-      c.alignment = align(i ? { horizontal: 'center' } : {});
+    [x.name || '—', x.team === 'hm' ? t('team_hm') : t('team_ops'), x.visits, x.arrRate, x.fixRate, x.rating == null ? null : +x.rating.toFixed(2), minsOf(x.arrive), minsOf(x.work), x.score].forEach((v, i) => {
+      const c = row.getCell(i + 1); c.value = v == null ? '—' : v; c.border = box; c.font = font({ bold: i === 0 || i === 8 });
+      c.alignment = align(i > 1 ? { horizontal: 'center' } : {});
+      if (v != null && (i === 3 || i === 4)) c.numFmt = '0%';
+      if (v != null && i === 5) c.numFmt = '0.0';
+    });
+    const f = scoreFill(x.score); if (f) { row.getCell(9).fill = fill(f[0]); row.getCell(9).font = font({ bold: true, color: { argb: f[1] } }); }
+    row.height = 22;
+  });
+  r++;
+  s.getRow(r).getCell(1).value = t('e_by_team'); s.getRow(r).getCell(1).font = font({ bold: true, size: 13 }); r++;
+  head(s.getRow(r++), [t('col_team'), t('e_visits'), t('e_arr_on'), t('e_fix_on'), t('e_rating'), t('x_avg_arr_min'), t('x_avg_work_min'), t('e_paused'), '']);
+  [['hm', t('e_hm_group')], ['ops', t('e_ops_group')]].forEach(([key, label]) => {
+    const x = ev.team[key], row = s.getRow(r++);
+    [label, x.visits, x.arrRate, x.fixRate, x.rating == null ? null : +x.rating.toFixed(2), minsOf(x.arrive), minsOf(x.work), minsOf(x.paused)].forEach((v, i) => {
+      const c = row.getCell(i + 1); c.value = v == null ? '—' : v; c.border = box; c.font = font({ bold: i === 0 }); c.alignment = align(i ? { horizontal: 'center' } : {});
       if (v != null && (i === 2 || i === 3)) c.numFmt = '0%';
       if (v != null && i === 4) c.numFmt = '0.0';
     });
-    const f = scoreFill(x.score); if (f) { row.getCell(8).fill = fill(f[0]); row.getCell(8).font = font({ bold: true, color: { argb: f[1] } }); }
     row.height = 22;
   });
   r++;
@@ -1701,36 +2261,70 @@ async function exportExcel() {
     row.height = 22;
   });
   r++;
-  s.mergeCells(`A${r}:H${r}`); s.getCell(`A${r}`).value = t('e_formula', { d: m.st.repeatDays || 30 }); s.getCell(`A${r}`).font = font({ size: 10, color: { argb: C.muted } }); s.getCell(`A${r}`).alignment = align(); s.getRow(r).height = 34;
+  s.mergeCells(`A${r}:I${r}`); s.getCell(`A${r}`).value = t('e_formula', { d: m.st.repeatDays || 30 }); s.getCell(`A${r}`).font = font({ size: 10, color: { argb: C.muted } }); s.getCell(`A${r}`).alignment = align(); s.getRow(r).height = 34;
 
-  // requests sheet
-  const q = wb.addWorksheet(t('x_requests'), { views: [{ rightToLeft: rtl, state: 'frozen', ySplit: 1 }] });
-  const cols = [['col_no', 10], ['col_date', 17], ['col_building', 16], ['col_unit', 14], ['col_issue', 26], ['col_priority', 10], ['col_tech', 18], ['col_status', 15],
-    ['col_pickup', 11], ['col_accepted', 17], ['col_arrived', 17], ['col_arrive', 11], ['col_arrive_t', 11], ['col_arrive_ok', 11], ['col_finished', 17], ['col_work', 11], ['col_work_t', 11], ['col_work_ok', 11],
-    ['col_closed', 17], ['col_total', 11], ['col_method', 13], ['col_close', 20], ['col_rating', 9], ['col_repeat', 11], ['col_desc', 44]];
+  requestsSheet(wb, m.rows, { font, fill, box, align, head, C });
+  visitsSheet(wb, m.ev.legs, { font, fill, box, align, head, C });
+  const buf = await wb.xlsx.writeBuffer();
+  saveBlob(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), `rasd-${m.ym}.xlsx`);
+}
+
+const xlDate = x => (x ? new Date(D(x).getTime() + OFFSET) : null);
+function requestsSheet(wb, rows, X, name) {
+  const { font, fill, box, align, head, C } = X, rtl = LANG === 'ar';
+  const q = wb.addWorksheet(name || t('x_requests'), { views: [{ rightToLeft: rtl, state: 'frozen', ySplit: 1 }] });
+  const cols = [['col_no', 10], ['col_date', 17], ['col_building', 16], ['col_unit', 14], ['col_source', 12], ['col_issue', 26], ['col_priority', 10], ['col_status', 22],
+    ['col_by', 18], ['col_team', 14], ['col_handed', 12], ['col_hm', 16], ['col_pickup', 11], ['col_arrive', 11], ['col_arrive_t', 11], ['col_arrive_ok', 11], ['col_paused_a', 13],
+    ['col_work', 11], ['col_work_t', 11], ['col_work_ok', 11], ['col_paused_w', 13], ['col_total', 11], ['col_method', 13], ['col_report', 44], ['col_parts', 32],
+    ['col_rating', 9], ['col_comment', 26], ['col_close', 20], ['col_repeat', 11], ['col_desc', 44]];
   q.columns = cols.map(c => ({ width: c[1] }));
   head(q.getRow(1), cols.map(c => t(c[0])));
-  const when = x => (x ? new Date(D(x).getTime() + OFFSET) : null);
   const yn = v => (v == null ? '' : v ? t('yes') : t('no'));
-  m.rows.forEach((x, i) => {
+  const wide = new Set([5, 7, 23, 24, 26, 29]);
+  rows.forEach((x, i) => {
     const rr = x.r, row = q.getRow(i + 2);
-    const vals = [rr.no, when(rr.created_at), bName(rr), uName(rr), issueLabel(rr.issue_type), t('pr_' + rr.priority), rr.technician || '', t('st_' + rr.status),
-      x.pickup, when(rr.accepted_at), when(rr.arrived_at), x.arr, rr.target_arrive, yn(x.arrOk), when(rr.finished_at), x.work, rr.target_work, yn(x.workOk),
-      when(rr.closed_at || rr.cancelled_at), x.total, rr.arrival_method ? t(rr.arrival_method === 'qr' ? 'm_qr' : 'm_manual') : '', closedBy(rr), rr.rating || null, x.repeat ? t('yes') : '', rr.description || ''];
+    const vals = [rr.no, xlDate(rr.created_at), bName(rr), uName(rr), t('src_' + (rr.source || 'qr')), issueLabel(rr.issue_type), t('pr_' + rr.priority), statusText(rr),
+      x.by, x.team === 'hm' ? t('team_hm') : t('team_ops'), x.handed ? t('yes') : '', x.hm ? x.hm.name || '' : '', x.pickup, x.arr, x.arrT, yn(x.arrOk), x.pa || null,
+      x.work, x.workT, yn(x.workOk), x.pw || null, x.total, rr.arrival_method ? t(rr.arrival_method === 'qr' ? 'm_qr' : 'm_manual') : '', rr.tech_note || '', partsText(rr.parts),
+      rr.rating || null, rr.rating_comment || '', closedBy(rr), x.repeat ? t('yes') : '', rr.description || ''];
     vals.forEach((v, j) => {
       const c = row.getCell(j + 1); c.value = v == null ? null : v; c.border = box; c.font = font({ size: 10 });
-      c.alignment = align(j === 24 || j === 4 ? {} : { horizontal: 'center' });
+      c.alignment = align(wide.has(j) ? {} : { horizontal: 'center' });
       if (v instanceof Date) c.numFmt = 'yyyy-mm-dd hh:mm';
     });
-    if (x.arrOk === false) { row.getCell(12).font = font({ size: 10, bold: true, color: { argb: C.bad } }); row.getCell(14).font = font({ size: 10, bold: true, color: { argb: C.bad } }); }
-    if (x.workOk === false) { row.getCell(16).font = font({ size: 10, bold: true, color: { argb: C.bad } }); row.getCell(18).font = font({ size: 10, bold: true, color: { argb: C.bad } }); }
-    if (rr.arrival_method === 'manual') row.getCell(21).font = font({ size: 10, bold: true, color: { argb: C.warn } });
+    if (x.arrOk === false) [14, 16].forEach(j => (row.getCell(j).font = font({ size: 10, bold: true, color: { argb: C.bad } })));
+    if (x.workOk === false) [18, 20].forEach(j => (row.getCell(j).font = font({ size: 10, bold: true, color: { argb: C.bad } })));
+    if (rr.arrival_method === 'manual') row.getCell(23).font = font({ size: 10, bold: true, color: { argb: C.warn } });
+    if (isHeld(rr)) row.getCell(8).font = font({ size: 10, bold: true, color: { argb: C.warn } });
     if (rr.status === 'cancelled') for (let j = 1; j <= cols.length; j++) row.getCell(j).font = font({ size: 10, color: { argb: C.muted } });
     if (i % 2) for (let j = 1; j <= cols.length; j++) row.getCell(j).fill = fill(C.soft);
   });
-  q.autoFilter = { from: { row: 1, column: 1 }, to: { row: Math.max(1, m.rows.length + 1), column: cols.length } };
-  const buf = await wb.xlsx.writeBuffer();
-  saveBlob(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), `rasd-${m.ym}.xlsx`);
+  q.autoFilter = { from: { row: 1, column: 1 }, to: { row: Math.max(1, rows.length + 1), column: cols.length } };
+  return q;
+}
+function visitsSheet(wb, legs, X) {
+  const { font, fill, box, align, head, C } = X, rtl = LANG === 'ar';
+  const q = wb.addWorksheet(t('x_visits'), { views: [{ rightToLeft: rtl, state: 'frozen', ySplit: 1 }] });
+  const cols = [['col_no', 10], ['col_date', 17], ['col_building', 16], ['col_unit', 14], ['col_tech', 18], ['col_team', 14], ['col_outcome', 22], ['col_pickup', 11],
+    ['col_arrive', 11], ['col_arrive_t', 11], ['col_arrive_ok', 11], ['col_paused_a', 13], ['col_work', 11], ['col_work_t', 11], ['col_work_ok', 11], ['col_paused_w', 13], ['col_method', 13], ['col_note', 40]];
+  q.columns = cols.map(c => ({ width: c[1] }));
+  head(q.getRow(1), cols.map(c => t(c[0])));
+  const yn = v => (v == null ? '' : v ? t('yes') : t('no'));
+  legs.slice().sort((a, b) => a.r.no - b.r.no).forEach((l, i) => {
+    const row = q.getRow(i + 2);
+    const vals = [l.r.no, xlDate(l.accepted_at || l.offered_at), bName(l.r), uName(l.r), l.name || '', l.team === 'hm' ? t('team_hm') : t('team_ops'), t('leg_' + l.outcome), minsOf(l.pickup),
+      minsOf(l.arrive), l.t_arrive, yn(l.arrOk), minsOf(l.pa) || null, minsOf(l.work), l.work != null ? l.t_work : null, yn(l.workOk), minsOf(l.pw) || null,
+      l.arrival_method ? t(l.arrival_method === 'qr' ? 'm_qr' : 'm_manual') : '', l.outcome === 'escalated' ? l.note || '' : ''];
+    vals.forEach((v, j) => {
+      const c = row.getCell(j + 1); c.value = v == null ? null : v; c.border = box; c.font = font({ size: 10 });
+      c.alignment = align(j === 17 || j === 6 ? {} : { horizontal: 'center' });
+      if (v instanceof Date) c.numFmt = 'yyyy-mm-dd hh:mm';
+    });
+    if (l.arrOk === false) row.getCell(9).font = font({ size: 10, bold: true, color: { argb: C.bad } });
+    if (l.workOk === false) row.getCell(13).font = font({ size: 10, bold: true, color: { argb: C.bad } });
+    if (i % 2) for (let j = 1; j <= cols.length; j++) row.getCell(j).fill = fill(C.soft);
+  });
+  q.autoFilter = { from: { row: 1, column: 1 }, to: { row: Math.max(1, legs.length + 1), column: cols.length } };
 }
 
 /* ----- PDF (the browser's own "Save as PDF" keeps Arabic text sharp and searchable) */
@@ -1743,6 +2337,7 @@ function reportHtml(m) {
   const flag = (n, l) => `<span class="${n ? 'on' : ''}">${l}: <b>${n}</b></span>`;
   const cls = s => (s == null ? '' : s >= 85 ? 'good' : s >= 70 ? 'mid' : 'low');
   const lateCell = (v, tg, ok) => (v == null ? '—' : `<span class="${ok === false ? 'bad' : ''}">${v}</span> / ${tg}`);
+  const teamRow = (label, x) => tr([label, x.visits, pct(x.arrRate), pct(x.fixRate), x.rating == null ? '—' : x.rating.toFixed(1), fDur(x.arrive), fDur(x.work), fDur(x.paused)]);
   return `<div class="rp" dir="${LANG === 'ar' ? 'rtl' : 'ltr'}" lang="${LANG}">
     <header class="rp-h"><div class="rp-brand">${MARK}<div><b>${t('app')}</b><span>${esc(org() || t('tagline'))}</span></div></div>
       <div class="rp-t"><h1>${t('e_title')} · ${esc(m.month)}</h1><p>${esc([m.cname ? t('e_contractor', { n: m.cname }) : '', m.buildings].filter(Boolean).join(' · '))}</p><small>${esc(t('x_generated', { d: m.stamp }))}</small></div></header>
@@ -1751,29 +2346,150 @@ function reportHtml(m) {
         ${kp(fDur(k.pickup), t('e_avg_pickup'))}${kp(fDur(k.arrive), t('e_avg_arrive'))}${kp(fDur(k.work), t('e_avg_work'))}${kp(ev.cancelled, t('st_cancelled'))}</div></section>
     <div class="rp-flags">${flag(k.manualArr, t('x_f_manual'))}${flag(k.onsite, t('x_f_onsite'))}${flag(k.manualClose, t('x_f_close'))}${flag(k.repeats, t('x_f_repeat'))}</div>
     <h2>${t('e_techs')}</h2>
-    <table class="rp-tb">${th([t('dm_tech'), t('e_jobs'), t('e_arr_on'), t('e_fix_on'), t('e_rating'), t('e_avg_arrive'), t('e_avg_work'), t('e_score')])}<tbody>
-      ${ev.techs.map(x => tr([esc(x.name || '—'), x.n, pct(x.arrRate), pct(x.fixRate), x.rating == null ? '—' : x.rating.toFixed(1), fDur(x.arrive), fDur(x.work), `<b class="rp-sc ${cls(x.score)}">${num(x.score)}</b>`])).join('')}</tbody></table>
+    <table class="rp-tb">${th([t('dm_tech'), t('col_team'), t('e_visits'), t('e_arr_on'), t('e_fix_on'), t('e_rating'), t('e_avg_arrive'), t('e_avg_work'), t('e_score')])}<tbody>
+      ${ev.techs.map(x => tr([esc(x.name || '—'), x.team === 'hm' ? t('team_hm') : t('team_ops'), x.visits, pct(x.arrRate), pct(x.fixRate), x.rating == null ? '—' : x.rating.toFixed(1), fDur(x.arrive), fDur(x.work), `<b class="rp-sc ${cls(x.score)}">${num(x.score)}</b>`])).join('')}</tbody></table>
+    <h2>${t('e_by_team')}</h2>
+    <table class="rp-tb">${th([t('col_team'), t('e_visits'), t('e_arr_on'), t('e_fix_on'), t('e_rating'), t('e_avg_arrive'), t('e_avg_work'), t('e_paused')])}<tbody>${teamRow(t('e_hm_group'), ev.team.hm)}${teamRow(t('e_ops_group'), ev.team.ops)}</tbody></table>
     <h2>${t('e_by_priority')}</h2>
     <table class="rp-tb">${th([t('d_priority'), t('e_col_count'), t('e_arr_on'), t('e_fix_on'), t('e_rating'), t('e_avg_arrive'), t('e_avg_work')])}<tbody>
       ${['urgent', 'normal'].map(p => { const x = ev.pri[p]; return tr([t('pr_' + p), x.n, pct(x.arrRate), pct(x.fixRate), x.rating == null ? '—' : x.rating.toFixed(1), fDur(x.arrive), fDur(x.work)]); }).join('')}</tbody></table>
     ${m.late.length ? `<h2>${t('e_late_list')} (${m.late.length})</h2>
     <table class="rp-tb">${th([t('col_no'), t('col_date'), t('col_unit'), t('col_issue'), t('col_tech'), t('x_arr_vs'), t('x_work_vs')])}<tbody>
-      ${m.late.map(x => tr(['#' + x.r.no, fmt(x.r.created_at, { day: 'numeric', month: 'short' }), esc(uName(x.r)), esc(issueLabel(x.r.issue_type)), esc(x.r.technician || '—'), lateCell(x.arr, x.r.target_arrive, x.arrOk), lateCell(x.work, x.r.target_work, x.workOk)])).join('')}</tbody></table>` : ''}
+      ${m.late.map(x => tr(['#' + x.r.no, fmt(x.r.created_at, { day: 'numeric', month: 'short' }), esc(uName(x.r)), esc(issueLabel(x.r.issue_type)), esc(x.name || '—'), lateCell(x.arr, x.arrT, x.arrOk), lateCell(x.work, x.workT, x.workOk)])).join('')}</tbody></table>` : ''}
     <h2 class="rp-break">${t('x_log')} (${m.rows.length})</h2>
     <table class="rp-tb rp-all">${th([t('col_no'), t('col_date'), t('col_unit'), t('col_issue'), t('col_priority'), t('col_tech'), t('col_status'), t('x_arr_vs'), t('x_work_vs'), t('col_rating'), t('col_close')])}<tbody>
-      ${m.rows.map(x => tr(['#' + x.r.no, fmt(x.r.created_at, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false }), esc(uName(x.r)), esc(issueLabel(x.r.issue_type)), t('pr_' + x.r.priority), esc(x.r.technician || '—'), t('st_' + x.r.status), lateCell(x.arr, x.r.target_arrive, x.arrOk), lateCell(x.work, x.r.target_work, x.workOk), x.r.rating || '—', esc(closedBy(x.r))])).join('')}</tbody></table>
+      ${m.rows.map(x => tr(['#' + x.r.no, fmt(x.r.created_at, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false }), esc(uName(x.r)), esc(issueLabel(x.r.issue_type)), t('pr_' + x.r.priority), esc(x.by || '—'), esc(statusText(x.r)), lateCell(x.arr, x.arrT, x.arrOk), lateCell(x.work, x.workT, x.workOk), x.r.rating || '—', esc(closedBy(x.r))])).join('')}</tbody></table>
     <p class="rp-note">${esc(t('e_formula', { d: m.st.repeatDays || 30 }))} ${esc(t('x_minutes_note'))}</p>
   </div>`;
 }
 function exportPdf() {
   const m = exportModel();
+  printHtml(reportHtml(m), `${t('app')} · ${t('e_title')} · ${m.month}`);
+}
+
+/* ----- the period report (Reports page): Excel and PDF */
+async function exportPeriodExcel() {
+  await loadScript(VENDOR.exceljs);
+  const M = repModel(), P = M.P, rtl = LANG === 'ar';
+  const C = { gold: 'FF8B7E49', ink: 'FF262521', muted: 'FF8A8576', line: 'FFE3DBC9', soft: 'FFF6F3EC', ok: 'FF2E7D4F', warn: 'FF9A6200', bad: 'FFB3261E', white: 'FFFFFFFF' };
+  const font = o => Object.assign({ name: 'Arial', size: 11, color: { argb: C.ink } }, o || {});
+  const fill = argb => ({ type: 'pattern', pattern: 'solid', fgColor: { argb } });
+  const edge = { style: 'thin', color: { argb: C.line } }, box = { top: edge, bottom: edge, left: edge, right: edge };
+  const align = o => Object.assign({ vertical: 'middle', horizontal: rtl ? 'right' : 'left', readingOrder: rtl ? 'rtl' : 'ltr', wrapText: true }, o || {});
+  const head = (row, cells) => { cells.forEach((v, i) => { const c = row.getCell(i + 1); c.value = v; c.font = font({ bold: true, color: { argb: C.white } }); c.fill = fill(C.gold); c.alignment = align({ horizontal: 'center' }); c.border = box; }); row.height = 30; };
+  const X = { font, fill, box, align, head, C };
+  const wb = new window.ExcelJS.Workbook();
+  wb.creator = t('app'); wb.created = new Date();
+  const stamp = fmt(new Date(), { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+  const filt = [S.rf.b ? bLabel(S.rf.b) : t('b_all_buildings'), S.rf.p ? t('pr_' + S.rf.p) : '', S.rf.st ? t('r_s_' + S.rf.st) : ''].filter(Boolean).join(' · ');
+
+  // summary
+  const s = wb.addWorksheet(t('x_summary'), { views: [{ rightToLeft: rtl, showGridLines: false }], properties: { defaultRowHeight: 20 } });
+  s.columns = [{ width: 34 }, { width: 13 }, { width: 13 }, { width: 13 }, { width: 16 }, { width: 16 }];
+  s.mergeCells('A1:F1'); s.getCell('A1').value = t('r_title') + ' · ' + P.label; s.getCell('A1').font = font({ size: 18, bold: true }); s.getCell('A1').alignment = align(); s.getRow(1).height = 34;
+  s.mergeCells('A2:F2'); s.getCell('A2').value = [org(), filt, t('x_generated', { d: stamp })].filter(Boolean).join(' · '); s.getCell('A2').font = font({ color: { argb: C.muted } }); s.getCell('A2').alignment = align();
+  let r = 4;
+  const kpi = (label, value, numFmt, note) => {
+    const row = s.getRow(r++);
+    row.getCell(1).value = label; row.getCell(1).font = font({ bold: true }); row.getCell(1).alignment = align();
+    const v = row.getCell(2); v.value = value == null ? '—' : value; if (numFmt && value != null) v.numFmt = numFmt; v.font = font({ bold: true, size: 13 }); v.alignment = align({ horizontal: 'center' });
+    s.mergeCells(`C${row.number}:F${row.number}`); row.getCell(3).value = note || ''; row.getCell(3).font = font({ color: { argb: C.muted } }); row.getCell(3).alignment = align();
+    [1, 2, 3].forEach(i => { row.getCell(i).fill = fill(C.soft); row.getCell(i).border = box; });
+    row.height = 24;
+  };
+  const d = M.curN - M.prevN;
+  kpi(t('r_total'), M.inP.length, '0', (d > 0 ? '+' : '') + d + ' ' + t('r_prev_' + P.unit));
+  kpi(t('r_done'), M.groups.done, '0'); kpi(t('r_progress'), M.groups.progress, '0'); kpi(t('r_hold'), M.groups.hold, '0'); kpi(t('r_cancel'), M.groups.cancel, '0');
+  kpi(t('r_carried'), M.carried.filter(isOpen).length, '0', t('r_carried_s'));
+  kpi(t('r_arr_on'), M.m.arrRate, '0%', M.m.arrN ? M.m.arrOn + ' / ' + M.m.arrN : '');
+  kpi(t('r_fix_on'), M.m.fixRate, '0%', M.m.fixN ? M.m.fixOn + ' / ' + M.m.fixN : '');
+  if (M.firstLine != null) kpi(t('r_first_line'), M.firstLine, '0%', M.team.hmFixed + ' / ' + (M.team.hmFixed + M.team.hmHanded));
+  kpi(t('e_avg_arrive'), minsOf(M.m.arrive), '0', t('x_minutes')); kpi(t('e_avg_work'), minsOf(M.m.work), '0', t('x_minutes'));
+  r++;
+  s.getRow(r).getCell(1).value = t('r_by_type'); s.getRow(r).getCell(1).font = font({ bold: true, size: 13 }); r++;
+  head(s.getRow(r++), [t('r_col_type'), t('col_priority'), t('col_count'), t('r_done'), t('r_col_open'), t('x_avg_work_min')]);
+  ['urgent', 'normal'].forEach(p => M.types.filter(x => x.p === p).sort((a, b) => b.n - a.n).forEach(x => {
+    const row = s.getRow(r++);
+    [issueLabel(x.k), t('pr_' + p), x.n, x.done, x.open, x.work.length ? Math.round(x.work.reduce((a, b) => a + b, 0) / x.work.length / 60000) : null].forEach((v, i) => {
+      const c = row.getCell(i + 1); c.value = v == null ? '—' : v; c.border = box; c.font = font({ bold: i === 0, color: { argb: i === 1 && p === 'urgent' ? C.bad : C.ink } }); c.alignment = align(i ? { horizontal: 'center' } : {});
+    });
+  }));
+  r++;
+  s.getRow(r).getCell(1).value = t('r_by_building'); s.getRow(r).getCell(1).font = font({ bold: true, size: 13 }); r++;
+  head(s.getRow(r++), [t('col_building'), t('col_count'), t('r_done'), t('r_hold'), t('r_col_open'), t('x_avg_arr_min')]);
+  M.blds.slice().sort((a, b) => b.n - a.n).forEach(x => {
+    const row = s.getRow(r++);
+    [x.name, x.n, x.done, x.hold, x.open, x.arr.length ? Math.round(x.arr.reduce((a, b) => a + b, 0) / x.arr.length / 60000) : null].forEach((v, i) => { const c = row.getCell(i + 1); c.value = v == null ? '—' : v; c.border = box; c.font = font({ bold: i === 0 }); c.alignment = align(i ? { horizontal: 'center' } : {}); });
+  });
+  r++;
+  s.getRow(r).getCell(1).value = t('r_by_team'); s.getRow(r).getCell(1).font = font({ bold: true, size: 13 }); r++;
+  [[t('r_hm_fixed'), M.team.hmFixed], [t('r_hm_handed'), M.team.hmHanded], [t('r_ops_direct'), M.team.opsDirect], [t('r_ops_fixed'), M.team.opsFixed]].forEach(([l, v]) => {
+    const row = s.getRow(r++); row.getCell(1).value = l; row.getCell(2).value = v; [1, 2].forEach(i => { row.getCell(i).border = box; row.getCell(i).alignment = align(i === 2 ? { horizontal: 'center' } : {}); });
+  });
+  r++;
+  s.mergeCells(`A${r}:F${r}`); s.getCell(`A${r}`).value = t('e_formula', { d: M.st.repeatDays || 30 }); s.getCell(`A${r}`).font = font({ size: 10, color: { argb: C.muted } }); s.getCell(`A${r}`).alignment = align(); s.getRow(r).height = 46;
+
+  // every request, then the earlier ones still open, the parts, the paused ones and the counts
+  requestsSheet(wb, M.shown.map(x => reqRow(x)), X);
+  const carried = M.carried.filter(isOpen);
+  if (carried.length && !S.rf.st) requestsSheet(wb, carried.map(x => reqRow(x)), X, t('r_carried').slice(0, 31));
+  const p = wb.addWorksheet(t('x_parts_sheet'), { views: [{ rightToLeft: rtl, state: 'frozen', ySplit: 1 }] });
+  p.columns = [{ width: 10 }, { width: 17 }, { width: 16 }, { width: 14 }, { width: 26 }, { width: 18 }, { width: 34 }, { width: 9 }];
+  head(p.getRow(1), [t('col_no'), t('col_date'), t('col_building'), t('col_unit'), t('col_issue'), t('col_by'), t('col_part'), t('col_qty')]);
+  let pr = 2;
+  M.inP.filter(x => x.parts && x.parts.length).forEach(x => x.parts.forEach(pt => {
+    const row = p.getRow(pr++), by = reqRow(x).by;
+    [x.no, xlDate(x.finished_at || x.created_at), bName(x), uName(x), issueLabel(x.issue_type), by, pt.n, +pt.q].forEach((v, i) => { const c = row.getCell(i + 1); c.value = v; c.border = box; c.font = font({ size: 10 }); c.alignment = align(i === 6 || i === 4 ? {} : { horizontal: 'center' }); if (v instanceof Date) c.numFmt = 'yyyy-mm-dd hh:mm'; });
+  }));
+  const h = wb.addWorksheet(t('x_holds_sheet'), { views: [{ rightToLeft: rtl, state: 'frozen', ySplit: 1 }] });
+  h.columns = [{ width: 10 }, { width: 16 }, { width: 14 }, { width: 26 }, { width: 20 }, { width: 17 }, { width: 12 }, { width: 15 }, { width: 32 }, { width: 32 }, { width: 18 }];
+  head(h.getRow(1), [t('col_no'), t('col_building'), t('col_unit'), t('col_issue'), t('col_hold'), t('col_hold_since'), t('col_total'), t('col_eta'), t('col_parts_wait'), t('col_note'), t('col_tech')]);
+  M.holds.forEach((x, i) => {
+    const row = h.getRow(i + 2);
+    [x.no, bName(x), uName(x), issueLabel(x.issue_type), holdLabel(x), xlDate(x.hold_at), minsOf(Date.now() - D(x.hold_at)), xlDate(x.hold_eta), x.hold_kind === 'parts' ? partsText(x.hold_parts) : '', x.hold_note || '', x.technician || ''].forEach((v, j) => { const c = row.getCell(j + 1); c.value = v == null ? null : v; c.border = box; c.font = font({ size: 10 }); c.alignment = align(j === 8 || j === 9 || j === 3 ? {} : { horizontal: 'center' }); if (v instanceof Date) c.numFmt = j === 7 ? 'yyyy-mm-dd' : 'yyyy-mm-dd hh:mm'; });
+  });
+  const cs = wb.addWorksheet(t('x_counts_sheet'), { views: [{ rightToLeft: rtl, state: 'frozen', ySplit: 1 }] });
+  cs.columns = [{ width: 16 }, { width: 12 }, { width: 12 }, { width: 12 }, { width: 12 }, { width: 12 }];
+  head(cs.getRow(1), [t('col_period'), t('col_count'), t('col_urgent'), t('col_normal'), t('r_done'), t('r_cancel')]);
+  M.trend.forEach((x, i) => { const row = cs.getRow(i + 2); [P.unit === 'month' ? ymLabel(x.d.slice(0, 7)) : x.d, x.n, x.urgent, x.n - x.urgent, x.done, x.cancelled].forEach((v, j) => { const c = row.getCell(j + 1); c.value = v; c.border = box; c.font = font({ size: 10, bold: x.d === P.cur }); c.alignment = align({ horizontal: 'center' }); }); });
+  const buf = await wb.xlsx.writeBuffer();
+  saveBlob(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), `rasd-${P.mode}-${P.key}.xlsx`);
+}
+function exportPeriodPdf() {
+  const M = repModel(), P = M.P;
+  const tr = cells => `<tr>${cells.map(c => `<td>${c}</td>`).join('')}</tr>`, th = cells => `<thead><tr>${cells.map(c => `<th>${c}</th>`).join('')}</tr></thead>`;
+  const kp = (v, l, s2) => `<div class="rp-k"><b>${v}</b><span>${l}</span>${s2 ? `<small>${s2}</small>` : ''}</div>`;
+  const stamp = fmt(new Date(), { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+  const d = M.curN - M.prevN;
+  const html = `<div class="rp" dir="${LANG === 'ar' ? 'rtl' : 'ltr'}" lang="${LANG}">
+    <header class="rp-h"><div class="rp-brand">${MARK}<div><b>${t('app')}</b><span>${esc(org() || t('tagline'))}</span></div></div>
+      <div class="rp-t"><h1>${t('r_title')} · ${esc(P.label)}</h1><p>${esc([S.rf.b ? bLabel(S.rf.b) : t('b_all_buildings'), S.rf.p ? t('pr_' + S.rf.p) : '', S.rf.st ? t('r_s_' + S.rf.st) : ''].filter(Boolean).join(' · '))}</p><small>${esc(t('x_generated', { d: stamp }))}</small></div></header>
+    <div class="rp-ks rp-ks5">${kp(M.inP.length, t('r_total'), (d > 0 ? '+' : '') + d + ' ' + esc(t('r_prev_' + P.unit)))}${kp(M.groups.done, t('r_done'))}${kp(M.groups.progress, t('r_progress'))}${kp(M.groups.hold, t('r_hold'))}${kp(M.groups.cancel, t('r_cancel'))}
+      ${kp(M.carried.filter(isOpen).length, t('r_carried'))}${kp(pct(M.m.arrRate), t('r_arr_on'))}${kp(pct(M.m.fixRate), t('r_fix_on'))}${kp(M.firstLine == null ? '—' : pct(M.firstLine), t('r_first_line'))}${kp(fDur(M.m.work), t('e_avg_work'))}</div>
+    <h2>${t('r_by_type')}</h2>
+    <table class="rp-tb">${th([t('r_col_type'), t('col_priority'), t('col_count'), t('r_done'), t('r_col_open'), t('r_col_avg_fix')])}<tbody>
+      ${['urgent', 'normal'].map(p => M.types.filter(x => x.p === p).sort((a, b) => b.n - a.n).map(x => tr([esc(issueLabel(x.k)), `<span class="${p === 'urgent' ? 'bad' : ''}">${t('pr_' + p)}</span>`, x.n, x.done, x.open, x.work.length ? fDur(x.work.reduce((a, b) => a + b, 0) / x.work.length) : '—'])).join('')).join('')}</tbody></table>
+    <h2>${t('r_by_building')}</h2>
+    <table class="rp-tb">${th([t('col_building'), t('col_count'), t('r_done'), t('r_hold'), t('r_col_open'), t('r_col_avg_arr')])}<tbody>
+      ${M.blds.slice().sort((a, b) => b.n - a.n).map(x => tr([esc(x.name), x.n, x.done, x.hold, x.open, x.arr.length ? fDur(x.arr.reduce((a, b) => a + b, 0) / x.arr.length) : '—'])).join('')}</tbody></table>
+    <div class="rp-flags"><span>${t('r_hm_fixed')}: <b>${M.team.hmFixed}</b></span><span>${t('r_hm_handed')}: <b>${M.team.hmHanded}</b></span><span>${t('r_ops_direct')}: <b>${M.team.opsDirect}</b></span><span>${t('r_ops_fixed')}: <b>${M.team.opsFixed}</b></span></div>
+    ${M.holds.length ? `<h2>${t('r_holds')} (${M.holds.length})</h2><table class="rp-tb">${th([t('col_no'), t('col_unit'), t('col_hold'), t('col_hold_since'), t('col_eta'), t('col_parts_wait')])}<tbody>
+      ${M.holds.map(x => tr(['#' + x.no, esc(uName(x) + ' · ' + bName(x)), esc(holdLabel(x)), fDur(Date.now() - D(x.hold_at)), x.hold_eta ? fmt(x.hold_eta, { day: 'numeric', month: 'short' }) : '—', esc(x.hold_kind === 'parts' ? partsText(x.hold_parts) : x.hold_note || '')])).join('')}</tbody></table>` : ''}
+    <h2 class="rp-break">${t('r_list')} (${M.shown.length})</h2>
+    <table class="rp-tb rp-all">${th([t('col_no'), t('col_time'), t('col_unit'), t('col_issue'), t('col_status'), t('col_by'), t('x_arr_vs'), t('x_work_vs'), t('col_report')])}<tbody>
+      ${M.shown.map(x0 => { const x = reqRow(x0); return tr(['#' + x0.no, fmt(x0.created_at, P.mode === 'day' ? { hour: '2-digit', minute: '2-digit', hour12: false } : { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false }), esc(uName(x0) + ' · ' + bName(x0)), esc(issueLabel(x0.issue_type)) + (x0.priority === 'urgent' ? ` <b class="bad">${t('pr_urgent')}</b>` : ''), esc(statusText(x0)), esc(x.by || '—'), x.arr == null ? '—' : `<span class="${x.arrOk === false ? 'bad' : ''}">${x.arr}</span> / ${x.arrT}`, x.work == null ? '—' : `<span class="${x.workOk === false ? 'bad' : ''}">${x.work}</span> / ${x.workT}`, esc([x0.tech_note || '', partsText(x0.parts)].filter(Boolean).join(' · '))]); }).join('')}</tbody></table>
+    <p class="rp-note">${esc(t('e_formula', { d: M.st.repeatDays || 30 }))} ${esc(t('x_minutes_note'))}</p>
+  </div>`;
+  printHtml(html, `${t('app')} · ${t('r_title')} · ${P.label}`);
+}
+function printHtml(html, title) {
   let root = $('#print-root');
   if (!root) { root = document.createElement('div'); root.id = 'print-root'; document.body.appendChild(root); }
-  root.innerHTML = reportHtml(m);
+  root.innerHTML = html;
   document.body.classList.add('print-report');
-  const title = document.title;
-  document.title = `${t('app')} · ${t('e_title')} · ${m.month}`;
-  const done = () => { document.title = title; document.body.classList.remove('print-report'); window.removeEventListener('afterprint', done); };
+  const old = document.title;
+  document.title = title;
+  const done = () => { document.title = old; document.body.classList.remove('print-report'); window.removeEventListener('afterprint', done); };
   window.addEventListener('afterprint', done);
   toast(t('x_pdf_hint'));
   setTimeout(() => { try { window.print(); } catch (e) { done(); } }, 250);
@@ -1885,7 +2601,7 @@ async function exportPptx() {
     sl.addText(String(i + 1), T({ shape: P.ShapeType.ellipse, x: X(M, 0.42), y: y + (rh - 0.42) / 2, w: 0.42, h: 0.42, fill: { color: C.gold }, color: C.white, fontSize: 13, bold: true, align: 'center', valign: 'middle', objectName: g + '-n' }));
     sl.addText(...RT([
       { text: x.name || '—', options: { fontSize: 15, bold: true, color: C.ink, breakLine: true } },
-      { text: t('p_jobs_line', { n: x.n, a: pct(x.arrRate), f: pct(x.fixRate), r: x.rating == null ? '—' : x.rating.toFixed(1) }), options: { fontSize: 10, color: C.muted } }
+      { text: (x.team === 'hm' ? t('team_hm') : t('team_ops')) + ' · ' + t('p_jobs_line', { n: x.visits, a: pct(x.arrRate), f: pct(x.fixRate), r: x.rating == null ? '—' : x.rating.toFixed(1) }), options: { fontSize: 10, color: C.muted } }
     ], { x: X(M + 0.6, 3.85), y: y + 0.02, w: 3.85, h: rh - 0.04, valign: 'middle', objectName: g + '-name' }));
     const bh = Math.min(0.36, rh * 0.45), by = y + (rh - bh) / 2, fw = Math.max(0.08, barW * (x.score || 0) / 100);
     sl.addShape(P.ShapeType.roundRect, { x: X(barX, barW), y: by, w: barW, h: bh, rectRadius: bh / 2, fill: { color: C.bar }, line: { color: C.bar, width: 0 }, objectName: g + '-bg' });
@@ -1910,7 +2626,24 @@ async function exportPptx() {
     });
   });
 
-  // 5. late requests
+  // 5. handymen and the operations room
+  sl = P.addSlide({ masterName: 'LIGHT' });
+  title(sl, t('p_s8'), t('p_s8_sub'));
+  [['hm', t('e_hm_group')], ['ops', t('e_ops_group')]].forEach(([key, label], i) => {
+    const x = ev.team[key], px = X(M + i * (pw + 0.4), pw), g = `g${i + 1}`;
+    sl.addShape(P.ShapeType.roundRect, { x: px, y: 1.9, w: pw, h: 4.6, rectRadius: 0.1, fill: { color: C.card }, line: { color: C.card, width: 0 }, objectName: g + '-bg' });
+    sl.addText(label, T({ x: px + 0.35, y: 2.1, w: pw - 0.7, h: 0.5, fontSize: 18, bold: true, color: C.gold, objectName: g + '-pill' }));
+    sl.addText(t('p_team_line', { n: x.visits, a: pct(x.arrRate), f: pct(x.fixRate) }), T({ x: px + 0.35, y: 2.65, w: pw - 0.7, h: 0.5, fontSize: 14, color: C.ink2, objectName: g + '-n' }));
+    const lines = [[t('e_avg_arrive'), fDur(x.arrive), C.ink], [t('e_avg_work'), fDur(x.work), C.ink], [t('e_rating'), x.rating == null ? '—' : x.rating.toFixed(1), C.ink], [t('e_paused'), fDur(x.paused), C.ink2]];
+    if (key === 'hm') lines.push([t('r_hm_handed'), String(x.handed), C.ink2]);
+    lines.forEach((ln, j) => {
+      const ly = 3.35 + j * 0.55;
+      sl.addText(ln[0], T({ x: rtl ? px + pw / 2 : px + 0.35, y: ly, w: pw / 2 - 0.35, h: 0.45, fontSize: 14, color: C.ink2, valign: 'middle', objectName: `${g}-l${j}` }));
+      sl.addText(ln[1], T({ x: rtl ? px + 0.35 : px + pw / 2, y: ly, w: pw / 2 - 0.35, h: 0.45, fontSize: 16, bold: true, color: ln[2], align: rtl ? 'left' : 'right', valign: 'middle', objectName: `${g}-v${j}` }));
+    });
+  });
+
+  // 6. late requests
   sl = P.addSlide({ masterName: 'LIGHT' });
   title(sl, t('e_late_list'), m.late.length ? t('p_s5_sub', { n: m.late.length }) : '');
   if (m.late.length) {
@@ -1920,9 +2653,9 @@ async function exportPptx() {
     let rows = [hdr.map(h => cell(h, { bold: true, color: C.white, fill: { color: C.gold } }))];
     m.late.slice(0, 8).forEach((x, i) => {
       const bg = i % 2 ? { fill: { color: C.card } } : { fill: { color: C.white } };
-      rows.push([cell('#' + x.r.no, bg), cell(fmt(x.r.created_at, { day: 'numeric', month: 'short' }), bg), cell(uName(x.r), bg), cell(x.r.technician || '—', bg),
-        cell(vs(x.arr, x.r.target_arrive), Object.assign({ bold: x.arrOk === false, color: x.arrOk === false ? C.bad : C.ink }, bg)),
-        cell(vs(x.work, x.r.target_work), Object.assign({ bold: x.workOk === false, color: x.workOk === false ? C.bad : C.ink }, bg))]);
+      rows.push([cell('#' + x.r.no, bg), cell(fmt(x.r.created_at, { day: 'numeric', month: 'short' }), bg), cell(uName(x.r), bg), cell(x.name || '—', bg),
+        cell(vs(x.arr, x.arrT), Object.assign({ bold: x.arrOk === false, color: x.arrOk === false ? C.bad : C.ink }, bg)),
+        cell(vs(x.work, x.workT), Object.assign({ bold: x.workOk === false, color: x.workOk === false ? C.bad : C.ink }, bg))]);
     });
     if (rtl) rows = rows.map(rw => rw.slice().reverse());
     const cws = [1.2, 1.6, 2.0, 2.6, 2.3, 2.43];
@@ -1932,7 +2665,7 @@ async function exportPptx() {
     sl.addText(t('p_none_late'), T({ shape: P.ShapeType.roundRect, rectRadius: 0.1, x: M, y: 2.4, w: W - 2 * M, h: 1.4, fill: { color: 'E3F1E8' }, color: C.ok, fontSize: 22, bold: true, align: 'center', valign: 'middle', objectName: 'g1-ok' }));
   }
 
-  // 6. points to follow up
+  // 7. points to follow up
   sl = P.addSlide({ masterName: 'LIGHT' });
   title(sl, t('p_s6'), t('p_s6_sub'));
   const fl = [[k.manualArr, t('x_f_manual'), t('x_f_manual_d'), C.bad], [k.onsite, t('x_f_onsite'), t('x_f_onsite_d'), C.warn], [k.manualClose, t('x_f_close'), t('x_f_close_d'), C.warn], [k.repeats, t('x_f_repeat'), t('x_f_repeat_d', { d: m.st.repeatDays || 30 }), C.bad]];
@@ -1947,7 +2680,7 @@ async function exportPptx() {
   });
   sl.addText(t('e_formula', { d: m.st.repeatDays || 30 }), T({ x: M, y: 6.15, w: W - 2 * M, h: 0.55, fontSize: 11, color: C.muted, valign: 'middle' }));
 
-  // 7. where the numbers come from
+  // 8. where the numbers come from
   sl = P.addSlide({ masterName: 'DARK' });
   sl.addText(t('p_s7'), T({ x: M, y: 0.6, w: W - 2 * M, h: 0.8, fontSize: 32, bold: true, color: C.white }));
   const sw = (W - 2 * M - 3 * 0.35) / 4;
@@ -2000,6 +2733,28 @@ const ACT = {
   print: () => { try { window.print(); } catch (e) { /* blocked */ } },
   copy: el => copyText(el.dataset.v, t('q_copied')),
   accept: el => busy(el, async () => { await srpc('tech_accept', { p_id: S.req.id }); toast(t('d_accept_ok')); S.list = null; render(); }),
+  'accept-busy': el => busy(el, async () => { await loadList(true); busyModal('accept'); }),
+  'pause-busy': el => busy(el, async () => { await loadList(true); busyModal('pause'); }),
+  'pause-access': () => holdModal('access'),
+  'hold-parts': () => holdModal('parts'),
+  'hold-other': () => holdModal('other'),
+  escalate: () => escalateModal(),
+  'go-now': el => busy(el, async () => { await srpc('tech_resume', { p_id: S.req.id }); toast(t('d_go_ok')); S.list = null; render(); }),
+  'resume-scan': () => openScanner(async token => {
+    await srpc('tech_resume', { p_id: S.req.id, p_unit_token: token });
+    toast(t('d_resumed_ok')); S.list = null; render();
+  }, S.req && S.req._token),
+  'unit-resume': el => busy(el, async () => {
+    await rpc('tech_resume', { p_token: S.session.token, p_id: el.dataset.id, p_unit_token: S.unit.token });
+    toast(t('d_resumed_ok')); S.list = null; go('/r/' + el.dataset.id);
+  }),
+  'part-add': el => { const box = $('#' + el.dataset.to); box.insertAdjacentHTML('beforeend', partRow({ n: '', q: 1 })); const rows = $$('.part-row', box); $('input', rows[rows.length - 1]).focus(); },
+  'part-del': el => el.closest('.part-row').remove(),
+  stage: el => busy(el, async () => { await srpc('mgr_stage', { p_id: S.req.id, p_stage: el.dataset.v }); toast(t('d_sent_ok')); S.list = null; render(); }),
+  src: el => { $$('[data-act="src"]', el.parentElement).forEach(b => b.classList.toggle('on', b === el)); if (S.draft.desk) S.draft.desk.src = el.dataset.v; },
+  'modal-close-go': el => { closeModal(el.closest('.modal')); go(el.getAttribute('href').slice(1)); },
+  'r-excel': el => runExport(el, exportPeriodExcel),
+  'r-pdf': el => runExport(el, async () => exportPeriodPdf()),
   scan: () => openScanner(async (token, pos) => {
     await srpc('tech_arrive', { p_id: S.req.id, p_unit_token: token, p_lat: pos ? pos.lat : null, p_lng: pos ? pos.lng : null, p_acc: pos ? pos.acc : null });
     toast(t('d_arrived_ok')); S.list = null; render();
@@ -2013,7 +2768,7 @@ const ACT = {
   prio: el => { if (el.classList.contains('on')) return; busy(el, async () => { await srpc('mgr_priority', { p_id: S.req.id, p_priority: el.dataset.v }); S.list = null; render(); }); },
   mclose: () => reasonModal(t('d_manual_close'), async note => { await srpc('mgr_close', { p_id: S.req.id, p_note: note }); toast(t('d_closed_ok')); S.list = null; render(); }),
   mcancel: () => reasonModal(t('d_cancel_req'), async note => { await srpc('mgr_cancel', { p_id: S.req.id, p_note: note }); S.list = null; render(); }, true),
-  btab: el => { S.boardTab = el.dataset.v; $('#btabs').innerHTML = boardTabs(); $('#blist').innerHTML = boardList(S.list || []); tick(); },
+  btab: el => { S.boardTab = el.dataset.v; $('#btabs').innerHTML = boardTabs(); refreshBoard(); },
   csv: () => {
     const f = evalCsv();
     if (EMB) { copyText(f.text, t('e_copied')); return; }
@@ -2051,7 +2806,7 @@ const ACT = {
   guide: el => { if (el.dataset.role) setSession(Demo.loginAs(el.dataset.role)); S.list = null; go(el.dataset.to); },
   'dm-unit': () => { const v = $('#dm-unit').value; S.unit = null; go('/u/' + encodeURIComponent(v)); },
   'dm-login': el => { setSession(Demo.loginAs(el.dataset.id)); go('/'); },
-  'dm-reset': () => { S.session = null; store.del(P + 'session'); store.del(P + 'mine'); store.del(P + 'contact'); Demo.reset(); S.list = null; S.settings = null; S.photos = {}; S.draft = {}; S.unit = null; toast(t('dm_reset_ok')); render(); }
+  'dm-reset': () => { S.session = null; store.del(P + 'session'); store.del(P + 'mine'); store.del(P + 'contact'); Demo.reset(); S.list = null; S.settings = null; S.photos = {}; S.draft = {}; S.unit = null; S.rf = { b: '', st: '', p: '' }; S.bf = ''; toast(t('dm_reset_ok')); render(); }
 };
 
 /* ============================================================ forms */
@@ -2120,11 +2875,67 @@ const FORM = {
   },
   finish: async f => {
     clearErrs(f);
-    const key = 'after:' + S.req.id, photo = S.photos[key];
-    if (!photo) { setErr(f, 'photo', t('d_need_after')); return firstErr(f); }
+    const key = 'after:' + S.req.id, photo = S.photos[key], note = f.querySelector('[name="note"]').value.trim();
+    let ok = true;
+    if (!photo) ok = setErr(f, 'photo', t('d_need_after'));
+    if (note.length < 5) ok = setErr(f, 'note', t('err_report_required'));
+    if (!ok) return firstErr(f);
     await busy(f.querySelector('[type="submit"]'), async () => {
-      await srpc('tech_finish', { p_id: S.req.id, p_photo: photo, p_note: f.querySelector('[name="note"]').value.trim() || null });
+      await srpc('tech_finish', { p_id: S.req.id, p_photo: photo, p_note: note, p_parts: readParts(f) });
       delete S.photos[key]; toast(t('d_finished_ok')); S.list = null; render();
+    });
+  },
+  busy: async f => {
+    clearErrs(f);
+    const mode = f.querySelector('[name="mode"]').value, ref = (f.querySelector('input[name="ref"]:checked') || {}).value || '', note = f.querySelector('[name="note"]').value.trim();
+    if (!ref && note.length < 3) return setErr(f, 'note', t('d_reason_need'));
+    await busy(f.querySelector('[type="submit"]'), async () => {
+      if (mode === 'accept') await srpc('tech_accept', ref ? { p_id: S.req.id, p_busy: ref } : { p_id: S.req.id, p_note: note });
+      else await srpc('tech_hold', ref ? { p_id: S.req.id, p_kind: 'busy', p_ref: ref } : { p_id: S.req.id, p_kind: 'busy', p_note: note });
+      closeModal(f.closest('.modal')); toast(mode === 'accept' ? t('d_accept_ok').split('.')[0] + '.' : t('d_paused_ok')); S.list = null; render();
+    });
+  },
+  hold: async f => {
+    clearErrs(f);
+    const kind = f.querySelector('[name="kind"]').value, note = f.querySelector('[name="note"]').value.trim(), eta = muscatIso(f.querySelector('[name="eta"]').value);
+    const parts = kind === 'parts' ? readParts(f) : null;
+    if (kind === 'parts' && !parts.length) return setErr(f, 'parts', t('d_need_parts'));
+    if (kind !== 'parts' && note.length < 3) return setErr(f, 'note', t('d_reason_need'));
+    await busy(f.querySelector('[type="submit"]'), async () => {
+      await srpc('tech_hold', { p_id: S.req.id, p_kind: kind, p_note: note || null, p_eta: eta, p_parts: parts });
+      closeModal(f.closest('.modal')); toast(t('d_paused_ok')); S.list = null; render();
+    });
+  },
+  escalate: async f => {
+    clearErrs(f);
+    const note = f.querySelector('[name="note"]').value.trim();
+    if (note.length < 3) return setErr(f, 'note', t('d_reason_need'));
+    await busy(f.querySelector('[type="submit"]'), async () => {
+      await srpc('tech_escalate', { p_id: S.req.id, p_note: note });
+      closeModal(f.closest('.modal')); toast(t('d_escalated_ok')); S.list = null; go(isMgr() ? '/r/' + S.req.id : '/jobs');
+    });
+  },
+  'resume-manual': async f => {
+    clearErrs(f);
+    const note = f.querySelector('[name="note"]').value.trim();
+    if (note.length < 3) return setErr(f, 'note', t('d_reason_need'));
+    await busy(f.querySelector('[type="submit"]'), async () => { await srpc('tech_resume', { p_id: S.req.id, p_note: note }); toast(t('d_resumed_ok')); S.list = null; render(); });
+  },
+  'desk-req': async f => {
+    clearErrs(f);
+    const d = S.draft.desk || {}, v = n => (f.querySelector(`[name="${n}"]`) || {}).value || '';
+    const issue = (f.querySelector('input[name="issue"]:checked') || {}).value, desc = v('desc').trim(), unit = v('u');
+    let ok = true;
+    if (!unit) ok = setErr(f, 'u', t('err_invalid_unit'));
+    if (!issue) ok = setErr(f, 'issue', t('t_need_issue'));
+    if (desc.length < 3) ok = setErr(f, 'desc', t('t_need_desc'));
+    if (!ok) return firstErr(f);
+    await busy(f.querySelector('[type="submit"]'), async () => {
+      const phone = v('cphone').trim();
+      const res = await srpc('mgr_create_request', { p_unit: unit, p_issue: issue, p_description: desc, p_photo: S.photos['before:desk'] || null, p_name: v('cname').trim() || null, p_phone: phone || null, p_source: d.src || 'phone', p_lang: LANG });
+      delete S.draft.desk; delete S.photos['before:desk']; S.list = null;
+      if (DEMO) addMine({ id: res.id, code: res.code, no: res.no, token: null, at: new Date().toISOString() });
+      go('/board'); setTimeout(() => deskDone(res, phone), 350);
     });
   },
   'onsite-sign': async f => {
@@ -2142,7 +2953,7 @@ const FORM = {
   },
   assign: async f => {
     const staff = f.querySelector('[name="staff"]').value;
-    if (staff === S.req.technician_id) return;
+    if (!staff || staff === S.req.technician_id) return;
     await busy(f.querySelector('[type="submit"]'), async () => { await srpc('mgr_assign', { p_id: S.req.id, p_staff: staff }); toast(t('d_assigned_ok')); S.list = null; render(); });
   },
   reason: async f => {
@@ -2157,8 +2968,10 @@ const FORM = {
     const id = v('id') || null, pin = v('pin'), name = v('name');
     if (pin && !/^[0-9]{6}$/.test(pin)) return setErr(f, 'form', t('err_pin_format'));
     if (!id && !pin) return setErr(f, 'form', t('err_pin_format'));
+    const kind = v('kind'), role = kind === 'hm' || kind === 'ops' ? 'technician' : kind, sites = $$('input[name="site"]:checked', f).map(x => x.value);
+    if (kind === 'hm' && !sites.length) return setErr(f, 'form', t('err_sites_required'));
     await busy(f.querySelector('[type="submit"]'), async () => {
-      await srpc('admin_save_staff', { p_id: id, p_name: name, p_phone: v('phone'), p_role: v('role'), p_active: id ? v('active') : true, p_pin: pin || null });
+      await srpc('admin_save_staff', { p_id: id, p_name: name, p_phone: v('phone'), p_role: role, p_active: id ? v('active') : true, p_pin: pin || null, p_team: kind === 'hm' ? 'hm' : 'ops', p_sites: kind === 'hm' ? sites : [] });
       closeModal(f.closest('.modal'));
       if (pin) modal(`<div class="success">${ICON.check}<div><b>${t('tm_saved_plain')}</b><p>${esc(t('tm_saved', { n: name, p: pin }))}</p><p class="mono" dir="ltr">${esc(APP_URL)}</p></div></div><button class="btn" type="button" data-act="modal-close">${t('close')}</button>`);
       else toast(t('tm_saved_plain'));
@@ -2173,11 +2986,14 @@ const FORM = {
     st.contractor = { ar: v('c_ar'), en: v('c_en') };
     st.targets = {};
     ['urgent', 'normal'].forEach(p => { const dflt = (DEFAULTS.targets || {})[p] || {}; st.targets[p] = { pickup: num(`tg_${p}_pickup`, dflt.pickup), arrive: num(`tg_${p}_arrive`, dflt.arrive), work: num(`tg_${p}_work`, dflt.work) }; });
+    st.v = 2;
     st.buildings = st.buildings || {};
-    $$('[name$="_urgent"]', f).forEach(el => {
-      const code = el.name.slice(2, -7);
+    $$('.bld[data-code]', f).forEach(el => {
+      const code = el.dataset.code, prev = st.buildings[code] || {}, u = (S.unitsForSettings || []).find(x => x.building_code === code) || {};
       const lat = parseFloat(v(`b_${code}_lat`)), lng = parseFloat(v(`b_${code}_lng`));
-      st.buildings[code] = { arrive: { urgent: num(`b_${code}_urgent`, null), normal: num(`b_${code}_normal`, null) }, lat: isNaN(lat) ? null : lat, lng: isNaN(lng) ? null : lng };
+      const b = Object.assign({}, prev, { ar: prev.ar || u.building_ar || code, en: prev.en || u.building_en || code, type: v(`b_${code}_type`) === 'com' ? 'com' : 'res', ops: num(`b_${code}_ops`, prev.ops || 60), sort: prev.sort || 50, lat: isNaN(lat) ? null : lat, lng: isNaN(lng) ? null : lng });
+      delete b.arrive;
+      st.buildings[code] = b;
     });
     const used = new Set();
     st.issueTypes = $$('#issues .issue-row', f).map(row => {
@@ -2209,7 +3025,7 @@ const FORM = {
 function onClick(e) {
   unlockAudio();
   const a = e.target.closest('a[href^="#/"]');
-  if (EMB && a) { e.preventDefault(); S.route = a.getAttribute('href'); render(); return; }
+  if (EMB && a) { e.preventDefault(); const md = a.closest('.modal'); if (md) closeModal(md); S.route = a.getAttribute('href'); render(); return; }
   if (a && a.getAttribute('href') === location.hash) { e.preventDefault(); S.list = null; render(); return; }
   const el = e.target.closest('[data-act]');
   if (!el) return;
@@ -2229,10 +3045,22 @@ function onChange(e) {
   const f = el.closest('form[data-form="submit-req"]');
   if (f && el.name === 'issue' && S.unit) { (S.draft[S.unit.token] || {}).issue = el.value; const fl = el.closest('.field'); fl.classList.remove('has-err'); $('.err', fl).textContent = ''; }
   if (el.matches('#ua-b')) { const nb = $('.newb', el.closest('form')); if (nb) nb.hidden = el.value !== '__new'; }
+  if (el.matches('#b-bld')) { S.bf = el.value; refreshBoard(); }
+  if (el.matches('#nr-b')) { if (S.draft.desk) { S.draft.desk.b = el.value; S.draft.desk.u = ''; } $('#nr-u').innerHTML = unitOptions(el.value, ''); }
+  if (el.matches('#nr-u') && S.draft.desk) S.draft.desk.u = el.value;
+  if (el.matches('form[data-form="desk-req"] input[name="issue"]') && S.draft.desk) S.draft.desk.issue = el.value;
+  if (el.matches('[data-rf]')) {
+    S.rf[el.dataset.rf] = el.value;
+    if (el.dataset.rf === 'b') render(); else { const box = $('#rep'); if (box && S.repData) box.innerHTML = reportBody(); }
+  }
+  if (el.matches('form[data-form="busy"] input[name="ref"]')) { const ow = $('.other-work', el.closest('form')); if (ow) { ow.hidden = !!el.value; if (!el.value) $('textarea', ow).focus(); } }
+  if (el.matches('#st-r')) { const fs = $('.sites', el.closest('form')); if (fs) fs.hidden = el.value !== 'hm'; }
 }
 function onInput(e) {
   const el = e.target;
   if (el.dataset.input === 'q') { S.q = el.value; const b = $('#blist'); if (b) { b.innerHTML = boardList(S.list || []); tick(); } return; }
+  const fd = el.closest('form[data-form="desk-req"]');
+  if (fd && S.draft.desk && ['desc', 'cname', 'cphone'].includes(el.name)) { S.draft.desk[el.name] = el.value; return; }
   const f = el.closest('form[data-form="submit-req"]');
   if (f && S.unit && S.draft[S.unit.token] && ['desc', 'cname', 'cphone'].includes(el.name)) {
     S.draft[S.unit.token][el.name] = el.value;
@@ -2247,18 +3075,20 @@ const Demo = (function () {
   const now = () => new Date().toISOString();
   const uid = () => 'x' + Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 6);
   const fail = c => { throw new Error(c); };
-  const LIGHT = ['id', 'no', 'unit_id', 'building_code', 'building_ar', 'building_en', 'unit_ar', 'unit_en', 'unit_kind', 'issue_type', 'priority', 'target_arrive', 'target_work', 'description', 'lang', 'contact_name', 'contact_phone', 'status', 'created_at', 'technician_id', 'accepted_at', 'accept_method', 'arrived_at', 'arrival_method', 'finished_at', 'signed_at', 'signoff_method', 'rating', 'closed_at', 'close_method', 'cancelled_at'];
+  const LIGHT = ['id', 'no', 'unit_id', 'building_code', 'building_ar', 'building_en', 'unit_ar', 'unit_en', 'unit_kind', 'issue_type', 'priority', 'target_pickup', 'target_arrive', 'target_work', 'description', 'lang', 'contact_name', 'contact_phone', 'status', 'created_at', 'technician_id', 'accepted_at', 'accept_method', 'arrived_at', 'arrival_method', 'finished_at', 'signed_at', 'signoff_method', 'rating', 'closed_at', 'close_method', 'cancelled_at', 'source', 'stage', 'offered_at', 'origin', 'hold_kind', 'hold_at', 'hold_ref', 'hold_eta', 'paused_arrive', 'paused_work', 'legs'];
+  const FULL = LIGHT.concat(['tech_note', 'parts', 'signer_name', 'rating_comment', 'close_note', 'cancel_note', 'hold_note', 'hold_parts']);
+  const TIMES = ['created_at', 'offered_at', 'accepted_at', 'arrived_at', 'finished_at', 'signed_at', 'closed_at', 'cancelled_at', 'hold_at', 'hold_eta'];
   function load() {
     if (!db) {
       db = store.get(KEY, null);
-      if (!db || db.v !== 3 || !db.units || !db.units.length) { db = seed(); save(); }
+      if (!db || db.v !== 4 || !db.units || !db.units.length) { db = seed(); save(); }
       else if (Date.now() - (db.at || 0) > 3600e3) { shift(Date.now() - (db.at || Date.now())); save(); }
     }
     return db;
   }
   function shift(delta) {
     const add = x => (x ? new Date(D(x).getTime() + delta).toISOString() : x);
-    db.requests.forEach(r => ['created_at', 'accepted_at', 'arrived_at', 'finished_at', 'signed_at', 'closed_at', 'cancelled_at'].forEach(k => { r[k] = add(r[k]); }));
+    db.requests.forEach(r => { TIMES.forEach(k => { r[k] = add(r[k]); }); (r.legs || []).forEach(l => ['offered_at', 'accepted_at', 'arrived_at', 'ended_at'].forEach(k => { l[k] = add(l[k]); })); });
     db.events.forEach(e => { e.at = add(e.at); });
     db.at = Date.now();
   }
@@ -2270,11 +3100,48 @@ const Demo = (function () {
     if (roles && roles.indexOf(s.role) < 0) fail('not_allowed');
     return s;
   }
-  function session(s) { const tok = uid() + uid(); db.sessions[tok] = s.id; return { token: tok, me: { id: s.id, name: s.full_name, role: s.role, phone: s.phone } }; }
+  const meOf = s => ({ id: s.id, name: s.full_name, role: s.role, phone: s.phone, team: s.team || 'ops', sites: s.sites || [] });
+  function session(s) { const tok = uid() + uid(); db.sessions[tok] = s.id; return { token: tok, me: meOf(s) }; }
   function ev(rid, actor, e, note) { db.events.push({ id: ++db.seq.ev, request_id: rid, at: now(), actor: actor || null, ev: e, note: note ? String(note).trim().slice(0, 500) || null : null }); }
-  function targets(code, p) {
-    const s = db.settings, b = (s.buildings || {})[code], tg = (s.targets || {})[p] || {};
-    return [(b && b.arrive && b.arrive[p]) || tg.arrive || (p === 'urgent' ? 60 : 240), tg.work || (p === 'urgent' ? 120 : 240)];
+  const bset = code => ((db.settings.buildings || {})[code]) || {};
+  function targets(p) { const tg = (db.settings.targets || {})[p] || {}; return [tg.pickup || (p === 'urgent' ? 15 : 60), tg.work || (p === 'urgent' ? 120 : 240)]; }
+  function arriveTarget(code, p, team, origin) {
+    if (team === 'hm' || (origin && origin === code)) return ((db.settings.targets || {})[p] || {}).arrive || (p === 'urgent' ? 15 : 60);
+    return Math.max(+bset(code).ops || 60, origin ? +bset(origin).ops || 0 : 0);
+  }
+  const stageFor = code => ((bset(code).type || 'res') === 'res' && db.staff.some(s => s.active && s.role === 'technician' && s.team === 'hm' && (s.sites || []).includes(code)) ? 'hm' : 'ops');
+  const teamIds = (stage, code) => db.staff.filter(s => s.active && s.role === 'technician' && (stage === 'hm' ? s.team === 'hm' && (s.sites || []).includes(code) : s.team !== 'hm')).map(s => s.id);
+  const sees = (me, r) => me.role !== 'technician' || r.technician_id === me.id || (r.status === 'new' && (r.stage === 'hm' ? me.team === 'hm' && (me.sites || []).includes(r.building_code) : me.team !== 'hm')) || (r.legs || []).some(l => l.staff_id === me.id);
+  function where(staffId) {
+    const on = db.requests.filter(r => r.technician_id === staffId && r.status === 'onsite' && !r.hold_kind).sort((a, b) => D(b.arrived_at) - D(a.arrived_at))[0];
+    if (on) return on.building_code;
+    const fin = db.requests.filter(r => r.technician_id === staffId && r.finished_at && Date.now() - D(r.finished_at) < 90 * 60000).sort((a, b) => D(b.finished_at) - D(a.finished_at))[0];
+    return fin ? fin.building_code : null;
+  }
+  const secsSince = x => Math.max(0, Math.floor((Date.now() - D(x)) / 1000));
+  function cleanParts(p) {
+    return (Array.isArray(p) ? p : []).slice(0, 30).filter(e => e && typeof e === 'object' && String(e.n || '').trim())
+      .map(e => ({ n: String(e.n).trim().slice(0, 80), q: /^[0-9]{1,4}([.][0-9]{1,2})?$/.test(String(e.q == null ? '' : e.q)) && +e.q > 0 ? +e.q : 1 }));
+  }
+  const partsTxt = p => (p || []).map(x => x.n + (+x.q !== 1 ? ' ×' + x.q : '')).join(', ');
+  function leg(r, outcome, note) {
+    const held = r.hold_kind ? secsSince(r.hold_at) : 0;
+    return { staff_id: r.technician_id, name: name(r.technician_id), team: r.stage, offered_at: r.offered_at || r.created_at, accepted_at: r.accepted_at, accept_method: r.accept_method, arrived_at: r.arrived_at, arrival_method: r.arrival_method, ended_at: now(), outcome, note: note || null, target_pickup: r.target_pickup, target_arrive: r.target_arrive, target_work: r.target_work, origin: r.origin || null, paused_arrive: (r.paused_arrive || 0) + (r.arrived_at ? 0 : held), paused_work: (r.paused_work || 0) + (r.arrived_at ? held : 0) };
+  }
+  const clearHold = r => Object.assign(r, { hold_kind: null, hold_at: null, hold_note: null, hold_ref: null, hold_eta: null });
+  function handover(r, outcome, note, staffId, stage) {
+    const origin = staffId ? where(staffId) : null;
+    if (r.technician_id) r.legs = (r.legs || []).concat([leg(r, outcome, note)]);
+    Object.assign(r, { stage, technician_id: staffId || null, status: staffId ? 'accepted' : 'new', offered_at: now(), accepted_at: staffId ? now() : null, accept_method: staffId ? 'assigned' : null, arrived_at: null, arrival_method: null, arrival_note: null, arrival_lat: null, arrival_lng: null, arrival_acc: null, origin, target_arrive: arriveTarget(r.building_code, r.priority, stage, origin), paused_arrive: 0, paused_work: 0, escalated_at: null });
+    clearHold(r);
+  }
+  function release(ref, code) {
+    const b = find(ref);
+    db.requests.filter(q => q.hold_ref === ref && q.hold_kind === 'busy' && q.status === 'accepted').forEach(q => {
+      q.paused_arrive = (q.paused_arrive || 0) + secsSince(q.hold_at);
+      q.origin = code; q.target_arrive = arriveTarget(q.building_code, q.priority, q.stage, code);
+      clearHold(q); ev(q.id, null, 'resumed_auto', '#' + (b ? b.no : ''));
+    });
   }
   function normPhone(p) {
     let d = String(p || '').replace(/[٠-٩]/g, c => '٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace(/[۰-۹]/g, c => '۰۱۲۳۴۵۶۷۸۹'.indexOf(c)).replace(/\D/g, '');
@@ -2285,23 +3152,38 @@ const Demo = (function () {
   const isImg = s => /^data:image\/(jpeg|png|webp);base64,/.test(s || '') && s.length >= 1000;
   const isSig = s => /^data:image\/png;base64,/.test(s || '') && s.length <= 400000;
   const own = (r, me) => r.technician_id === me.id || me.role !== 'technician';
+  const pick = (r, keys) => { const o = {}; keys.forEach(k => (o[k] = r[k] == null ? null : r[k])); return o; };
+  function insertRequest(u, it, a, source, by) {
+    const tg = targets(it.p), stage = stageFor(u.building_code), at = now();
+    const r = { id: uid(), no: ++db.seq.no, unit_id: u.id, building_code: u.building_code, building_ar: u.building_ar, building_en: u.building_en, unit_ar: u.label_ar, unit_en: u.label_en, unit_kind: u.kind, issue_type: it.k, priority: it.p, target_pickup: tg[0], target_arrive: arriveTarget(u.building_code, it.p, stage, null), target_work: tg[1], description: String(a.p_description).trim().slice(0, 2000), photo_before: a.p_photo || null, lang: a.p_lang === 'en' ? 'en' : 'ar', contact_name: (a.p_name || '').trim() || null, contact_phone: (a.p_phone || '').trim() || null, tracking_code: uid() + uid(), status: 'new', created_at: at, offered_at: at, source, created_by: by || null, stage, paused_arrive: 0, paused_work: 0, parts: [], legs: [] };
+    db.requests.push(r); ev(r.id, by || null, by ? 'logged' : 'submitted', by ? source : null);
+    return { id: r.id, no: r.no, code: r.tracking_code, created_at: r.created_at, stage: r.stage };
+  }
+  const issueOf = k => db.settings.issueTypes.find(i => i.k === k);
   const H = {
     get_settings: () => db.settings,
     unit_info: a => { const u = db.units.find(x => x.token === a.p_token && x.active); return u ? { id: u.id, building_code: u.building_code, building_ar: u.building_ar, building_en: u.building_en, label_ar: u.label_ar, label_en: u.label_en, kind: u.kind, issues: db.settings.issueTypes } : null; },
     submit_request: a => {
       const u = db.units.find(x => x.token === a.p_token && x.active); if (!u) fail('invalid_unit');
-      const it = db.settings.issueTypes.find(i => i.k === a.p_issue); if (!it) fail('issue_required');
+      const it = issueOf(a.p_issue); if (!it) fail('issue_required');
       if (!a.p_description || a.p_description.trim().length < 3) fail('description_required');
       if (!isImg(a.p_photo)) fail('photo_required');
       if (db.requests.filter(r => r.unit_id === u.id && Date.now() - D(r.created_at) < 600000).length >= 3) fail('slow_down');
-      const tg = targets(u.building_code, it.p);
-      const r = { id: uid(), no: ++db.seq.no, unit_id: u.id, building_code: u.building_code, building_ar: u.building_ar, building_en: u.building_en, unit_ar: u.label_ar, unit_en: u.label_en, unit_kind: u.kind, issue_type: it.k, priority: it.p, target_arrive: tg[0], target_work: tg[1], description: a.p_description.trim().slice(0, 2000), photo_before: a.p_photo, lang: a.p_lang === 'en' ? 'en' : 'ar', contact_name: (a.p_name || '').trim() || null, contact_phone: (a.p_phone || '').trim() || null, tracking_code: uid() + uid(), status: 'new', created_at: now() };
-      db.requests.push(r); ev(r.id, null, 'submitted');
-      return { id: r.id, no: r.no, code: r.tracking_code, created_at: r.created_at };
+      return insertRequest(u, it, a, 'qr', null);
+    },
+    mgr_create_request: a => {
+      const me = auth(a.p_token, ['supervisor', 'admin']);
+      const u = db.units.find(x => x.id === a.p_unit && x.active); if (!u) fail('invalid_unit');
+      const it = issueOf(a.p_issue); if (!it) fail('issue_required');
+      if (!a.p_description || a.p_description.trim().length < 3) fail('description_required');
+      if (a.p_photo && !isImg(a.p_photo)) fail('photo_required');
+      return insertRequest(u, it, a, ['phone', 'whatsapp', 'walkin', 'email'].includes(a.p_source) ? a.p_source : 'other', me.id);
     },
     track_request: a => {
       const r = db.requests.find(x => x.id === a.p_id && x.tracking_code === a.p_code); if (!r) return null;
-      const o = {}; ['id', 'no', 'status', 'issue_type', 'description', 'building_ar', 'building_en', 'unit_ar', 'unit_en', 'unit_kind', 'created_at', 'accepted_at', 'arrived_at', 'finished_at', 'closed_at', 'cancelled_at', 'signed_at', 'signoff_method', 'rating', 'tech_note'].forEach(k => (o[k] = r[k] == null ? null : r[k]));
+      const o = pick(r, ['id', 'no', 'status', 'issue_type', 'description', 'building_code', 'building_ar', 'building_en', 'unit_ar', 'unit_en', 'unit_kind', 'created_at', 'accepted_at', 'arrived_at', 'finished_at', 'closed_at', 'cancelled_at', 'signed_at', 'signoff_method', 'rating', 'tech_note', 'hold_kind', 'hold_eta', 'stage']);
+      o.parts = ['finished', 'closed'].includes(r.status) ? r.parts || [] : null;
+      o.escalated = (r.legs || []).some(l => l.outcome === 'escalated');
       o.photo_after = ['finished', 'closed'].includes(r.status) ? r.photo_after || null : null; o.technician = name(r.technician_id);
       return o;
     },
@@ -2316,26 +3198,84 @@ const Demo = (function () {
     setup_admin: () => fail('already_setup'),
     staff_login: a => { const s = db.staff.find(x => x.phone === normPhone(a.p_phone)); return !s || !s.active || s.pin !== a.p_pin ? { error: 'bad_login' } : session(s); },
     staff_logout: a => { delete db.sessions[a.p_token]; },
-    staff_me: a => { const s = auth(a.p_token); return { id: s.id, name: s.full_name, role: s.role, phone: s.phone }; },
+    staff_me: a => meOf(auth(a.p_token)),
     staff_requests: a => {
       const me = auth(a.p_token), F = a.p_from ? D(a.p_from).getTime() : -Infinity, T = a.p_to ? D(a.p_to).getTime() : Infinity;
-      return db.requests.filter(r => (me.role !== 'technician' || r.status === 'new' || r.technician_id === me.id) && (['new', 'accepted', 'onsite', 'finished'].includes(r.status) || (D(r.created_at) >= F && D(r.created_at) < T)))
+      return db.requests.filter(r => sees(me, r) && (['new', 'accepted', 'onsite', 'finished'].includes(r.status) || (D(r.created_at) >= F && D(r.created_at) < T)))
         .sort((x, y) => D(y.created_at) - D(x.created_at))
-        .map(r => { const o = {}; LIGHT.forEach(k => (o[k] = r[k] == null ? null : r[k])); o.description = (r.description || '').slice(0, 280); o.technician = name(r.technician_id); return o; });
+        .map(r => { const o = pick(r, LIGHT); o.description = (r.description || '').slice(0, 280); o.technician = name(r.technician_id); o.legs = r.legs || []; o.hold_ref_no = r.hold_ref ? (find(r.hold_ref) || {}).no || null : null; return o; });
     },
     staff_request: a => {
       const me = auth(a.p_token), r = find(a.p_id); if (!r) fail('not_found');
-      if (me.role === 'technician' && r.status !== 'new' && r.technician_id !== me.id) fail('not_allowed');
+      if (me.role === 'technician' && !sees(me, r)) fail('not_allowed');
       const o = clone(r); delete o.tracking_code;
-      o.technician = name(r.technician_id);
+      o.technician = name(r.technician_id); o.created_by_name = name(r.created_by);
+      o.hold_ref_no = r.hold_ref ? (find(r.hold_ref) || {}).no || null : null;
       o.events = db.events.filter(e => e.request_id === r.id).sort((x, y) => D(x.at) - D(y.at) || x.id - y.id).map(e => ({ at: e.at, ev: e.ev, note: e.note, actor: name(e.actor) }));
       const u = db.units.find(x => x.id === r.unit_id); o._token = u ? u.token : null;
       return o;
     },
-    tech_accept: a => { const me = auth(a.p_token), r = find(a.p_id); if (!r || r.status !== 'new') fail('already_taken'); Object.assign(r, { status: 'accepted', technician_id: me.id, accepted_at: now(), accept_method: 'self' }); ev(r.id, me.id, 'accepted'); },
+    report_requests: a => {
+      auth(a.p_token, ['supervisor', 'admin']); const F = D(a.p_from).getTime(), T = D(a.p_to).getTime();
+      return db.requests.filter(r => { const c = D(r.created_at).getTime(), end = r.closed_at || r.cancelled_at; return c < T && (c >= F || !end || D(end).getTime() >= F); })
+        .sort((x, y) => D(x.created_at) - D(y.created_at))
+        .map(r => { const o = pick(r, FULL); o.technician = name(r.technician_id); o.legs = r.legs || []; o.parts = r.parts || []; o.hold_ref_no = r.hold_ref ? (find(r.hold_ref) || {}).no || null : null; return o; });
+    },
+    report_counts: a => {
+      auth(a.p_token, ['supervisor', 'admin']); const F = D(a.p_from).getTime(), T = D(a.p_to).getTime(), out = {};
+      db.requests.filter(r => { const c = D(r.created_at).getTime(); return c >= F && c < T && (!a.p_building || r.building_code === a.p_building); }).forEach(r => {
+        const k0 = dayKey(r.created_at), k = a.p_unit === 'month' ? k0.slice(0, 8) + '01' : a.p_unit === 'week' ? weekOf(k0) : k0;
+        const x = out[k] || (out[k] = { d: k, n: 0, urgent: 0, done: 0, cancelled: 0 });
+        x.n++; if (r.priority === 'urgent') x.urgent++; if (['finished', 'closed'].includes(r.status)) x.done++; if (r.status === 'cancelled') x.cancelled++;
+      });
+      return Object.values(out).sort((x, y) => (x.d < y.d ? -1 : 1));
+    },
+    tech_accept: a => {
+      const me = auth(a.p_token), r = find(a.p_id); if (!r || r.status !== 'new') fail('already_taken');
+      if (me.role === 'technician' && !sees(me, r)) fail('not_allowed');
+      let b = null; const note = String(a.p_note || '').trim().slice(0, 300);
+      if (a.p_busy) { b = find(a.p_busy); if (!b || b.technician_id !== me.id || !['accepted', 'onsite'].includes(b.status)) fail('bad_busy'); }
+      else if (a.p_note != null && note.length < 3) fail('reason_required');
+      const busyNow = !!b || !!note, origin = b ? b.building_code : where(me.id);
+      Object.assign(r, { status: 'accepted', technician_id: me.id, accepted_at: now(), accept_method: 'self', origin, target_arrive: arriveTarget(r.building_code, r.priority, r.stage, origin), hold_kind: busyNow ? 'busy' : null, hold_at: busyNow ? now() : null, hold_ref: b ? b.id : null, hold_note: b ? null : note || null });
+      ev(r.id, me.id, 'accepted');
+      if (busyNow) ev(r.id, me.id, 'hold_busy', b ? '#' + b.no : note);
+    },
+    tech_hold: a => {
+      const me = auth(a.p_token), r = find(a.p_id); if (!r || !['accepted', 'onsite'].includes(r.status) || r.hold_kind) fail('not_ready');
+      if (!own(r, me)) fail('not_assigned');
+      const note = String(a.p_note || '').trim().slice(0, 500); let b = null, parts = null;
+      if (a.p_kind === 'busy') {
+        if (r.status !== 'accepted') fail('not_ready');
+        if (a.p_ref) { b = find(a.p_ref); if (!b || b.id === r.id || b.technician_id !== r.technician_id || !['accepted', 'onsite'].includes(b.status)) fail('bad_busy'); }
+        else if (note.length < 3) fail('reason_required');
+      } else if (a.p_kind === 'access') { if (note.length < 3) fail('reason_required'); }
+      else if (a.p_kind === 'parts') { if (r.status !== 'onsite') fail('not_ready'); parts = cleanParts(a.p_parts); if (!parts.length) fail('parts_required'); }
+      else if (a.p_kind === 'other') { if (r.status !== 'onsite') fail('not_ready'); if (note.length < 3) fail('reason_required'); }
+      else fail('bad_kind');
+      Object.assign(r, { hold_kind: a.p_kind, hold_at: now(), hold_note: note || null, hold_ref: a.p_kind === 'busy' && b ? b.id : null, hold_eta: a.p_kind !== 'busy' ? a.p_eta || null : null });
+      if (parts) r.hold_parts = parts;
+      ev(r.id, me.id, 'hold_' + a.p_kind, [b ? '#' + b.no : '', note, parts ? partsTxt(parts) : ''].filter(Boolean).join(' · '));
+      if (r.status === 'onsite') release(r.id, r.building_code);
+    },
+    tech_resume: a => {
+      const me = auth(a.p_token), r = find(a.p_id); if (!r || !r.hold_kind || !['accepted', 'onsite'].includes(r.status)) fail('not_ready');
+      if (!own(r, me)) fail('not_assigned');
+      const s2 = secsSince(r.hold_at);
+      if (r.status === 'accepted') {
+        const origin = where(r.technician_id);
+        r.paused_arrive = (r.paused_arrive || 0) + s2; r.origin = origin; r.target_arrive = arriveTarget(r.building_code, r.priority, r.stage, origin);
+        clearHold(r); ev(r.id, me.id, 'resumed'); return 'go';
+      }
+      const u = db.units.find(x => x.id === r.unit_id), tk = String(a.p_unit_token || '').trim(); let m;
+      if (tk) { if (tk !== u.token) fail('wrong_unit'); m = 'qr'; } else { if (!a.p_note || a.p_note.trim().length < 3) fail('reason_required'); m = 'manual'; }
+      r.paused_work = (r.paused_work || 0) + s2; clearHold(r);
+      ev(r.id, me.id, 'resumed_' + m, a.p_note); return m;
+    },
     tech_arrive: a => {
       const me = auth(a.p_token), r = find(a.p_id); if (!r || r.status !== 'accepted') fail('not_ready');
       if (!own(r, me)) fail('not_assigned');
+      if (r.hold_kind) fail('on_hold');
       const u = db.units.find(x => x.id === r.unit_id), tk = String(a.p_unit_token || '').trim(); let m;
       if (tk) { if (tk !== u.token) fail('wrong_unit'); m = 'qr'; } else { if (!a.p_note || a.p_note.trim().length < 3) fail('reason_required'); m = 'manual'; }
       Object.assign(r, { status: 'onsite', arrived_at: now(), arrival_method: m, arrival_note: (a.p_note || '').trim() || null, arrival_lat: a.p_lat == null ? null : a.p_lat, arrival_lng: a.p_lng == null ? null : a.p_lng, arrival_acc: a.p_acc == null ? null : a.p_acc });
@@ -2343,8 +3283,15 @@ const Demo = (function () {
     },
     tech_finish: a => {
       const me = auth(a.p_token); if (!isImg(a.p_photo)) fail('photo_required');
-      const r = find(a.p_id); if (!r || r.status !== 'onsite') fail('not_ready'); if (!own(r, me)) fail('not_assigned');
-      Object.assign(r, { status: 'finished', finished_at: now(), photo_after: a.p_photo, tech_note: (a.p_note || '').trim() || null }); ev(r.id, me.id, 'finished', a.p_note);
+      if (!a.p_note || a.p_note.trim().length < 5) fail('report_required');
+      const r = find(a.p_id); if (!r || r.status !== 'onsite' || r.hold_kind) fail('not_ready'); if (!own(r, me)) fail('not_assigned');
+      Object.assign(r, { status: 'finished', finished_at: now(), photo_after: a.p_photo, tech_note: a.p_note.trim().slice(0, 1500), parts: cleanParts(a.p_parts) });
+      ev(r.id, me.id, 'finished', a.p_note); release(r.id, r.building_code);
+    },
+    tech_escalate: a => {
+      const me = auth(a.p_token); const note = String(a.p_note || '').trim().slice(0, 500); if (note.length < 3) fail('reason_required');
+      const r = find(a.p_id); if (!r || r.status !== 'onsite' || r.stage !== 'hm') fail('not_ready'); if (!own(r, me)) fail('not_assigned');
+      handover(r, 'escalated', note, null, 'ops'); ev(r.id, me.id, 'to_ops', note); release(r.id, r.building_code);
     },
     onsite_signoff: a => {
       const me = auth(a.p_token);
@@ -2354,74 +3301,125 @@ const Demo = (function () {
       ev(r.id, me.id, 'signed_onsite', a.p_signer);
     },
     mgr_assign: a => {
-      const me = auth(a.p_token, ['supervisor', 'admin']), s = db.staff.find(x => x.id === a.p_staff && x.active); if (!s) fail('bad_technician');
-      const r = find(a.p_id); if (!r || !['new', 'accepted', 'onsite', 'finished'].includes(r.status)) fail('not_ready');
-      if (r.status === 'new') { Object.assign(r, { status: 'accepted', technician_id: s.id, accepted_at: now(), accept_method: 'assigned' }); ev(r.id, me.id, 'assigned', s.full_name); }
-      else { r.technician_id = s.id; ev(r.id, me.id, 'reassigned', s.full_name); }
+      const me = auth(a.p_token, ['supervisor', 'admin']), s = db.staff.find(x => x.id === a.p_staff && x.active && x.role === 'technician'); if (!s) fail('bad_technician');
+      const r = find(a.p_id); if (!r || !['new', 'accepted', 'onsite'].includes(r.status)) fail('not_ready');
+      if (r.technician_id === s.id) return;
+      const stage = s.team === 'hm' ? 'hm' : 'ops';
+      if (r.status === 'new') {
+        const origin = where(s.id);
+        Object.assign(r, { status: 'accepted', technician_id: s.id, accepted_at: now(), accept_method: 'assigned', stage, origin, target_arrive: arriveTarget(r.building_code, r.priority, stage, origin) });
+        ev(r.id, me.id, 'assigned', s.full_name);
+      } else { handover(r, 'reassigned', s.full_name, s.id, stage); ev(r.id, me.id, 'reassigned', s.full_name); release(r.id, r.building_code); }
+    },
+    mgr_stage: a => {
+      const me = auth(a.p_token, ['supervisor', 'admin']); if (['hm', 'ops'].indexOf(a.p_stage) < 0) fail('bad_stage');
+      const r = find(a.p_id); if (!r || r.status !== 'new') fail('not_ready'); if (r.stage === a.p_stage) return;
+      Object.assign(r, { stage: a.p_stage, offered_at: now(), escalated_at: null, target_arrive: arriveTarget(r.building_code, r.priority, a.p_stage, null) });
+      ev(r.id, me.id, a.p_stage === 'ops' ? 'sent_ops' : 'sent_hm');
     },
     mgr_priority: a => {
       const me = auth(a.p_token, ['supervisor', 'admin']); if (['urgent', 'normal'].indexOf(a.p_priority) < 0) fail('bad_priority');
       const r = find(a.p_id); if (!r || ['closed', 'cancelled'].includes(r.status)) fail('not_ready'); if (r.priority === a.p_priority) return;
-      const tg = targets(r.building_code, a.p_priority); Object.assign(r, { priority: a.p_priority, target_arrive: tg[0], target_work: tg[1] }); ev(r.id, me.id, 'priority_' + a.p_priority);
+      const tg = targets(a.p_priority);
+      Object.assign(r, { priority: a.p_priority, target_pickup: tg[0], target_work: tg[1], target_arrive: r.arrived_at ? r.target_arrive : arriveTarget(r.building_code, a.p_priority, r.stage, r.origin) });
+      ev(r.id, me.id, 'priority_' + a.p_priority);
     },
     mgr_close: a => {
       const me = auth(a.p_token, ['supervisor', 'admin']); if (!a.p_note || a.p_note.trim().length < 3) fail('reason_required');
       const r = find(a.p_id); if (!r || !['accepted', 'onsite', 'finished'].includes(r.status)) fail('not_ready');
-      Object.assign(r, { status: 'closed', closed_at: now(), close_method: 'manual', close_note: a.p_note.trim() }); ev(r.id, me.id, 'closed_manual', a.p_note);
+      if (r.hold_kind) { const s2 = secsSince(r.hold_at); if (r.arrived_at) r.paused_work = (r.paused_work || 0) + s2; else r.paused_arrive = (r.paused_arrive || 0) + s2; }
+      Object.assign(r, { status: 'closed', closed_at: now(), close_method: 'manual', close_note: a.p_note.trim(), hold_kind: null, hold_at: null, hold_ref: null, hold_eta: null });
+      ev(r.id, me.id, 'closed_manual', a.p_note); release(r.id, r.building_code);
     },
     mgr_cancel: a => {
       const me = auth(a.p_token, ['supervisor', 'admin']); if (!a.p_note || a.p_note.trim().length < 3) fail('reason_required');
       const r = find(a.p_id); if (!r || ['closed', 'cancelled'].includes(r.status)) fail('not_ready');
-      Object.assign(r, { status: 'cancelled', cancelled_at: now(), cancel_note: a.p_note.trim() }); ev(r.id, me.id, 'cancelled', a.p_note);
+      Object.assign(r, { status: 'cancelled', cancelled_at: now(), cancel_note: a.p_note.trim(), hold_kind: null, hold_at: null, hold_ref: null, hold_eta: null });
+      ev(r.id, me.id, 'cancelled', a.p_note); release(r.id, r.building_code);
     },
-    team_list: a => { auth(a.p_token, ['supervisor', 'admin']); return db.staff.slice().sort((x, y) => (y.active - x.active) || x.role.localeCompare(y.role) || x.full_name.localeCompare(y.full_name)).map(s => ({ id: s.id, name: s.full_name, phone: s.phone, role: s.role, active: s.active, locked: false, created_at: s.created_at })); },
+    team_list: a => { auth(a.p_token, ['supervisor', 'admin']); return db.staff.slice().sort((x, y) => (y.active - x.active) || x.role.localeCompare(y.role) || String(x.team).localeCompare(String(y.team)) || x.full_name.localeCompare(y.full_name)).map(s => ({ id: s.id, name: s.full_name, phone: s.phone, role: s.role, team: s.team || 'ops', sites: s.sites || [], active: s.active, locked: false, created_at: s.created_at })); },
     admin_save_staff: a => {
       const me = auth(a.p_token, ['admin']), phone = normPhone(a.p_phone);
       if (!a.p_name || a.p_name.trim().length < 2) fail('name_required'); if (phone.length < 8) fail('phone_required');
       if (['technician', 'supervisor', 'admin'].indexOf(a.p_role) < 0) fail('bad_role'); if (a.p_pin && !/^[0-9]{6}$/.test(a.p_pin)) fail('pin_format');
       if (db.staff.some(s => s.phone === phone && s.id !== a.p_id)) fail('phone_taken');
-      if (!a.p_id) { if (!a.p_pin) fail('pin_format'); const s = { id: uid(), full_name: a.p_name.trim(), phone, role: a.p_role, pin: a.p_pin, active: true, created_at: now() }; db.staff.push(s); return { id: s.id }; }
+      const team = a.p_team === 'hm' && a.p_role === 'technician' ? 'hm' : 'ops';
+      const sites = team === 'hm' ? Array.from(new Set((Array.isArray(a.p_sites) ? a.p_sites : []).map(x => String(x).trim().toUpperCase()).filter(x => /^[A-Z0-9]{2,8}$/.test(x)))) : [];
+      if (team === 'hm' && !sites.length) fail('sites_required');
+      if (!a.p_id) { if (!a.p_pin) fail('pin_format'); const s = { id: uid(), full_name: a.p_name.trim(), phone, role: a.p_role, team, sites, pin: a.p_pin, active: true, created_at: now() }; db.staff.push(s); return { id: s.id }; }
       const s = db.staff.find(x => x.id === a.p_id); if (!s) fail('not_found');
       if (s.id === me.id && (a.p_role !== 'admin' || a.p_active === false)) fail('not_self');
-      Object.assign(s, { full_name: a.p_name.trim(), phone, role: a.p_role, active: a.p_active !== false }); if (a.p_pin) s.pin = a.p_pin;
+      Object.assign(s, { full_name: a.p_name.trim(), phone, role: a.p_role, team, sites, active: a.p_active !== false }); if (a.p_pin) s.pin = a.p_pin;
       if ((a.p_pin || a.p_active === false) && s.id !== me.id) Object.keys(db.sessions).forEach(k => { if (db.sessions[k] === s.id) delete db.sessions[k]; });
       return { id: s.id };
     },
-    admin_units: a => { auth(a.p_token, ['admin']); return db.units.slice().sort((x, y) => x.building_code.localeCompare(y.building_code) || x.sort - y.sort); },
+    admin_units: a => { const me = auth(a.p_token, ['supervisor', 'admin']); return db.units.slice().sort((x, y) => x.building_code.localeCompare(y.building_code) || x.sort - y.sort).map(u => Object.assign({}, u, { token: me.role === 'admin' ? u.token : null })); },
     admin_add_unit: a => {
       auth(a.p_token, ['admin']); const code = String(a.p_building_code || '').trim().toUpperCase();
       if (!/^[A-Z0-9]{2,8}$/.test(code) || !a.p_building_ar || !a.p_building_en) fail('bad_building'); if (!a.p_label_ar || !a.p_label_en) fail('label_required');
       if (db.units.some(u => u.building_code === code && u.label_en === a.p_label_en.trim())) fail('unit_exists');
       const u = { id: uid(), building_code: code, building_ar: a.p_building_ar.trim(), building_en: a.p_building_en.trim(), label_ar: a.p_label_ar.trim(), label_en: a.p_label_en.trim(), kind: a.p_kind === 'common' ? 'common' : 'flat', token: code.toLowerCase() + '-' + uid().slice(1, 9), active: true, sort: a.p_sort || 0 };
-      db.units.push(u); return { id: u.id, token: u.token };
+      db.units.push(u);
+      db.settings.buildings = db.settings.buildings || {};
+      if (!db.settings.buildings[code]) db.settings.buildings[code] = { ar: u.building_ar, en: u.building_en, type: 'res', ops: 60, sort: 50 };
+      return { id: u.id, token: u.token };
     },
     admin_unit_active: a => { auth(a.p_token, ['admin']); const u = db.units.find(x => x.id === a.p_id); if (u) u.active = !!a.p_active; },
-    admin_save_settings: a => { auth(a.p_token, ['admin']); const d = a.p_data; if (!d || !Array.isArray(d.issueTypes) || !d.issueTypes.length || d.issueTypes.some(i => !i.k || !i.ar || !i.en || ['urgent', 'normal'].indexOf(i.p) < 0)) fail('bad_settings'); db.settings = clone(d); }
+    admin_save_settings: a => {
+      auth(a.p_token, ['admin']); const d = a.p_data;
+      if (!d || !Array.isArray(d.issueTypes) || !d.issueTypes.length || d.issueTypes.some(i => !i.k || !i.ar || !i.en || ['urgent', 'normal'].indexOf(i.p) < 0)) fail('bad_settings');
+      if (d.buildings && (typeof d.buildings !== 'object' || Object.values(d.buildings).some(b => !b || typeof b !== 'object' || (b.ops != null && typeof b.ops !== 'number') || ['res', 'com'].indexOf(b.type || 'res') < 0))) fail('bad_settings');
+      db.settings = clone(d);
+    }
   };
 
-  /* ----- sample data: one building, four technicians with different habits, about five weeks of history ----- */
+  /* ----- sample data: seven buildings, four handymen, four operations-room technicians, five weeks of history ----- */
   function seed() {
-    let s = 73110;
+    let s = 73112;
     const R = () => { s |= 0; s = (s + 0x6D2B79F5) | 0; let x = Math.imul(s ^ (s >>> 15), 1 | s); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x; return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
-    const pick = a => a[Math.floor(R() * a.length)];
+    const pickR = a => a[Math.floor(R() * a.length)];
     const wpick = obj => { const ks = Object.keys(obj), tot = ks.reduce((t2, k) => t2 + obj[k], 0); let x = R() * tot; for (const k of ks) { x -= obj[k]; if (x <= 0) return k; } return ks[0]; };
-    const B = DEMO_UNITS.building;
     const st = clone(DEFAULTS);
-    if (st.buildings && st.buildings[B.code]) { st.buildings[B.code].lat = 23.5893; st.buildings[B.code].lng = 58.3891; }
-    const units = DEMO_UNITS.units.map((u, i) => ({ id: 'u' + (i + 1), building_code: B.code, building_ar: B.ar, building_en: B.en, label_ar: u.label_ar, label_en: u.label_en, kind: u.kind, token: u.token, active: true, sort: u.sort }));
+    if (st.buildings.AZB) { st.buildings.AZB.lat = 23.5893; st.buildings.AZB.lng = 58.3891; }
+    const extra = {
+      SAY: [['شقة 101', 'Flat 101'], ['شقة 102', 'Flat 102'], ['شقة 103', 'Flat 103'], ['شقة 201', 'Flat 201'], ['شقة 202', 'Flat 202'], ['شقة 203', 'Flat 203']],
+      MWL: [['شقة 11', 'Flat 11'], ['شقة 12', 'Flat 12'], ['شقة 21', 'Flat 21'], ['شقة 22', 'Flat 22'], ['شقة 31', 'Flat 31']],
+      BSH: [['شقة 1', 'Flat 1'], ['شقة 2', 'Flat 2'], ['شقة 3', 'Flat 3'], ['شقة 4', 'Flat 4']],
+      HO: [['الطابق الأرضي', 'Ground floor'], ['الطابق الأول', 'First floor'], ['الطابق الثاني', 'Second floor']],
+      SCC: [['محل 5', 'Shop 5'], ['محل 12', 'Shop 12'], ['المطعم', 'Restaurant'], ['المواقف', 'Car park']],
+      OBTS: [['الطابق 2', 'Floor 2'], ['الطابق 5', 'Floor 5'], ['الطابق 8', 'Floor 8']]
+    };
+    let ui = 0;
+    const units = [];
+    DEMO_UNITS.buildings.forEach(B => {
+      B.units.forEach(u => units.push({ id: 'u' + (++ui), building_code: B.code, building_ar: B.ar, building_en: B.en, label_ar: u.label_ar, label_en: u.label_en, kind: u.kind, token: u.token, active: true, sort: u.sort }));
+      (extra[B.code] || []).forEach((x, i) => units.push({ id: 'u' + (++ui), building_code: B.code, building_ar: B.ar, building_en: B.en, label_ar: x[0], label_en: x[1], kind: B.code === 'HO' || B.code === 'OBTS' || x[1] === 'Car park' ? 'common' : 'flat', token: B.code.toLowerCase() + (i + 1) + '-demo' + (i + 1), active: true, sort: i + 1 }));
+    });
     const t0 = new Date(Date.now() - 60 * 864e5).toISOString();
     const staff = [
-      { id: 's-admin', full_name: 'مدير المرافق', phone: '96890000001', role: 'admin', pin: '100001', active: true, created_at: t0 },
-      { id: 's-sup', full_name: 'ناصر الرواحي', phone: '96890000002', role: 'supervisor', pin: '100002', active: true, created_at: t0 },
-      { id: 's-t1', full_name: 'Sanjay Kumar', phone: '96891111111', role: 'technician', pin: '111111', active: true, created_at: t0 },
-      { id: 's-t2', full_name: 'Mohammed Rafiq', phone: '96892222222', role: 'technician', pin: '222222', active: true, created_at: t0 },
-      { id: 's-t3', full_name: 'Anil Thomas', phone: '96893333333', role: 'technician', pin: '333333', active: true, created_at: t0 },
-      { id: 's-t4', full_name: 'سالم البلوشي', phone: '96894444444', role: 'technician', pin: '444444', active: true, created_at: t0 }
+      { id: 's-admin', full_name: 'مدير المرافق', phone: '96890000001', role: 'admin', team: 'ops', sites: [], pin: '100001', active: true, created_at: t0 },
+      { id: 's-sup', full_name: 'ناصر الرواحي', phone: '96890000002', role: 'supervisor', team: 'ops', sites: [], pin: '100002', active: true, created_at: t0 },
+      { id: 's-h1', full_name: 'Rajesh Nair', phone: '96895555551', role: 'technician', team: 'hm', sites: ['AZB'], pin: '555551', active: true, created_at: t0 },
+      { id: 's-h2', full_name: 'Sameer Ali', phone: '96895555552', role: 'technician', team: 'hm', sites: ['SAY'], pin: '555552', active: true, created_at: t0 },
+      { id: 's-h3', full_name: 'Bijoy Das', phone: '96895555553', role: 'technician', team: 'hm', sites: ['MWL'], pin: '555553', active: true, created_at: t0 },
+      { id: 's-h4', full_name: 'Imran Khan', phone: '96895555554', role: 'technician', team: 'hm', sites: ['BSH'], pin: '555554', active: true, created_at: t0 },
+      { id: 's-t1', full_name: 'Sanjay Kumar', phone: '96891111111', role: 'technician', team: 'ops', sites: [], pin: '111111', active: true, created_at: t0 },
+      { id: 's-t2', full_name: 'Mohammed Rafiq', phone: '96892222222', role: 'technician', team: 'ops', sites: [], pin: '222222', active: true, created_at: t0 },
+      { id: 's-t3', full_name: 'Anil Thomas', phone: '96893333333', role: 'technician', team: 'ops', sites: [], pin: '333333', active: true, created_at: t0 },
+      { id: 's-t4', full_name: 'سالم البلوشي', phone: '96894444444', role: 'technician', team: 'ops', sites: [], pin: '444444', active: true, created_at: t0 }
     ];
-    const prof = { 's-t1': { a: 0.5, w: 0.6, r: 4.7, man: 0.03, on: 0.1 }, 's-t2': { a: 0.85, w: 0.85, r: 4.2, man: 0.08, on: 0.2 }, 's-t3': { a: 1.3, w: 1.15, r: 3.4, man: 0.3, on: 0.45 }, 's-t4': { a: 0.7, w: 0.8, r: 4.4, man: 0.05, on: 0.15 } };
-    const techW = { 's-t1': 30, 's-t2': 27, 's-t3': 23, 's-t4': 20 };
+    const HM = { AZB: 's-h1', SAY: 's-h2', MWL: 's-h3', BSH: 's-h4' };
+    const prof = {
+      's-h1': { a: 0.55, w: 0.65, r: 4.6, esc: 0.22, man: 0.03, on: 0.12 }, 's-h2': { a: 0.9, w: 0.9, r: 4.2, esc: 0.32, man: 0.08, on: 0.2 },
+      's-h3': { a: 1.35, w: 1.15, r: 3.6, esc: 0.45, man: 0.25, on: 0.4 }, 's-h4': { a: 0.75, w: 0.8, r: 4.4, esc: 0.3, man: 0.05, on: 0.15 },
+      's-t1': { a: 0.55, w: 0.6, r: 4.7, man: 0.03, on: 0.1 }, 's-t2': { a: 0.85, w: 0.85, r: 4.2, man: 0.08, on: 0.2 },
+      's-t3': { a: 1.3, w: 1.15, r: 3.4, man: 0.3, on: 0.45 }, 's-t4': { a: 0.7, w: 0.8, r: 4.4, man: 0.05, on: 0.15 }
+    };
+    const opsW = { 's-t1': 30, 's-t2': 27, 's-t3': 23, 's-t4': 20 };
+    const bldW = { AZB: 30, SAY: 15, MWL: 13, BSH: 11, HO: 13, SCC: 12, OBTS: 6 };
     const flatW = { ac: 22, plumbing: 14, water_leak: 9, lights: 10, heater: 8, sockets: 6, drain_overflow: 6, carpentry: 5, door_lock: 4, no_power: 3, pests: 4, no_water: 2, sparks: 1, other: 3 };
     const commonW = { lights: 40, lift: 15, water_leak: 10, plumbing: 8, door_lock: 9, pests: 8, other: 10 };
+    const escBoost = { ac: 0.35, no_power: 0.3, sparks: 0.45, lift: 0.6, heater: 0.15, drain_overflow: 0.15, water_leak: 0.1 };
     const DESC = {
       ac: ['المكيف في غرفة النوم لا يبرّد منذ أمس', 'AC in the living room is blowing warm air', 'صوت عالٍ من وحدة المكيف', 'المكيف يسرّب ماء على الجدار'],
       plumbing: ['الشطاف يسرّب ماء باستمرار', 'Kitchen tap keeps dripping', 'السيفون لا يتوقف عن الجريان'],
@@ -2433,83 +3431,132 @@ const Demo = (function () {
       pests: ['صراصير في المطبخ', 'Ants in the bathroom'], no_water: ['لا يوجد ماء في الشقة منذ الصباح'], sparks: ['رائحة احتراق من لوحة الكهرباء'],
       lift: ['المصعد متوقف في الطابق الثالث', 'Lift door does not open on the ground floor'], other: ['صوت طرق في أنابيب المياه', 'Intercom is not working']
     };
-    const COMMON_DESC = { lights: ['إنارة الدرج في الطابق الرابع لا تعمل', 'Corridor lights on the 2nd floor are off', 'إنارة المدخل لا تعمل'], water_leak: ['تسرّب ماء في موقف السيارات'], plumbing: ['حنفية غرفة الحارس تسرّب'], door_lock: ['باب المدخل الرئيسي لا يُقفل'], pests: ['حشرات عند حاويات النفايات'], other: ['جرس الإنتركم في المدخل لا يعمل'] };
-    const NOTE = { ac: ['تم تنظيف الفلتر وإعادة شحن الغاز', 'Cleaned the drain line and tested cooling'], plumbing: ['تم تغيير الشطاف', 'Replaced the cartridge and tested'], water_leak: ['تم تغيير الوصلة وتجربة التشغيل', 'Sealed the joint and checked for leaks'], lights: ['تم تغيير اللمبة والمفتاح', 'Replaced the driver'], heater: ['تم تغيير الثرموستات'], sockets: ['تم تثبيت الفيش وتغييره'], drain_overflow: ['تم تسليك المجرى'], carpentry: ['Re-fixed the hinge and adjusted the door'], door_lock: ['تم تغيير الأسطوانة'], no_power: ['تم تغيير القاطع وشد التوصيلات'], pests: ['تم رش المبيد وإغلاق الفتحات'], no_water: ['تم فتح المحبس وتنظيف العوامة'], sparks: ['تم تغيير التوصيلة المحترقة'], lift: ['تمت إعادة تشغيل المصعد مع شركة المصاعد'], other: ['تم الإصلاح'] };
+    const COMMON_DESC = { lights: ['إنارة الدرج في الطابق الرابع لا تعمل', 'Corridor lights on the 2nd floor are off', 'إنارة المدخل لا تعمل'], water_leak: ['تسرّب ماء في موقف السيارات'], plumbing: ['حنفية دورة المياه العامة تسرّب'], door_lock: ['باب المدخل الرئيسي لا يُقفل'], pests: ['حشرات عند حاويات النفايات'], other: ['جرس الإنتركم في المدخل لا يعمل'], lift: ['المصعد متوقف بين الطابقين'] };
+    const NOTE = { ac: ['تم تنظيف الفلتر وإعادة شحن الغاز وتجربة التبريد', 'Cleaned the drain line and tested cooling'], plumbing: ['تم تغيير الشطاف وتجربته', 'Replaced the cartridge and tested'], water_leak: ['الوصلة تحت المغسلة متآكلة، تم تغييرها وتجربة التشغيل', 'Sealed the joint and checked for leaks'], lights: ['تم تغيير اللمبة والمفتاح', 'Replaced the LED driver and tested'], heater: ['تم تغيير الثرموستات وتجربة التسخين'], sockets: ['تم تغيير الفيش وشد التوصيلات'], drain_overflow: ['تم تسليك المجرى بالماكينة'], carpentry: ['Re-fixed the hinge and adjusted the door'], door_lock: ['تم تغيير أسطوانة القفل وتسليم المفاتيح'], no_power: ['تم تغيير القاطع وشد التوصيلات في اللوحة'], pests: ['تم رش المبيد وإغلاق الفتحات'], no_water: ['تم فتح المحبس وتنظيف العوامة'], sparks: ['تم تغيير التوصيلة المحترقة وفحص اللوحة'], lift: ['تمت إعادة تشغيل المصعد مع شركة المصاعد'], other: ['تم الإصلاح وتجربته'] };
+    const PARTS = { ac: [[{ n: 'فلتر مكيف', q: 1 }], [{ n: 'غاز R410A (كجم)', q: 1.5 }], [{ n: 'مكثف تشغيل 35 مايكرو', q: 1 }]], plumbing: [[{ n: 'شطاف كامل', q: 1 }], [{ n: 'جلدة سيفون', q: 1 }]], water_leak: [[{ n: 'وصلة مرنة ½ إنش', q: 1 }], [{ n: 'شريط تفلون', q: 2 }]], lights: [[{ n: 'لمبة LED 18 واط', q: 2 }], [{ n: 'محوّل إنارة LED', q: 1 }]], heater: [[{ n: 'ثرموستات سخان', q: 1 }], [{ n: 'عنصر تسخين 2 كيلوواط', q: 1 }]], sockets: [[{ n: 'فيش 13 أمبير', q: 1 }]], carpentry: [[{ n: 'مفصلة باب', q: 2 }]], door_lock: [[{ n: 'أسطوانة قفل', q: 1 }]], no_power: [[{ n: 'قاطع 32 أمبير', q: 1 }]], sparks: [[{ n: 'سلك 4 مم (متر)', q: 3 }]] };
+    const WAIT_PARTS = { ac: [{ n: 'كمبروسر 1.5 طن', q: 1 }], heater: [{ n: 'سخان 80 لتر', q: 1 }], lift: [{ n: 'لوحة تحكم الباب', q: 1 }], no_power: [{ n: 'قاطع رئيسي 63 أمبير', q: 1 }], plumbing: [{ n: 'خلاط مغسلة', q: 1 }], door_lock: [{ n: 'قفل ذكي', q: 1 }], water_leak: [{ n: 'أنبوب PPR 1 إنش (متر)', q: 3 }] };
+    const ESC = ['الكمبروسر لا يعمل، يحتاج فني تكييف', 'العطل في لوحة الكهرباء الرئيسية', 'يحتاج سلّم ومعدات غير متوفرة في المبنى', 'التسريب من الأنبوب الرئيسي داخل الجدار', 'يحتاج فني كهرباء مختص'];
     const COMMENTS = ['شكراً، خدمة سريعة', 'Very polite technician', 'تأخر قليلاً لكن العمل ممتاز', 'Good job', 'الفني محترم ونظيف في العمل', 'وصل متأخراً'];
     const NAMES = ['أحمد', 'Fatma', 'خالد', 'Priya', 'سعيد', 'مريم', 'John', null, null];
-    const db0 = { v: 3, at: Date.now(), settings: st, units, staff, sessions: {}, requests: [], events: [], seq: { no: 1000, ev: 0 } };
+    const db0 = { v: 4, at: Date.now(), settings: st, units, staff, sessions: {}, requests: [], events: [], seq: { no: 1000, ev: 0 } };
     const iso = x => new Date(x).toISOString();
     const nowMs = Date.now(), midnight = d => { const n = d + OFFSET; return n - (n % 864e5) - OFFSET; };
     const pushEv = (rid, at, actor, e, note) => db0.events.push({ id: ++db0.seq.ev, request_id: rid, at: iso(at), actor: actor || null, ev: e, note: note || null });
-    const flats = units.filter(u => u.kind === 'flat'), commons = units.filter(u => u.kind === 'common');
+    const sname = id => (staff.find(x => x.id === id) || {}).full_name;
+    const ops = c => st.buildings[c].ops;
+    const tgA = (code, p, team, origin) => (team === 'hm' || (origin && origin === code) ? st.targets[p].arrive : Math.max(ops(code), origin ? ops(origin) : 0));
     const mk = (u, issue, created) => {
-      const it = st.issueTypes.find(i => i.k === issue), tg = (st.targets[it.p] || {});
+      const it = st.issueTypes.find(i => i.k === issue), stage = HM[u.building_code] ? 'hm' : 'ops';
       const descs = (u.kind === 'common' && COMMON_DESC[issue]) || DESC[issue] || DESC.other;
-      const nm = pick(NAMES);
-      return { id: uid(), no: 0, unit_id: u.id, building_code: B.code, building_ar: B.ar, building_en: B.en, unit_ar: u.label_ar, unit_en: u.label_en, unit_kind: u.kind, issue_type: issue, priority: it.p, target_arrive: tg.arrive, target_work: tg.work, description: pick(descs), photo_before: PH_BEFORE, lang: R() < 0.7 ? 'ar' : 'en', contact_name: nm, contact_phone: nm ? '9' + String(1000000 + Math.floor(R() * 8999999)) : null, tracking_code: uid() + uid(), status: 'new', created_at: iso(created) };
+      const nm = pickR(NAMES);
+      return { id: uid(), no: 0, unit_id: u.id, building_code: u.building_code, building_ar: u.building_ar, building_en: u.building_en, unit_ar: u.label_ar, unit_en: u.label_en, unit_kind: u.kind, issue_type: issue, priority: it.p, target_pickup: st.targets[it.p].pickup, target_arrive: tgA(u.building_code, it.p, stage, null), target_work: st.targets[it.p].work, description: pickR(descs), photo_before: PH_BEFORE, lang: R() < 0.7 ? 'ar' : 'en', contact_name: nm, contact_phone: nm ? '9' + String(1000000 + Math.floor(R() * 8999999)) : null, tracking_code: uid() + uid(), status: 'new', created_at: iso(created), offered_at: iso(created), source: R() < 0.12 ? pickR(['phone', 'whatsapp']) : 'qr', stage, paused_arrive: 0, paused_work: 0, parts: [], legs: [] };
     };
-    const play = (r, techId, upTo) => {
-      const p = prof[techId], c = D(r.created_at).getTime(); let at = c;
-      pushEv(r.id, c, null, 'submitted');
-      const pick2 = r.priority === 'urgent' ? 2 + R() * 13 : 5 + R() * 70; at = c + pick2 * 60000;
-      if (at > upTo) return r;
-      const assigned = R() < 0.2;
-      Object.assign(r, { status: 'accepted', technician_id: techId, accepted_at: iso(at), accept_method: assigned ? 'assigned' : 'self' });
-      pushEv(r.id, at, assigned ? 's-sup' : techId, assigned ? 'assigned' : 'accepted', assigned ? name2(techId) : null);
-      const arr = at + r.target_arrive * p.a * (0.55 + R() * 0.95) * 60000; if (arr > upTo) return r;
+    // one visit, from being offered to the end; returns where it stopped
+    const visit = (r, techId, startAt, upTo, opts) => {
+      const p = prof[techId], team = r.stage; let at = startAt;
+      const pk = r.priority === 'urgent' ? 2 + R() * 13 : 5 + R() * 55; at += pk * 60000;
+      if (at > upTo) return 'new';
+      const assigned = R() < 0.15, origin = team === 'ops' && R() < 0.25 ? pickR(['SAY', 'MWL', 'BSH', 'AZB']) : null;
+      r.target_arrive = tgA(r.building_code, r.priority, team, origin);
+      Object.assign(r, { status: 'accepted', technician_id: techId, accepted_at: iso(at), accept_method: assigned ? 'assigned' : 'self', origin });
+      pushEv(r.id, at, assigned ? 's-sup' : techId, assigned ? 'assigned' : 'accepted', assigned ? sname(techId) : null);
+      if (R() < (team === 'ops' ? 0.22 : 0.1)) { const pause = (team === 'ops' ? 20 + R() * 100 : 10 + R() * 35) * 60000; r.paused_arrive += Math.round(pause / 1000); pushEv(r.id, at + 1000, techId, 'hold_busy', pickR(['صيانة دورية لمضخات المياه', 'طلب آخر في نفس المبنى', 'Routine check of the fire pumps'])); pushEv(r.id, at + pause, null, 'resumed_auto', ''); at += pause; }
+      const arr = at + r.target_arrive * p.a * (0.5 + R() * 0.95) * 60000; if (arr > upTo) return 'accepted';
       const manual = R() < p.man;
-      Object.assign(r, { status: 'onsite', arrived_at: iso(arr), arrival_method: manual ? 'manual' : 'qr', arrival_note: manual ? pick(['ملصق الرمز تالف', 'الكاميرا لا تعمل', 'QR label missing']) : null, arrival_lat: 23.5893 + (R() - 0.5) * 0.0012, arrival_lng: 58.3891 + (R() - 0.5) * 0.0012, arrival_acc: 8 + R() * 25 });
+      Object.assign(r, { status: 'onsite', arrived_at: iso(arr), arrival_method: manual ? 'manual' : 'qr', arrival_note: manual ? pickR(['ملصق الرمز تالف', 'الكاميرا لا تعمل', 'QR label missing']) : null });
+      if (r.building_code === 'AZB') Object.assign(r, { arrival_lat: 23.5893 + (R() - 0.5) * 0.0012, arrival_lng: 58.3891 + (R() - 0.5) * 0.0012, arrival_acc: 8 + R() * 25 });
       pushEv(r.id, arr, techId, manual ? 'arrived_manual' : 'arrived_qr', r.arrival_note);
-      const fin = arr + r.target_work * p.w * (0.35 + R() * 1.0) * 60000; if (fin > upTo) return r;
-      Object.assign(r, { status: 'finished', finished_at: iso(fin), photo_after: PH_AFTER, tech_note: pick(NOTE[r.issue_type] || NOTE.other) });
+      if (team === 'hm' && R() < p.esc + (escBoost[r.issue_type] || 0)) {
+        const end = arr + (10 + R() * 30) * 60000; if (end > upTo) return 'onsite';
+        const note = pickR(ESC);
+        r.legs.push({ staff_id: techId, name: sname(techId), team: 'hm', offered_at: r.offered_at, accepted_at: r.accepted_at, accept_method: r.accept_method, arrived_at: r.arrived_at, arrival_method: r.arrival_method, ended_at: iso(end), outcome: 'escalated', note, target_pickup: r.target_pickup, target_arrive: r.target_arrive, target_work: r.target_work, origin: null, paused_arrive: r.paused_arrive, paused_work: 0 });
+        pushEv(r.id, end, techId, 'to_ops', note);
+        Object.assign(r, { stage: 'ops', status: 'new', technician_id: null, offered_at: iso(end), accepted_at: null, accept_method: null, arrived_at: null, arrival_method: null, arrival_note: null, arrival_lat: null, arrival_lng: null, arrival_acc: null, origin: null, paused_arrive: 0, paused_work: 0, target_arrive: tgA(r.building_code, r.priority, 'ops', null) });
+        return visit(r, opts.ops(), end, upTo, opts);
+      }
+      let fin = arr + r.target_work * p.w * (0.3 + R() * 1.0) * 60000;
+      if (WAIT_PARTS[r.issue_type] && R() < 0.14) {
+        const hold = arr + (20 + R() * 40) * 60000, wait = (4 + R() * 60) * 3600e3;
+        r.hold_parts = WAIT_PARTS[r.issue_type];
+        pushEv(r.id, hold, techId, 'hold_parts', partsTxt(r.hold_parts));
+        if (hold + wait > upTo) { Object.assign(r, { hold_kind: 'parts', hold_at: iso(hold), hold_note: 'طلب من المورد', hold_eta: iso(hold + wait + 864e5) }); return 'hold'; }
+        r.paused_work += Math.round(wait / 1000); pushEv(r.id, hold + wait, techId, 'resumed_qr'); fin += wait;
+      }
+      if (fin > upTo) return 'onsite';
+      const parts = r.hold_parts ? r.hold_parts : PARTS[r.issue_type] && R() < 0.75 ? pickR(PARTS[r.issue_type]) : [];
+      Object.assign(r, { status: 'finished', finished_at: iso(fin), photo_after: PH_AFTER, tech_note: pickR(NOTE[r.issue_type] || NOTE.other), parts: clone(parts) });
       pushEv(r.id, fin, techId, 'finished', r.tech_note);
-      const sig = fin + (5 + R() * 80) * 60000; if (sig > upTo) return r;
-      if (R() < 0.03) { Object.assign(r, { status: 'closed', closed_at: iso(sig), close_method: 'manual', close_note: 'تعذّر الوصول للمستأجر للتوقيع' }); pushEv(r.id, sig, 's-sup', 'closed_manual', r.close_note); return r; }
+      const sig = fin + (5 + R() * 80) * 60000; if (sig > upTo) return 'finished';
+      if (R() < 0.03) { Object.assign(r, { status: 'closed', closed_at: iso(sig), close_method: 'manual', close_note: 'تعذّر الوصول للمستأجر للتوقيع' }); pushEv(r.id, sig, 's-sup', 'closed_manual', r.close_note); return 'closed'; }
       const onsite = R() < p.on || r.unit_kind === 'common';
       const rating = Math.max(1, Math.min(5, Math.round(p.r + (R() - 0.5) * 1.8)));
-      Object.assign(r, { status: 'closed', signature: SIGS[Math.floor(R() * SIGS.length)], signer_name: onsite ? (r.unit_kind === 'common' ? 'حارس المبنى' : (r.contact_name || 'صاحب الشقة')) : null, signoff_method: onsite ? 'onsite' : 'tenant', rating, rating_comment: R() < 0.3 ? pick(COMMENTS) : null, signed_at: iso(sig), closed_at: iso(sig), close_method: 'signed' });
+      Object.assign(r, { status: 'closed', signature: SIGS[Math.floor(R() * SIGS.length)], signer_name: onsite ? (r.unit_kind === 'common' ? 'حارس المبنى' : (r.contact_name || 'صاحب الشقة')) : null, signoff_method: onsite ? 'onsite' : 'tenant', rating, rating_comment: R() < 0.3 ? pickR(COMMENTS) : null, signed_at: iso(sig), closed_at: iso(sig), close_method: 'signed' });
       pushEv(r.id, sig, onsite ? techId : null, onsite ? 'signed_onsite' : 'signed_tenant', onsite ? r.signer_name : null);
-      return r;
+      return 'closed';
     };
-    const name2 = id => (staff.find(x => x.id === id) || {}).full_name;
+    const opts = { ops: () => wpick(opsW) };
+    const play = (r, upTo) => {
+      const c = D(r.created_at).getTime();
+      pushEv(r.id, c, r.source !== 'qr' ? 's-sup' : null, r.source !== 'qr' ? 'logged' : 'submitted', r.source !== 'qr' ? r.source : null);
+      return visit(r, r.stage === 'hm' ? HM[r.building_code] : opts.ops(), c, upTo, opts);
+    };
     const hist = [], used = new Set();
-    for (let i = 0; i < 52; i++) {
+    for (let i = 0; i < 96; i++) {
       const day = 1 + Math.floor(R() * 34), created = midnight(nowMs - day * 864e5) + (7 * 60 + R() * 15 * 60) * 60000;
-      const common = R() < 0.15;
+      const code = wpick(bldW), bunits = units.filter(u => u.building_code === code);
+      const common = R() < 0.18 || !bunits.some(u => u.kind === 'flat');
+      const pool = bunits.filter(u => (u.kind === 'common') === common).length ? bunits.filter(u => (u.kind === 'common') === common) : bunits;
       let u, issue, tries = 0;
-      do { u = common ? pick(commons) : pick(flats); issue = wpick(common ? commonW : flatW); tries++; } while (used.has(u.id + '|' + issue) && tries < 25);
+      do { u = pickR(pool); issue = wpick(u.kind === 'common' ? commonW : flatW); tries++; } while (used.has(u.id + '|' + issue) && tries < 25);
       used.add(u.id + '|' + issue);
       const r = mk(u, issue, created);
-      play(r, wpick(techW), nowMs - 6 * 3600e3);
+      play(r, nowMs - 6 * 3600e3);
       hist.push(r);
     }
-    // two repeat faults for the slowest technician
-    hist.filter(r => r.technician_id === 's-t3' && r.status === 'closed' && D(r.closed_at) < nowMs - 14 * 864e5).slice(0, 2).forEach(r => {
+    // two repeat faults after the slowest people's jobs
+    hist.filter(r => r.status === 'closed' && ['s-t3', 's-h3'].includes(r.technician_id) && D(r.closed_at) < nowMs - 14 * 864e5).slice(0, 2).forEach(r => {
       const u = units.find(x => x.id === r.unit_id), again = mk(u, r.issue_type, D(r.closed_at).getTime() + (3 + R() * 6) * 864e5);
-      play(again, pick(['s-t1', 's-t2', 's-t4']), nowMs - 6 * 3600e3); hist.push(again);
+      play(again, nowMs - 6 * 3600e3); hist.push(again);
     });
     // two cancelled duplicates
-    hist.slice(5, 7).forEach(r => { if (r.status !== 'closed') return; const d = mk(units.find(x => x.id === r.unit_id), r.issue_type, D(r.created_at).getTime() + 9 * 60000); pushEv(d.id, D(d.created_at), null, 'submitted'); Object.assign(d, { status: 'cancelled', cancelled_at: iso(D(d.created_at).getTime() + 20 * 60000), cancel_note: 'طلب مكرر' }); pushEv(d.id, D(d.cancelled_at), 's-sup', 'cancelled', d.cancel_note); hist.push(d); });
+    hist.slice(5, 7).forEach(r => { const d = mk(units.find(x => x.id === r.unit_id), r.issue_type, D(r.created_at).getTime() + 9 * 60000); pushEv(d.id, D(d.created_at), null, 'submitted'); Object.assign(d, { status: 'cancelled', cancelled_at: iso(D(d.created_at).getTime() + 20 * 60000), cancel_note: 'طلب مكرر' }); pushEv(d.id, D(d.cancelled_at), 's-sup', 'cancelled', d.cancel_note); hist.push(d); });
     // what is happening right now
-    const at = (label, issue, mins) => { const u = units.find(x => x.label_en === label) || flats[0]; return mk(u, issue, nowMs - mins * 60000); };
+    const at = (code, label, issue, mins) => { const u = units.find(x => x.building_code === code && x.label_en === label) || units.find(x => x.building_code === code); return mk(u, issue, nowMs - mins * 60000); };
+    const m = mins => iso(nowMs - mins * 60000);
     const live = [];
-    live.push(at('Flat 32', 'water_leak', 6));
-    live.push(at('Flat 23', 'ac', 38));
-    let r = at('Flat 44', 'lights', 70); Object.assign(r, { status: 'accepted', technician_id: 's-t1', accepted_at: iso(nowMs - 24 * 60000), accept_method: 'self' }); live.push(r);
-    r = at('Flat 51', 'no_power', 120); Object.assign(r, { status: 'onsite', technician_id: 's-t2', accepted_at: iso(nowMs - 112 * 60000), accept_method: 'self', arrived_at: iso(nowMs - 62 * 60000), arrival_method: 'qr', arrival_lat: 23.5894, arrival_lng: 58.3890, arrival_acc: 12 }); live.push(r);
-    r = at('Flat 13', 'heater', 300); Object.assign(r, { status: 'finished', technician_id: 's-t3', accepted_at: iso(nowMs - 280 * 60000), accept_method: 'self', arrived_at: iso(nowMs - 226 * 60000), arrival_method: 'qr', finished_at: iso(nowMs - 125 * 60000), photo_after: PH_AFTER, tech_note: 'تم تغيير الثرموستات' }); live.push(r);
-    r = at('Common area', 'drain_overflow', 95); Object.assign(r, { status: 'accepted', technician_id: 's-t3', accepted_at: iso(nowMs - 82 * 60000), accept_method: 'assigned' }); live.push(r);
+    live.push(at('AZB', 'Flat 32', 'water_leak', 6));                                                                   // 0 new, waiting for the AZB handyman
+    const f44 = at('AZB', 'Flat 44', 'lights', 70); Object.assign(f44, { status: 'onsite', technician_id: 's-h1', accepted_at: m(64), accept_method: 'self', arrived_at: m(55), arrival_method: 'qr', origin: null }); live.push(f44);
+    const f23 = at('AZB', 'Flat 23', 'ac', 38); Object.assign(f23, { status: 'accepted', technician_id: 's-h1', accepted_at: m(33), accept_method: 'self', hold_kind: 'busy', hold_at: m(33), hold_ref: f44.id }); live.push(f23);
+    const say = at('SAY', 'Flat 102', 'no_power', 52);
+    say.legs = [{ staff_id: 's-h2', name: 'Sameer Ali', team: 'hm', offered_at: m(52), accepted_at: m(47), accept_method: 'self', arrived_at: m(36), arrival_method: 'qr', ended_at: m(21), outcome: 'escalated', note: 'العطل في لوحة الكهرباء الرئيسية للشقة، يحتاج فني كهرباء', target_pickup: 15, target_arrive: 15, target_work: 120, origin: null, paused_arrive: 0, paused_work: 0 }];
+    Object.assign(say, { stage: 'ops', offered_at: m(21), target_arrive: ops('SAY') }); live.push(say);
+    const mwl = at('MWL', 'Flat 21', 'ac', 150);
+    mwl.legs = [{ staff_id: 's-h3', name: 'Bijoy Das', team: 'hm', offered_at: m(150), accepted_at: m(122), accept_method: 'self', arrived_at: m(95), arrival_method: 'manual', ended_at: m(70), outcome: 'escalated', note: 'الكمبروسر لا يعمل، يحتاج فني تكييف', target_pickup: 60, target_arrive: 60, target_work: 240, origin: null, paused_arrive: 0, paused_work: 0 }];
+    Object.assign(mwl, { stage: 'ops', offered_at: m(70), status: 'accepted', technician_id: 's-t1', accepted_at: m(58), accept_method: 'self', target_arrive: ops('MWL') }); live.push(mwl);
+    const bsh = at('BSH', 'Flat 3', 'heater', 26 * 60);
+    Object.assign(bsh, { status: 'onsite', technician_id: 's-h4', accepted_at: m(26 * 60 - 20), accept_method: 'self', arrived_at: m(26 * 60 - 35), arrival_method: 'qr', hold_kind: 'parts', hold_at: m(25 * 60), hold_note: 'السخان تالف بالكامل، طُلب سخان جديد من المورد', hold_parts: [{ n: 'سخان 80 لتر', q: 1 }, { n: 'صمام أمان', q: 1 }], hold_eta: iso(midnight(nowMs + 864e5) + 10 * 3600e3) }); live.push(bsh);
+    live.push(at('HO', 'First floor', 'lights', 8));                                                                    // new, operations room
+    const scc = at('SCC', 'Shop 12', 'water_leak', 50); Object.assign(scc, { status: 'onsite', technician_id: 's-t2', accepted_at: m(46), accept_method: 'self', arrived_at: m(35), arrival_method: 'qr' }); live.push(scc);
+    const f13 = at('AZB', 'Flat 13', 'heater', 300); Object.assign(f13, { status: 'finished', technician_id: 's-h1', accepted_at: m(290), accept_method: 'self', arrived_at: m(270), arrival_method: 'qr', finished_at: m(150), photo_after: PH_AFTER, tech_note: 'الثرموستات تالف، تم تغييره وتجربة التسخين', parts: [{ n: 'ثرموستات سخان', q: 1 }] }); live.push(f13);
+    const obts = at('OBTS', 'Floor 5', 'ac', 40); Object.assign(obts, { status: 'onsite', technician_id: 's-t3', accepted_at: m(36), accept_method: 'self', arrived_at: m(25), arrival_method: 'qr' }); live.push(obts);
+    const hoq = at('HO', 'Common area', 'door_lock', 20); Object.assign(hoq, { status: 'accepted', technician_id: 's-t3', accepted_at: m(16), accept_method: 'self', origin: 'OBTS', hold_kind: 'busy', hold_at: m(16), hold_ref: obts.id }); live.push(hoq);
+    const azc = at('AZB', 'Common area', 'drain_overflow', 95); Object.assign(azc, { stage: 'ops', offered_at: m(92), status: 'accepted', technician_id: 's-t4', accepted_at: m(82), accept_method: 'assigned', target_arrive: ops('AZB') }); live.push(azc);
     live.forEach(x => {
       const c = D(x.created_at).getTime(); pushEv(x.id, c, null, 'submitted');
-      if (x.accepted_at) pushEv(x.id, D(x.accepted_at), x.accept_method === 'assigned' ? 's-sup' : x.technician_id, x.accept_method === 'assigned' ? 'assigned' : 'accepted', x.accept_method === 'assigned' ? name2(x.technician_id) : null);
+      (x.legs || []).forEach(l => { pushEv(x.id, D(l.accepted_at), l.staff_id, 'accepted'); pushEv(x.id, D(l.arrived_at), l.staff_id, l.arrival_method === 'manual' ? 'arrived_manual' : 'arrived_qr', l.arrival_method === 'manual' ? 'ملصق الرمز تالف' : null); pushEv(x.id, D(l.ended_at), l.staff_id, 'to_ops', l.note); });
+      if (x === azc) pushEv(x.id, D(x.offered_at), 's-sup', 'sent_ops');
+      if (x.accepted_at) pushEv(x.id, D(x.accepted_at), x.accept_method === 'assigned' ? 's-sup' : x.technician_id, x.accept_method === 'assigned' ? 'assigned' : 'accepted', x.accept_method === 'assigned' ? sname(x.technician_id) : null);
+      if (x.hold_kind === 'busy') pushEv(x.id, D(x.hold_at) + 1000, x.technician_id, 'hold_busy', '#?');
       if (x.arrived_at) pushEv(x.id, D(x.arrived_at), x.technician_id, 'arrived_qr');
+      if (x.hold_kind === 'parts') pushEv(x.id, D(x.hold_at), x.technician_id, 'hold_parts', x.hold_note + ' · ' + partsTxt(x.hold_parts));
       if (x.finished_at) pushEv(x.id, D(x.finished_at), x.technician_id, 'finished', x.tech_note);
     });
     db0.requests = hist.concat(live).sort((a, b) => D(a.created_at) - D(b.created_at));
     db0.requests.forEach((x, i) => { x.no = 1001 + i; });
+    db0.events.forEach(e => { if (e.ev === 'hold_busy' && e.note === '#?') { const r = db0.requests.find(x => x.id === e.request_id), b = r && db0.requests.find(x => x.id === r.hold_ref); e.note = b ? '#' + b.no : null; } });
     db0.seq.no = 1000 + db0.requests.length;
-    const waiting = live[4], wu = units.find(x => x.id === waiting.unit_id);
-    store.set(P + 'mine', [{ id: waiting.id, code: waiting.tracking_code, no: waiting.no, token: wu.token, at: waiting.created_at }]);
+    const wu = units.find(x => x.id === f13.unit_id);
+    store.set(P + 'mine', [{ id: f13.id, code: f13.tracking_code, no: f13.no, token: wu.token, at: f13.created_at }]);
     return db0;
   }
   return {
@@ -2523,7 +3570,8 @@ const Demo = (function () {
     },
     reset() { db = seed(); save(); },
     peek() { return load(); },
-    loginAs(id) { load(); const s = db.staff.find(x => x.id === id) || db.staff[0]; const res = session(s); save(); return res; }
+    loginAs(id) { load(); const s = db.staff.find(x => x.id === id) || db.staff[0]; const res = session(s); save(); return res; },
+    firstFor(code, stage) { load(); const s = db.staff.find(x => x.active && x.role === 'technician' && (stage === 'hm' ? x.team === 'hm' && (x.sites || []).includes(code) : x.team !== 'hm')); return s ? s.id : 's-t1'; }
   };
 })();
 const svgUri = s => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(s);
