@@ -179,6 +179,8 @@ alter table public.requests drop constraint if exists requests_status_check;
 alter table public.requests add constraint requests_status_check
   check (status in ('new','assigned','accepted','onsite','finished','closed','cancelled'));
 create index if not exists requests_tech_idx on public.requests (technician_id) where technician_id is not null;
+-- a member removed from the team keeps his row (and his work in the reports) when he has any history
+alter table public.staff add column if not exists removed_at timestamptz;
 
 -- No one reads or writes the tables directly: every change goes through the
 -- functions below, which check the sign-in and stamp the server's own clock.
@@ -710,6 +712,49 @@ begin
     ) z), '[]'::json);
 end $$;
 
+-- Requests at every location (flat or common area), per month in Muscat time and per problem type:
+-- [{unit, cells: [{m: 'YYYY-MM', k: issue type, n}]}]. Cancelled requests are not counted.
+create or replace function public.report_units(p_token text, p_from timestamptz, p_to timestamptz,
+  p_building text default null) returns json
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare me public.staff := public._auth(p_token, array['supervisor','admin']);
+begin
+  return coalesce((
+    select json_agg(json_build_object(
+             'unit_id', u.id, 'building_code', u.building_code, 'building_ar', u.building_ar, 'building_en', u.building_en,
+             'label_ar', u.label_ar, 'label_en', u.label_en, 'kind', u.kind, 'active', u.active, 'sort', u.sort,
+             'cells', coalesce(c.cells, '[]'::json)) order by u.building_code, u.sort, u.label_en)
+      from public.units u
+      left join lateral (
+        select json_agg(json_build_object('m', z.m, 'k', z.issue_type, 'n', z.n) order by z.m, z.issue_type) as cells
+          from (select to_char(r.created_at at time zone 'Asia/Muscat', 'YYYY-MM') as m, r.issue_type, count(*) as n
+                  from public.requests r
+                 where r.unit_id = u.id and r.status <> 'cancelled' and r.created_at >= p_from and r.created_at < p_to
+                 group by 1, 2) z) c on true
+     where p_building is null or p_building = '' or u.building_code = p_building
+  ), '[]'::json);
+end $$;
+
+-- every request ever made at one location, newest first (no photos)
+create or replace function public.unit_history(p_token text, p_unit uuid) returns json
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare me public.staff := public._auth(p_token, array['supervisor','admin']);
+begin
+  if not exists (select 1 from public.units where id = p_unit) then raise exception 'not_found'; end if;
+  return json_build_object(
+    'unit', (select json_build_object('id', u.id, 'building_code', u.building_code, 'building_ar', u.building_ar,
+                                      'building_en', u.building_en, 'label_ar', u.label_ar, 'label_en', u.label_en,
+                                      'kind', u.kind, 'active', u.active)
+               from public.units u where u.id = p_unit),
+    'requests', coalesce((
+      select json_agg(to_jsonb(r) - array['tracking_code', 'photo_before', 'photo_after', 'signature']::text[]
+                      || jsonb_build_object('technician', t.full_name,
+                                            'assigned_by_name', (select a.full_name from public.staff a where a.id = r.assigned_by))
+                      order by r.created_at desc)
+        from public.requests r left join public.staff t on t.id = r.technician_id
+       where r.unit_id = p_unit), '[]'::json));
+end $$;
+
 -- ------------------------------------------------------ staff: actions
 -- Accept a job the supervisor gave you. In the middle of another job, accept with p_busy (that job)
 -- or p_note (work outside Rasd): the arrival timer waits until that job is done.
@@ -1036,7 +1081,7 @@ begin
                      'active', s.active, 'locked', coalesce(s.locked_until > now(), false), 'created_at', s.created_at,
                      'push', exists (select 1 from public.push_subs ps where ps.staff_id = s.id))
                      order by s.active desc, s.role, s.team, s.full_name)
-                   from public.staff s), '[]'::json);
+                   from public.staff s where s.removed_at is null), '[]'::json);
 end $$;
 
 create or replace function public.admin_save_staff(p_token text, p_id uuid, p_name text, p_phone text, p_role text,
@@ -1048,6 +1093,8 @@ begin
   if coalesce(length(trim(p_name)), 0) < 2 then raise exception 'name_required'; end if;
   if length(v_phone) < 8 then raise exception 'phone_required'; end if;
   if p_role not in ('technician','supervisor','admin') then raise exception 'bad_role'; end if;
+  -- the manager role belongs to one account only: the one that set the system up
+  if p_role = 'admin' and p_id is distinct from me.id then raise exception 'one_admin'; end if;
   if nullif(p_pin, '') is not null and p_pin !~ '^[0-9]{6}$' then raise exception 'pin_format'; end if;
   if exists (select 1 from public.staff where phone = v_phone and id is distinct from p_id) then raise exception 'phone_taken'; end if;
   v_sites := case when v_team = 'hm' then coalesce((select array_agg(distinct upper(trim(x)))
@@ -1067,7 +1114,7 @@ begin
            pin_hash = case when nullif(p_pin, '') is not null then crypt(p_pin, gen_salt('bf', 8)) else pin_hash end,
            failed_logins = case when nullif(p_pin, '') is not null then 0 else failed_logins end,
            locked_until = case when nullif(p_pin, '') is not null then null else locked_until end
-     where id = p_id
+     where id = p_id and removed_at is null
     returning id into v_id;
     if v_id is null then raise exception 'not_found'; end if;
     if nullif(p_pin, '') is not null or not coalesce(p_active, true) then
@@ -1075,6 +1122,34 @@ begin
     end if;
   end if;
   return json_build_object('id', v_id);
+end $$;
+
+-- Remove a member from the team (the manager only). Someone with no work recorded is deleted;
+-- anyone else is archived: he can no longer sign in, leaves the team list, and his past work stays
+-- in the reports and the evaluation. His phone number is freed for a new member.
+create or replace function public.admin_remove_staff(p_token text, p_id uuid) returns json
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare me public.staff := public._auth(p_token, array['admin']); s public.staff;
+begin
+  select * into s from public.staff where id = p_id and removed_at is null for update;
+  if not found then raise exception 'not_found'; end if;
+  if s.id = me.id then raise exception 'not_self'; end if;
+  if exists (select 1 from public.requests where technician_id = s.id and status in ('assigned','accepted','onsite')) then
+    raise exception 'has_open_jobs';
+  end if;
+  delete from public.sessions where staff_id = s.id;
+  delete from public.push_subs where staff_id = s.id;
+  if not exists (select 1 from public.requests r
+                  where r.technician_id = s.id or r.created_by = s.id or r.assigned_by = s.id
+                     or r.legs @> jsonb_build_array(jsonb_build_object('staff_id', s.id)))
+     and not exists (select 1 from public.events e where e.actor = s.id) then
+    delete from public.staff where id = s.id;
+    return json_build_object('removed', 'deleted');
+  end if;
+  update public.staff
+     set removed_at = now(), active = false, phone = phone || '-' || left(replace(id::text, '-', ''), 6)
+   where id = s.id;
+  return json_build_object('removed', 'archived');
 end $$;
 
 create or replace function public.admin_units(p_token text) returns json
@@ -1268,6 +1343,7 @@ revoke all on function
   public.staff_logout(text), public.staff_me(text), public.staff_requests(text,timestamptz,timestamptz),
   public.staff_request(text,uuid), public.report_requests(text,timestamptz,timestamptz),
   public.report_counts(text,timestamptz,timestamptz,text,text),
+  public.report_units(text,timestamptz,timestamptz,text), public.unit_history(text,uuid), public.admin_remove_staff(text,uuid),
   public.tech_accept(text,uuid,uuid,text), public.tech_hold(text,uuid,text,text,uuid,timestamptz,jsonb),
   public.tech_resume(text,uuid,text,text),
   public.tech_arrive(text,uuid,text,text,double precision,double precision,double precision),
@@ -1290,6 +1366,7 @@ grant execute on function
   public.staff_logout(text), public.staff_me(text), public.staff_requests(text,timestamptz,timestamptz),
   public.staff_request(text,uuid), public.report_requests(text,timestamptz,timestamptz),
   public.report_counts(text,timestamptz,timestamptz,text,text),
+  public.report_units(text,timestamptz,timestamptz,text), public.unit_history(text,uuid), public.admin_remove_staff(text,uuid),
   public.tech_accept(text,uuid,uuid,text), public.tech_hold(text,uuid,text,text,uuid,timestamptz,jsonb),
   public.tech_resume(text,uuid,text,text),
   public.tech_arrive(text,uuid,text,text,double precision,double precision,double precision),

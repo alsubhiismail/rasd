@@ -111,7 +111,7 @@ ar: {
   tm_title: 'فريق العمل', tm_add: 'إضافة عضو', tm_edit: 'تعديل', tm_name: 'الاسم', tm_phone: 'رقم الهاتف', tm_role: 'الدور',
   tm_active: 'الحساب نشط', tm_inactive: 'موقوف', tm_locked: 'مقفل مؤقتاً', tm_pin: 'الرمز السري (6 أرقام)',
   tm_pin_new: 'رمز جديد (اتركه فارغاً للإبقاء على الحالي)', tm_gen: 'توليد', tm_saved: 'تم الحفظ. أعطِ {n} الرمز السري {p} ورابط الدخول.',
-  tm_saved_plain: 'تم الحفظ.', tm_readonly: 'إضافة الأعضاء وتعديلهم من صلاحية المدير.', tm_share: 'رابط دخول الفريق',
+  tm_saved_plain: 'تم الحفظ.', tm_readonly: 'إضافة الأعضاء وتعديلهم وحذفهم من صلاحية المدير فقط.', tm_share: 'رابط دخول الفريق',
   se_title: 'الإعدادات', se_contractor: 'اسم المقاول', se_targets: 'الأوقات المستهدفة بالدقائق', se_pickup: 'قبول الفني',
   se_arrive: 'وصول الهاندي مان', se_work: 'الإصلاح', se_buildings: 'المباني ووقت وصول غرفة العمليات', se_b_arrive: 'وقت الوصول لهذا المبنى حسب بعده عن المقر (اتركه فارغاً لاستخدام الوقت العام)',
   se_b_loc: 'موقع المبنى (لحساب بُعد الفني عند الوصول)', se_b_here: 'استخدم موقعي الحالي', se_issues: 'أنواع المشاكل وتصنيفها',
@@ -301,7 +301,57 @@ ar: {
   n_assign: 'توزيع المهمة الآن',
   n_assign_later: 'لاحقاً من اللوحة',
   tm_wait_s: 'الانتظار',
-  st_assigned_me: 'بانتظار قبولك'
+  st_assigned_me: 'بانتظار قبولك',
+  tm_only_you: 'أنت وحدك تضيف الأعضاء وتعدّلهم وتحذفهم، وتغيّر الإعدادات ورموز QR. هذه الصلاحية محمية في قاعدة البيانات نفسها، ولا تُعطى لأحد غيرك.',
+  tm_self_role: 'المدير · حسابك',
+  tm_delete: 'حذف من الفريق',
+  tm_delete_q: 'حذف {n} من الفريق؟',
+  tm_delete_body: 'لن يستطيع الدخول بعد الآن، ويبقى ما سجّله من أعمال في التقارير والتقييم.',
+  tm_delete_btn: 'حذف',
+  tm_deleted: 'حُذف {n} من الفريق.',
+  se_only_you: 'الإعدادات تُعدّل من حسابك فقط.',
+  err_has_open_jobs: 'لديه مهام مفتوحة. انقلها لغيره من اللوحة أولاً، ثم احذفه.',
+  err_one_admin: 'صلاحية المدير لحسابك وحدك ولا تُعطى لغيرك.',
+  r_units: 'الشقق',
+  r_this_year: 'هذا العام',
+  u_title: 'تقرير الشقق والمواقع',
+  u_sub: 'عدد البلاغات في كل شقة أو منطقة عامة شهراً بشهر، ومقارنتها بالعام السابق، ونوع كل بلاغ.',
+  u_year_total: 'بلاغات {y}',
+  u_vs: 'عن {y}',
+  u_places: 'مواقع لها بلاغات',
+  u_of: 'من {n} موقعاً',
+  u_top_place: 'الأكثر بلاغات',
+  u_top_type: 'النوع الأكثر',
+  u_matrix: 'عدد البلاغات في كل موقع شهرياً',
+  u_place: 'الموقع',
+  u_total: 'المجموع',
+  u_types_col: 'الأكثر تكراراً',
+  u_quiet: '{n} مواقع بلا أي بلاغ في {y}.',
+  u_open_hint: 'اضغط على أي موقع لعرض سجله الكامل.',
+  u_less: 'أقل',
+  u_more: 'أكثر',
+  u_by_type: 'حسب نوع البلاغ',
+  u_type_hint: 'اضغط على نوع لعرض المواقع التي تكرر فيها.',
+  u_all_types: 'كل أنواع البلاغات',
+  u_none: 'لا توجد بلاغات في {y}.',
+  u_history: 'سجل الموقع',
+  u_history_link: 'سجل هذا الموقع',
+  u_all_time: 'كل البلاغات',
+  u_since: 'منذ {d}',
+  u_by_year: 'حسب السنة والشهر',
+  u_back: 'تقرير الشقق',
+  u_repeat: 'أعطال تكررت بعد الإصلاح',
+  u_repeat_s: 'خلال {d} يوماً',
+  u_list: 'كل البلاغات في هذا الموقع',
+  u_export: 'تصدير تقرير الشقق {y}',
+  u_export_one: 'تصدير سجل الموقع',
+  x_units_d: 'كل المواقع شهرياً مع المقارنة السنوية وأنواع البلاغات',
+  x_unit_d: 'السجل حسب السنة والشهر والنوع، وكل البلاغات بتفاصيلها',
+  x_units_sheet: 'المواقع شهرياً',
+  x_unit_types_sheet: 'المواقع حسب النوع',
+  x_types_sheet: 'الأنواع شهرياً',
+  u_change: 'الفرق',
+  u_kind: 'النوع'
 },
 en: {
   app: 'Rasd', tagline: 'Maintenance tracking', demo_banner: 'Demo with sample data', demo_switch: 'Switch role',
@@ -379,7 +429,7 @@ en: {
   tm_title: 'Team', tm_add: 'Add member', tm_edit: 'Edit', tm_name: 'Name', tm_phone: 'Phone number', tm_role: 'Role',
   tm_active: 'Account active', tm_inactive: 'Disabled', tm_locked: 'Temporarily locked', tm_pin: 'PIN (6 digits)',
   tm_pin_new: 'New PIN (leave empty to keep the current one)', tm_gen: 'Generate', tm_saved: 'Saved. Give {n} the PIN {p} and the sign-in link.',
-  tm_saved_plain: 'Saved.', tm_readonly: 'Only the admin can add or change members.', tm_share: 'Team sign-in link',
+  tm_saved_plain: 'Saved.', tm_readonly: 'Only the manager can add, change or remove members.', tm_share: 'Team sign-in link',
   se_title: 'Settings', se_contractor: 'Contractor name', se_targets: 'Target times in minutes', se_pickup: 'Technician accepts',
   se_arrive: 'Handyman arrival', se_work: 'Repair', se_buildings: 'Buildings and operations-room travel time', se_b_arrive: 'Arrival target for this building, by its distance from base (leave empty to use the general target)',
   se_b_loc: "Building location (to measure the technician's distance on arrival)", se_b_here: 'Use my current location', se_issues: 'Problem types and priority',
@@ -569,7 +619,57 @@ en: {
   n_assign: 'Assign the job now',
   n_assign_later: 'Later, from the board',
   tm_wait_s: 'Waiting',
-  st_assigned_me: 'Waiting for you to accept'
+  st_assigned_me: 'Waiting for you to accept',
+  tm_only_you: 'Only you add, change and remove members, and change the settings and QR codes. This is enforced by the database itself and cannot be given to anyone else.',
+  tm_self_role: 'Manager · your account',
+  tm_delete: 'Remove from the team',
+  tm_delete_q: 'Remove {n} from the team?',
+  tm_delete_body: 'They will no longer be able to sign in. Their recorded work stays in the reports and the evaluation.',
+  tm_delete_btn: 'Remove',
+  tm_deleted: '{n} was removed from the team.',
+  se_only_you: 'Only your account can change the settings.',
+  err_has_open_jobs: 'They still have open jobs. Give them to someone else from the board first.',
+  err_one_admin: 'The manager role belongs to your account only.',
+  r_units: 'Flats',
+  r_this_year: 'This year',
+  u_title: 'Flats and locations',
+  u_sub: 'Requests at each flat or common area month by month, compared with the year before, by problem type.',
+  u_year_total: 'Requests in {y}',
+  u_vs: 'vs {y}',
+  u_places: 'Locations with requests',
+  u_of: 'of {n} locations',
+  u_top_place: 'Most requests',
+  u_top_type: 'Most common problem',
+  u_matrix: 'Requests at each location, by month',
+  u_place: 'Location',
+  u_total: 'Total',
+  u_types_col: 'Most frequent',
+  u_quiet: '{n} locations had no requests in {y}.',
+  u_open_hint: 'Tap a location to see its full history.',
+  u_less: 'Fewer',
+  u_more: 'More',
+  u_by_type: 'By problem type',
+  u_type_hint: 'Tap a problem type to see where it keeps happening.',
+  u_all_types: 'All problem types',
+  u_none: 'No requests in {y}.',
+  u_history: 'Location history',
+  u_history_link: 'History of this location',
+  u_all_time: 'All requests',
+  u_since: 'since {d}',
+  u_by_year: 'By year and month',
+  u_back: 'Flats report',
+  u_repeat: 'Faults that came back',
+  u_repeat_s: 'within {d} days',
+  u_list: 'Every request at this location',
+  u_export: 'Export the flats report {y}',
+  u_export_one: 'Export this location’s history',
+  x_units_d: 'Every location by month, with the yearly comparison and problem types',
+  x_unit_d: 'History by year, month and type, with every request in detail',
+  x_units_sheet: 'Locations by month',
+  x_unit_types_sheet: 'Locations by type',
+  x_types_sheet: 'Types by month',
+  u_change: 'Change',
+  u_kind: 'Kind'
 }
 };
 function t(k, p) {
@@ -690,7 +790,7 @@ const ICON = {
 const S = {
   session: store.get(P + 'session', null),
   settings: null, list: null, listAt: 0, req: null, draft: {}, photos: {}, unit: null, track: null,
-  seenNew: null, boardTab: 'open', q: '', bf: '', route: '#/demo', justSent: null, rf: { b: '', st: '', p: '' }
+  seenNew: null, boardTab: 'open', q: '', bf: '', route: '#/demo', justSent: null, rf: { b: '', st: '', p: '' }, uf: { b: '', k: '' }
 };
 const isMgr = () => !!(S.session && S.session.me.role !== 'technician');
 const isAdmin = () => !!(S.session && S.session.me.role === 'admin');
@@ -793,7 +893,7 @@ async function dispatch(p, alive) {
     case 'board': return mgr ? vBoard(alive) : go('/jobs');
     case 'r': return vReq(p[1], alive);
     case 'eval': return mgr ? vEval(p[1], alive) : go('/history');
-    case 'reports': return mgr ? vReports(p[1], p[2], alive) : go('/jobs');
+    case 'reports': return mgr ? (p[1] === 'units' ? vUnitsReport(p[2], alive) : p[1] === 'unit' ? vUnitHistory(p[2], alive) : vReports(p[1], p[2], alive)) : go('/jobs');
     case 'new': return mgr ? vNewReq(alive) : go('/jobs');
     case 'team': return mgr ? vTeam(alive) : go('/jobs');
     case 'settings': return role === 'admin' ? vSettings(alive) : go('/');
@@ -1513,7 +1613,7 @@ function reqView(r, team) {
     <div class="det-h">
       <div><div class="det-tags">${prBadge(r.priority)}${statusChip(r)}${stageChip(r)}${src}${r.arrival_method === 'manual' ? `<span class="flag">${ICON.alert}${t('ev_arrived_manual')}</span>` : ''}</div>
         <h1><span class="num">#${r.no}</span> · ${esc(uName(r))}</h1>
-        <p class="muted">${esc(bName(r))} · ${t('d_reported')} <span class="num">${fDT(r.created_at)}</span></p></div>
+        <p class="muted">${esc(bName(r))} · ${t('d_reported')} <span class="num">${fDT(r.created_at)}</span>${isMgr() && r.unit_id ? ` · <a class="no-print" href="#/reports/unit/${esc(r.unit_id)}">${t('u_history_link')}</a>` : ''}</p></div>
       ${r.status === 'closed' && !EMB ? `<button class="btn sm no-print" type="button" data-act="print">${ICON.print}${t('d_print')}</button>` : ''}
     </div>
     <div class="det-grid">
@@ -2199,7 +2299,7 @@ function reportBody() {
   const sumP = p => M.inP.filter(r => r.priority === p).length;
   return `
     <div class="eval-h"><div><h1>${t('r_title')}</h1><p class="muted">${esc(org())}</p></div>
-      <div class="seg" role="tablist">${['day', 'week', 'month'].map(x => `<a role="tab" class="${P.mode === x ? 'on' : ''}" href="#/reports/${x}">${t('r_' + x)}</a>`).join('')}</div></div>
+      ${repTabs(P.mode)}</div>
     <div class="rep-bar no-print">
       <div class="month-pick"><a class="icon-btn" href="${nav(P.prev)}" aria-label="-1">${ICON.prev}</a><b>${esc(P.label)}</b><a class="icon-btn" href="${nav(P.next)}" aria-label="+1">${ICON.next}</a>${P.isNow ? '' : `<a class="btn sm ghost" href="#/reports/${P.mode}">${t(P.mode === 'day' ? 'r_today' : P.mode === 'week' ? 'r_this_week' : 'r_this_month')}</a>`}</div>
       <div class="filters">${tsel('b', [['', t('b_all_buildings')]].concat(bCodes().map(c => [c, bLabel(c)])), f.b)}${tsel('p', [['', t('r_f_priority') + ': ' + t('r_all')], ['urgent', t('pr_urgent')], ['normal', t('pr_normal')]], f.p)}${tsel('st', [['', t('r_f_status') + ': ' + t('r_all')], ['done', t('r_s_done')], ['progress', t('r_s_open')], ['hold', t('r_s_hold')], ['cancel', t('r_s_cancel')]], f.st)}</div>
@@ -2234,6 +2334,265 @@ function repRow(r, mode) {
     <span class="rr-s">${statusChip(r)}${times ? `<small>${times}</small>` : ''}</span></a>`;
 }
 
+/* ============================================================ views: flats and locations, month by month and year on year */
+const monthName = (y, i, short) => fmt(new Date(Date.UTC(y, i, 15)), { month: short ? 'short' : 'long' });
+const heatLv = (n, max) => (n ? Math.min(4, Math.ceil((n / Math.max(1, max)) * 4)) : 0);
+function repTabs(mode) {
+  return `<div class="seg" role="tablist">${['day', 'week', 'month', 'units'].map(x => `<a role="tab" class="${mode === x ? 'on' : ''}" href="#/reports/${x}">${t('r_' + x)}</a>`).join('')}</div>`;
+}
+async function vUnitsReport(key, alive) {
+  const thisYear = +dayKey(Date.now()).slice(0, 4), y = /^\d{4}$/.test(key || '') ? +key : thisYear;
+  page(loadingBox(), { staff: true, nav: 'reports' });
+  await settings();
+  const units = await srpc('report_units', { p_from: new Date(Date.UTC(y - 1, 0, 1) - OFFSET).toISOString(), p_to: new Date(Date.UTC(y + 1, 0, 1) - OFFSET).toISOString() });
+  if (!alive()) return;
+  S.unitData = { y, units, thisYear };
+  page(`<div class="wrap wide" id="rep">${unitsBody()}</div>`, { staff: true, nav: 'reports' });
+  heatToNow();
+}
+// bring the current month into view in tables wider than the screen
+function heatToNow() {
+  const m = +dayKey(Date.now()).slice(5, 7);
+  $$('.heat-wrap').forEach(w => {
+    const th = $$('thead th.mo', w)[m - 1];
+    if (!th || w.scrollWidth <= w.clientWidth + 2) return;
+    const wr = w.getBoundingClientRect(), cr = th.getBoundingClientRect();
+    w.scrollLeft += (cr.left + cr.width / 2) - (wr.left + wr.width / 2);
+  });
+}
+// one row per location: requests per month of the year, last year's total, and the problem types
+function unitsModel() {
+  const { y, units, thisYear } = S.unitData, f = S.uf, ys = String(y), ps = String(y - 1);
+  const upto = y < thisYear ? 12 : y === thisYear ? +dayKey(Date.now()).slice(5, 7) : 0;
+  const scope = units.filter(u => !f.b || u.building_code === f.b);
+  const tYear = {}, tPrev = {}, tMonths = {};
+  const rows = scope.map(u => {
+    const months = Array(12).fill(0), types = {}, mt = {};
+    let n = 0, prev = 0;
+    u.cells.forEach(c => {
+      const yy = c.m.slice(0, 4), mi = +c.m.slice(5, 7) - 1;
+      if (yy === ys) { tYear[c.k] = (tYear[c.k] || 0) + c.n; (tMonths[c.k] || (tMonths[c.k] = Array(12).fill(0)))[mi] += c.n; }
+      else if (yy === ps) tPrev[c.k] = (tPrev[c.k] || 0) + c.n;
+      if (f.k && c.k !== f.k) return;
+      if (yy === ys) { months[mi] += c.n; n += c.n; types[c.k] = (types[c.k] || 0) + c.n; (mt[mi] || (mt[mi] = {}))[c.k] = (mt[mi][c.k] || 0) + c.n; }
+      else if (yy === ps) prev += c.n;
+    });
+    return { u, months, n, prev, mt, types: Object.entries(types).sort((a, b) => b[1] - a[1]) };
+  });
+  const order = (a, b) => b.n - a.n || b.prev - a.prev || a.u.building_code.localeCompare(b.u.building_code) || a.u.sort - b.u.sort;
+  const shown = rows.filter(x => x.n > 0).sort(order), all = rows.slice().sort(order);
+  const types = Object.keys(Object.assign({}, tPrev, tYear)).map(k => ({ k, n: tYear[k] || 0, prev: tPrev[k] || 0, months: tMonths[k] || Array(12).fill(0) })).sort((a, b) => b.n - a.n || b.prev - a.prev);
+  return {
+    y, upto, thisYear, rows: shown, all, quiet: rows.length - shown.length, places: scope.length, types,
+    max: Math.max(1, ...shown.map(x => Math.max(...x.months))), tmax: Math.max(1, ...types.map(x => Math.max(...x.months))),
+    col: Array.from({ length: 12 }, (_, i) => shown.reduce((s2, x) => s2 + x.months[i], 0)),
+    total: shown.reduce((s2, x) => s2 + x.n, 0), prevTotal: rows.reduce((s2, x) => s2 + x.prev, 0),
+    top: shown[0] || null, topType: types[0] && types[0].n ? types[0] : null
+  };
+}
+function unitsBody() {
+  const M = unitsModel(), y = M.y, f = S.uf;
+  const k = (v, l, s2, cls) => `<div class="kpi ${cls || ''}"><span class="v">${v}</span><span class="l">${l}</span>${s2 ? `<span class="s">${s2}</span>` : ''}</div>`;
+  const d = M.total - M.prevTotal;
+  const delta = d ? `<span class="delta ${d > 0 ? 'up' : 'down'}">${d > 0 ? '▲' : '▼'} ${Math.abs(d)}</span> ${esc(t('u_vs', { y: y - 1 }))}` : esc(t('r_same', { p: String(y - 1) }));
+  const sel = (name, opts, cur, label) => `<select data-uf="${name}" aria-label="${esc(label)}">${opts.map(o => `<option value="${esc(o[0])}" ${o[0] === cur ? 'selected' : ''}>${esc(o[1])}</option>`).join('')}</select>`;
+  const mh = i => `<th scope="col" class="mo"><span class="m-l">${esc(monthName(y, i, true))}</span><span class="m-s num">${i + 1}</span></th>`;
+  const cell = (n, i, tip, max) => (i >= M.upto ? `<td aria-hidden="true"><span class="hc fut"></span></td>` : `<td title="${esc(tip)}"><span class="hc h${heatLv(n, max)}">${n || ''}</span></td>`);
+  const tipOf = (x, i, n) => `${uName(x.u)} · ${monthName(y, i)} ${y}: ${n}` + (n && x.mt[i] ? ' (' + Object.entries(x.mt[i]).sort((a, b) => b[1] - a[1]).map(([kk, v]) => issueLabel(kk) + ' ' + v).join('، ') + ')' : '');
+  const chg = (n, p) => (n === p ? '' : ` <i class="dl ${n > p ? 'up' : 'down'}" aria-label="${n > p ? '+' : '-'}${Math.abs(n - p)}">${n > p ? '▲' : '▼'}</i>`);
+  const row = x => `<tr data-act="go" data-to="/reports/unit/${esc(x.u.unit_id)}"><th scope="row"><a href="#/reports/unit/${esc(x.u.unit_id)}"><b>${esc(uName(x.u))}</b><small>${esc(bName(x.u))}</small></a></th>
+    ${x.months.map((n, i) => cell(n, i, tipOf(x, i, n), M.max)).join('')}<td class="tot num">${x.n}</td><td class="prev num">${x.prev}${chg(x.n, x.prev)}</td>
+    <td class="tt">${x.types.slice(0, 3).map(([kk, v]) => `<span class="tchip">${esc(issueLabel(kk))} <b class="num">${v}</b></span>`).join('')}</td></tr>`;
+  const trow = x => `<tr class="${f.k === x.k ? 'on' : ''}" data-act="uf-type" data-v="${esc(x.k)}"><th scope="row"><b>${esc(issueLabel(x.k))}</b></th>
+    ${x.months.map((n, i) => cell(n, i, `${issueLabel(x.k)} · ${monthName(y, i)} ${y}: ${n}`, M.tmax)).join('')}<td class="tot num">${x.n}</td><td class="prev num">${x.prev}${chg(x.n, x.prev)}</td></tr>`;
+  const thead = (first, extra) => `<thead><tr><th scope="col" class="pl">${first}</th>${Array.from({ length: 12 }, (_, i) => mh(i)).join('')}<th scope="col">${t('u_total')} <span class="num">${y}</span></th><th scope="col" class="num">${y - 1}</th>${extra || ''}</tr></thead>`;
+  const next = y < M.thisYear ? `<a class="icon-btn" href="#/reports/units/${y + 1}" aria-label="+1">${ICON.next}</a>` : `<span class="icon-btn off" aria-hidden="true">${ICON.next}</span>`;
+  return `
+    <div class="eval-h"><div><h1>${t('u_title')}</h1><p class="muted">${t('u_sub')}</p></div>${repTabs('units')}</div>
+    <div class="rep-bar no-print">
+      <div class="month-pick"><a class="icon-btn" href="#/reports/units/${y - 1}" aria-label="-1">${ICON.prev}</a><b class="num">${y}</b>${next}${y !== M.thisYear ? `<a class="btn sm ghost" href="#/reports/units">${t('r_this_year')}</a>` : ''}</div>
+      <div class="filters">${sel('b', [['', t('b_all_buildings')]].concat(bCodes().map(c => [c, bLabel(c)])), f.b, t('r_f_building'))}${sel('k', [['', t('u_all_types')]].concat(issueList().map(i => [i.k, i[LANG] || i.ar])), f.k, t('r_col_type'))}</div>
+    </div>
+    <div class="kpis rep-kpis">
+      ${k(M.total, esc(t('u_year_total', { y })), delta, 'lead')}${k(M.rows.length, t('u_places'), esc(t('u_of', { n: M.places })))}
+      ${k(M.top ? M.top.n : '—', t('u_top_place'), M.top ? esc(uName(M.top.u) + ' · ' + bName(M.top.u)) : '')}${k(M.topType ? M.topType.n : '—', t('u_top_type'), M.topType ? esc(issueLabel(M.topType.k)) : '')}
+    </div>
+    ${EMB ? '' : `<section class="card export no-print"><h3>${ICON.download}${esc(t('u_export', { y }))}</h3><div class="x-grid">
+      <button class="x-btn" type="button" data-act="u-excel"><b>Excel</b><span>${t('x_units_d')}</span></button>
+      <button class="x-btn" type="button" data-act="u-pdf"><b>PDF</b><span>${t('x_period_pdf_d')}</span></button></div></section>`}
+    <section class="card"><h3>${ICON.building}${t('u_matrix')}${f.k ? ` · <span class="tchip on">${esc(issueLabel(f.k))}</span>` : ''}</h3>
+      ${M.rows.length ? `<div class="heat-wrap"><table class="heat">${thead(t('u_place'), `<th scope="col" class="tt">${t('u_types_col')}</th>`)}<tbody>${M.rows.map(row).join('')}</tbody>
+        <tfoot><tr><th scope="row">${t('u_total')}</th>${M.col.map((n, i) => (i >= M.upto ? '<td class="fut"></td>' : `<td class="num">${n}</td>`)).join('')}<td class="tot num">${M.total}</td><td class="prev num">${M.prevTotal}</td><td></td></tr></tfoot></table></div>
+        <div class="heat-legend"><span>${t('u_less')}</span>${[1, 2, 3, 4].map(i => `<i class="hc h${i}"></i>`).join('')}<span>${t('u_more')}</span><span class="muted">· ${t('u_open_hint')}</span></div>` : `<p class="empty-line">${esc(t('u_none', { y }))}</p>`}
+      ${M.quiet && M.rows.length ? `<p class="muted small">${esc(t('u_quiet', { n: M.quiet, y }))}</p>` : ''}</section>
+    ${M.types.length ? `<section class="card"><h3>${ICON.list}${t('u_by_type')}</h3><div class="heat-wrap"><table class="heat types">${thead(t('r_col_type'))}<tbody>${M.types.map(trow).join('')}</tbody></table></div>
+      <p class="muted small">${t('u_type_hint')}</p></section>` : ''}`;
+}
+async function vUnitHistory(id, alive) {
+  page(loadingBox(), { staff: true, nav: 'reports' });
+  const st = await settings();
+  const h = await srpc('unit_history', { p_unit: id });
+  if (!alive()) return;
+  S.unitHist = { h, st };
+  page(`<div class="wrap wide">${unitHistoryBody()}</div>`, { staff: true, nav: 'reports' });
+  heatToNow();
+}
+function unitHistoryModel() {
+  const { h, st } = S.unitHist, u = h.unit, real = h.requests.filter(r => r.status !== 'cancelled');
+  const thisYear = +dayKey(Date.now()).slice(0, 4), upNow = +dayKey(Date.now()).slice(5, 7);
+  const years = { [thisYear]: Array(12).fill(0) }, types = {};
+  real.forEach(r => {
+    const kd = dayKey(r.created_at), yy = +kd.slice(0, 4), mi = +kd.slice(5, 7) - 1;
+    (years[yy] || (years[yy] = Array(12).fill(0)))[mi]++;
+    const x = types[r.issue_type] || (types[r.issue_type] = { k: r.issue_type, n: 0, by: {} }); x.n++; x.by[yy] = (x.by[yy] || 0) + 1;
+  });
+  const ylist = Object.keys(years).map(Number).sort((a, b) => b - a);
+  const sum = a => (a || []).reduce((s2, v) => s2 + v, 0);
+  const rated = real.filter(r => r.rating);
+  return {
+    u, st, real, all: h.requests, thisYear, upNow, years, ylist, sum,
+    types: Object.values(types).sort((a, b) => b.n - a.n), repeatOf: repeatsIn(real, real, st),
+    rating: rated.length ? rated.reduce((s2, r) => s2 + r.rating, 0) / rated.length : null, ratedN: rated.length,
+    max: Math.max(1, ...ylist.map(yy => Math.max(...years[yy]))), first: real.length ? real[real.length - 1].created_at : null
+  };
+}
+function unitHistoryBody() {
+  const M = unitHistoryModel(), u = M.u, ty = M.thisYear;
+  const k = (v, l, s2, cls) => `<div class="kpi ${cls || ''}"><span class="v">${v}</span><span class="l">${l}</span>${s2 ? `<span class="s">${s2}</span>` : ''}</div>`;
+  const nThis = M.sum(M.years[ty]), nPrev = M.sum(M.years[ty - 1]), d = nThis - nPrev;
+  const mh = i => `<th scope="col" class="mo"><span class="m-l">${esc(monthName(ty, i, true))}</span><span class="m-s num">${i + 1}</span></th>`;
+  const yrow = yy => `<tr><th scope="row" class="num">${yy}</th>${M.years[yy].map((n, i) => (yy === ty && i >= M.upNow ? `<td aria-hidden="true"><span class="hc fut"></span></td>` : `<td title="${esc(monthName(yy, i) + ' ' + yy + ': ' + n)}"><span class="hc h${heatLv(n, M.max)}">${n || ''}</span></td>`)).join('')}<td class="tot num">${M.sum(M.years[yy])}</td></tr>`;
+  const top = M.types[0];
+  return `
+    <a class="back no-print" href="#/reports/units">${ICON.back}${t('u_back')}</a>
+    <div class="eval-h"><div><small class="muted">${t('u_history')}</small><h1>${esc(uName(u))} · ${esc(bName(u))}</h1>${M.first ? `<p class="muted">${esc(t('u_since', { d: fmt(M.first, { month: 'long', year: 'numeric' }) }))}</p>` : ''}</div></div>
+    <div class="kpis rep-kpis">
+      ${k(M.real.length, t('u_all_time'), '', 'lead')}
+      ${k(nThis, esc(t('u_year_total', { y: ty })), d ? `<span class="delta ${d > 0 ? 'up' : 'down'}">${d > 0 ? '▲' : '▼'} ${Math.abs(d)}</span> ${esc(t('u_vs', { y: ty - 1 }))}` : esc(t('r_same', { p: String(ty - 1) })))}
+      ${k(top ? top.n : '—', t('u_top_type'), top ? esc(issueLabel(top.k)) : '')}
+      ${k(M.repeatOf.size, t('u_repeat'), esc(t('u_repeat_s', { d: M.st.repeatDays || 30 })), M.repeatOf.size ? 'attn warn' : '')}
+      ${k(M.rating == null ? '—' : M.rating.toFixed(1), t('e_rating'), M.ratedN ? t('e_rated', { n: M.ratedN }) : '')}
+    </div>
+    ${EMB || !M.real.length ? '' : `<section class="card export no-print"><h3>${ICON.download}${t('u_export_one')}</h3><div class="x-grid"><button class="x-btn" type="button" data-act="uh-excel"><b>Excel</b><span>${t('x_unit_d')}</span></button></div></section>`}
+    <section class="card"><h3>${ICON.chart}${t('u_by_year')}</h3><div class="heat-wrap"><table class="heat years"><thead><tr><th scope="col" class="pl"></th>${Array.from({ length: 12 }, (_, i) => mh(i)).join('')}<th scope="col">${t('u_total')}</th></tr></thead><tbody>${M.ylist.map(yrow).join('')}</tbody></table></div></section>
+    ${M.types.length ? `<section class="card"><h3>${ICON.list}${t('u_by_type')}</h3><div class="ptable-wrap"><table class="ptable dist"><thead><tr><th>${t('r_col_type')}</th>${M.ylist.map(yy => `<th class="num">${yy}</th>`).join('')}<th>${t('u_total')}</th></tr></thead><tbody>
+      ${M.types.map(x => `<tr><th>${esc(issueLabel(x.k))}</th>${M.ylist.map(yy => `<td>${x.by[yy] || '—'}</td>`).join('')}<td><b>${x.n}</b></td></tr>`).join('')}</tbody></table></div></section>` : ''}
+    <section class="card"><h3>${ICON.list}${t('u_list')}<span class="count">${M.all.length}</span></h3>
+      ${M.all.length ? `<div class="rep-list">${M.all.map(r => repRow(r, 'month')).join('')}</div>` : `<p class="empty-line">${t('r_none')}</p>`}</section>`;
+}
+function xlKit() {
+  const rtl = LANG === 'ar';
+  const C = { gold: 'FF8B7E49', ink: 'FF262521', muted: 'FF8A8576', line: 'FFE3DBC9', soft: 'FFF6F3EC', ok: 'FF2E7D4F', warn: 'FF9A6200', bad: 'FFB3261E', white: 'FFFFFFFF', h: [null, 'FFF2EEE2', 'FFE3DAC0', 'FFC9BC93', 'FF6F6436'] };
+  const font = o => Object.assign({ name: 'Arial', size: 11, color: { argb: C.ink } }, o || {});
+  const fill = argb => ({ type: 'pattern', pattern: 'solid', fgColor: { argb } });
+  const edge = { style: 'thin', color: { argb: C.line } }, box = { top: edge, bottom: edge, left: edge, right: edge };
+  const align = o => Object.assign({ vertical: 'middle', horizontal: rtl ? 'right' : 'left', readingOrder: rtl ? 'rtl' : 'ltr', wrapText: true }, o || {});
+  const head = (row, cells) => { cells.forEach((v, i) => { const c = row.getCell(i + 1); c.value = v; c.font = font({ bold: true, color: { argb: C.white } }); c.fill = fill(C.gold); c.alignment = align({ horizontal: 'center' }); c.border = box; }); row.height = 30; };
+  const heatCell = (c, n, max) => { const lv = heatLv(n, max); c.value = n || null; c.border = box; c.alignment = align({ horizontal: 'center' }); if (lv) c.fill = fill(C.h[lv]); c.font = font({ size: 10, bold: lv >= 3, color: { argb: lv === 4 ? C.white : C.ink } }); };
+  const titleRows = (ws, title, sub, span) => {
+    ws.mergeCells(1, 1, 1, span); ws.getCell(1, 1).value = title; ws.getCell(1, 1).font = font({ size: 16, bold: true }); ws.getCell(1, 1).alignment = align(); ws.getRow(1).height = 30;
+    ws.mergeCells(2, 1, 2, span); ws.getCell(2, 1).value = sub; ws.getCell(2, 1).font = font({ color: { argb: C.muted } }); ws.getCell(2, 1).alignment = align();
+  };
+  return { rtl, C, font, fill, box, align, head, heatCell, titleRows, stamp: fmt(new Date(), { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }) };
+}
+async function exportUnitsExcel() {
+  await loadScript(VENDOR.exceljs);
+  const M = unitsModel(), y = M.y, X = xlKit(), { font, fill, box, align, head, heatCell, titleRows, C } = X, f = S.uf;
+  const wb = new window.ExcelJS.Workbook(); wb.creator = t('app'); wb.created = new Date();
+  const sub = [org(), f.b ? bLabel(f.b) : t('b_all_buildings'), f.k ? issueLabel(f.k) : t('u_all_types'), t('x_generated', { d: X.stamp })].filter(Boolean).join(' · ');
+  const months = Array.from({ length: 12 }, (_, i) => monthName(y, i, true));
+  // 1. every location, month by month, with last year and the most frequent problems
+  const s1 = wb.addWorksheet(t('x_units_sheet'), { views: [{ rightToLeft: X.rtl, state: 'frozen', xSplit: 2, ySplit: 3 }] });
+  const h1 = [t('col_building'), t('u_place')].concat(months, [t('u_total') + ' ' + y, String(y - 1), t('u_change'), t('u_types_col')]);
+  s1.columns = h1.map((x, i) => ({ width: i < 2 ? 22 : i < 14 ? 8 : i < 17 ? 11 : 40 }));
+  titleRows(s1, t('u_title') + ' · ' + y, sub, h1.length); head(s1.getRow(3), h1);
+  M.all.forEach((x, i) => {
+    const row = s1.getRow(i + 4);
+    row.getCell(1).value = bName(x.u); row.getCell(2).value = uName(x.u);
+    [1, 2].forEach(j => { const c = row.getCell(j); c.border = box; c.alignment = align(); c.font = font({ size: 10, bold: j === 2 }); });
+    x.months.forEach((n, mi) => heatCell(row.getCell(3 + mi), mi < M.upto ? n : null, M.max));
+    const tail = [x.n, x.prev, x.n - x.prev, x.types.map(([kk, v]) => issueLabel(kk) + ' ' + v).join('، ')];
+    tail.forEach((v, j) => { const c = row.getCell(15 + j); c.value = v === 0 && j < 3 ? 0 : v || null; c.border = box; c.alignment = align(j < 3 ? { horizontal: 'center' } : {}); c.font = font({ size: 10, bold: j === 0, color: { argb: j === 2 && v > 0 ? C.bad : j === 2 && v < 0 ? C.ok : C.ink } }); });
+    row.height = 20;
+  });
+  const tr = s1.getRow(M.all.length + 4);
+  tr.getCell(2).value = t('u_total'); M.col.forEach((n, mi) => { tr.getCell(3 + mi).value = mi < M.upto ? n : null; });
+  tr.getCell(15).value = M.total; tr.getCell(16).value = M.prevTotal; tr.getCell(17).value = M.total - M.prevTotal;
+  for (let j = 1; j <= h1.length; j++) { const c = tr.getCell(j); c.font = font({ bold: true }); c.fill = fill(C.soft); c.border = box; c.alignment = align(j > 2 ? { horizontal: 'center' } : {}); }
+  s1.autoFilter = { from: { row: 3, column: 1 }, to: { row: M.all.length + 3, column: h1.length } };
+  // 2. every location by problem type, for the year
+  const tk = M.types.filter(x => x.n).map(x => x.k);
+  const s2 = wb.addWorksheet(t('x_unit_types_sheet'), { views: [{ rightToLeft: X.rtl, state: 'frozen', xSplit: 2, ySplit: 3 }] });
+  const h2 = [t('col_building'), t('u_place')].concat(tk.map(issueLabel), [t('u_total')]);
+  s2.columns = h2.map((x, i) => ({ width: i < 2 ? 22 : 14 }));
+  titleRows(s2, t('u_by_type') + ' · ' + y, sub, h2.length); head(s2.getRow(3), h2);
+  const tmax = Math.max(1, ...M.rows.map(x => Math.max(0, ...x.types.map(e => e[1]))));
+  M.rows.forEach((x, i) => {
+    const row = s2.getRow(i + 4), by = Object.fromEntries(x.types);
+    row.getCell(1).value = bName(x.u); row.getCell(2).value = uName(x.u);
+    [1, 2].forEach(j => { const c = row.getCell(j); c.border = box; c.alignment = align(); c.font = font({ size: 10, bold: j === 2 }); });
+    tk.forEach((kk, j) => heatCell(row.getCell(3 + j), by[kk] || 0, tmax));
+    const c = row.getCell(3 + tk.length); c.value = x.n; c.border = box; c.font = font({ bold: true }); c.alignment = align({ horizontal: 'center' });
+  });
+  // 3. each problem type, month by month
+  const s3 = wb.addWorksheet(t('x_types_sheet'), { views: [{ rightToLeft: X.rtl, state: 'frozen', xSplit: 1, ySplit: 3 }] });
+  const h3 = [t('r_col_type')].concat(months, [t('u_total') + ' ' + y, String(y - 1)]);
+  s3.columns = h3.map((x, i) => ({ width: i ? 9 : 28 }));
+  titleRows(s3, t('u_by_type') + ' · ' + y, sub, h3.length); head(s3.getRow(3), h3);
+  M.types.forEach((x, i) => {
+    const row = s3.getRow(i + 4);
+    row.getCell(1).value = issueLabel(x.k); row.getCell(1).border = box; row.getCell(1).font = font({ size: 10, bold: true }); row.getCell(1).alignment = align();
+    x.months.forEach((n, mi) => heatCell(row.getCell(2 + mi), mi < M.upto ? n : null, M.tmax));
+    [x.n, x.prev].forEach((v, j) => { const c = row.getCell(14 + j); c.value = v; c.border = box; c.font = font({ bold: !j }); c.alignment = align({ horizontal: 'center' }); });
+  });
+  const buf = await wb.xlsx.writeBuffer();
+  saveBlob(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), `rasd-flats-${y}.xlsx`);
+}
+function exportUnitsPdf() {
+  const M = unitsModel(), y = M.y, f = S.uf;
+  const kp = (v, l, s2) => `<div class="rp-k"><b>${v}</b><span>${l}</span>${s2 ? `<small>${s2}</small>` : ''}</div>`;
+  const mth = Array.from({ length: 12 }, (_, i) => `<th>${esc(monthName(y, i, true))}</th>`).join('');
+  const cells = (arr, max) => arr.map((n, i) => (i >= M.upto ? '<td></td>' : `<td class="ph${heatLv(n, max)}">${n || ''}</td>`)).join('');
+  const html = `<div class="rp" dir="${LANG === 'ar' ? 'rtl' : 'ltr'}" lang="${LANG}">
+    <header class="rp-h"><div class="rp-brand">${MARK}<div><b>${t('app')}</b><span>${esc(org() || t('tagline'))}</span></div></div>
+      <div class="rp-t"><h1>${t('u_title')} · ${y}</h1><p>${esc([f.b ? bLabel(f.b) : t('b_all_buildings'), f.k ? issueLabel(f.k) : t('u_all_types')].join(' · '))}</p><small>${esc(t('x_generated', { d: xlKit().stamp }))}</small></div></header>
+    <div class="rp-ks">${kp(M.total, esc(t('u_year_total', { y })), (M.total - M.prevTotal > 0 ? '+' : '') + (M.total - M.prevTotal) + ' ' + esc(t('u_vs', { y: y - 1 })))}${kp(M.rows.length, t('u_places'), esc(t('u_of', { n: M.places })))}${kp(M.top ? M.top.n : '—', t('u_top_place'), M.top ? esc(uName(M.top.u) + ' · ' + bName(M.top.u)) : '')}${kp(M.topType ? M.topType.n : '—', t('u_top_type'), M.topType ? esc(issueLabel(M.topType.k)) : '')}</div>
+    <h2>${t('u_matrix')}</h2>
+    <table class="rp-tb rp-heat"><thead><tr><th>${t('u_place')}</th>${mth}<th>${y}</th><th>${y - 1}</th></tr></thead><tbody>
+      ${M.rows.map(x => `<tr><td><b>${esc(uName(x.u))}</b> <small>${esc(bName(x.u))}</small></td>${cells(x.months, M.max)}<td><b>${x.n}</b></td><td>${x.prev}</td></tr>`).join('')}
+      <tr class="rp-sum-row"><td><b>${t('u_total')}</b></td>${M.col.map((n, i) => `<td><b>${i >= M.upto ? '' : n}</b></td>`).join('')}<td><b>${M.total}</b></td><td><b>${M.prevTotal}</b></td></tr></tbody></table>
+    ${M.quiet ? `<p class="rp-note">${esc(t('u_quiet', { n: M.quiet, y }))}</p>` : ''}
+    <h2>${t('u_by_type')}</h2>
+    <table class="rp-tb rp-heat"><thead><tr><th>${t('r_col_type')}</th>${mth}<th>${y}</th><th>${y - 1}</th></tr></thead><tbody>
+      ${M.types.map(x => `<tr><td><b>${esc(issueLabel(x.k))}</b></td>${cells(x.months, M.tmax)}<td><b>${x.n}</b></td><td>${x.prev}</td></tr>`).join('')}</tbody></table>
+  </div>`;
+  printHtml(html, `rasd-flats-${y}`);
+}
+async function exportUnitExcel() {
+  await loadScript(VENDOR.exceljs);
+  const M = unitHistoryModel(), u = M.u, X = xlKit(), { font, box, align, head, heatCell, titleRows } = X;
+  const wb = new window.ExcelJS.Workbook(); wb.creator = t('app'); wb.created = new Date();
+  const s1 = wb.addWorksheet(t('u_by_year'), { views: [{ rightToLeft: X.rtl, showGridLines: false }] });
+  const h1 = [''].concat(Array.from({ length: 12 }, (_, i) => monthName(M.thisYear, i, true)), [t('u_total')]);
+  s1.columns = h1.map((x, i) => ({ width: i ? 9 : 14 }));
+  titleRows(s1, t('u_history') + ' · ' + uName(u) + ' · ' + bName(u), [org(), t('x_generated', { d: X.stamp })].filter(Boolean).join(' · '), h1.length);
+  head(s1.getRow(3), h1);
+  M.ylist.forEach((yy, i) => {
+    const row = s1.getRow(i + 4); row.getCell(1).value = yy; row.getCell(1).font = font({ bold: true }); row.getCell(1).border = box; row.getCell(1).alignment = align({ horizontal: 'center' });
+    M.years[yy].forEach((n, mi) => heatCell(row.getCell(2 + mi), yy === M.thisYear && mi >= M.upNow ? null : n, M.max));
+    const c = row.getCell(14); c.value = M.sum(M.years[yy]); c.font = font({ bold: true }); c.border = box; c.alignment = align({ horizontal: 'center' });
+  });
+  let r = M.ylist.length + 5;
+  head(s1.getRow(r++), [t('r_col_type')].concat(M.ylist.map(String), [t('u_total')]));
+  M.types.forEach(x => {
+    const row = s1.getRow(r++);
+    [issueLabel(x.k)].concat(M.ylist.map(yy => x.by[yy] || null), [x.n]).forEach((v, j) => { const c = row.getCell(j + 1); c.value = v; c.border = box; c.font = font({ bold: !j || j === M.ylist.length + 1 }); c.alignment = align(j ? { horizontal: 'center' } : {}); });
+  });
+  requestsSheet(wb, M.all.slice().sort((a, b) => a.no - b.no).map(x => reqRow(x, M.repeatOf)), X, t('x_requests'));
+  const buf = await wb.xlsx.writeBuffer();
+  saveBlob(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), `rasd-${String(u.building_code).toLowerCase()}-${String(u.label_en || 'unit').replace(/[^A-Za-z0-9]+/g, '-').toLowerCase()}.xlsx`);
+}
+
 /* ============================================================ views: team */
 async function vTeam(alive) {
   page(loadingBox(), { staff: true, nav: 'team' });
@@ -2249,7 +2608,7 @@ async function vTeam(alive) {
   ].filter(g => g[1].length);
   page(`<div class="wrap">
     <div class="sec-h"><h1>${t('tm_title')}</h1>${admin ? `<button class="btn primary" type="button" data-act="staff-edit" data-id="">${ICON.plus}${t('tm_add')}</button>` : ''}</div>
-    ${admin ? '' : `<p class="muted">${t('tm_readonly')}</p>`}
+    <p class="callout">${ICON.shield}<span>${t(admin ? 'tm_only_you' : 'tm_readonly')}</span></p>
     ${groups.map(g => `<h2 class="sec">${esc(g[0])}<span class="count">${g[1].length}</span></h2><section class="card list">${g[1].map(member).join('')}</section>`).join('')}
     <section class="card"><h3>${t('tm_share')}</h3><p class="mono" dir="ltr">${esc(APP_URL)}</p><div class="row"><button class="btn sm" type="button" data-act="copy" data-v="${esc(APP_URL)}">${ICON.copy}${t('q_copy')}</button></div></section>
   </div>`, { staff: true, nav: 'team' });
@@ -2259,21 +2618,21 @@ function staffModal(s) {
   const kind = s ? (s.role === 'technician' ? (s.team === 'hm' ? 'hm' : 'ops') : s.role) : 'hm';
   const sites = (s && s.sites) || [];
   const res = bCodes().filter(c => (bMeta(c).type || 'res') === 'res');
+  const self = !!(s && S.session && s.id === S.session.me.id);
   modal(`<form class="form" data-form="staff" novalidate><input type="hidden" name="id" value="${s ? esc(s.id) : ''}">
     <h3>${s ? t('tm_edit') : t('tm_add')}</h3>
     <div class="field"><label for="st-n">${t('tm_name')}</label><input id="st-n" name="name" maxlength="80" value="${s ? esc(s.name) : ''}"></div>
     <div class="field"><label for="st-p">${t('tm_phone')}</label><input id="st-p" name="phone" type="tel" inputmode="tel" dir="ltr" value="${s ? esc(fPhone(s.phone)) : ''}"></div>
-    <div class="field"><label for="st-r">${t('tm_role')}</label><select id="st-r" name="kind">
+    ${self ? `<input type="hidden" name="kind" value="admin"><p class="muted small">${ICON.shield} ${t('tm_self_role')}</p>` : `<div class="field"><label for="st-r">${t('tm_role')}</label><select id="st-r" name="kind">
       <option value="hm" ${kind === 'hm' ? 'selected' : ''}>${t('team_hm')}</option>
       <option value="ops" ${kind === 'ops' ? 'selected' : ''}>${t('tech_ops')}</option>
-      <option value="supervisor" ${kind === 'supervisor' ? 'selected' : ''}>${t('dm_sup')}</option>
-      <option value="admin" ${kind === 'admin' ? 'selected' : ''}>${t('role_admin')}</option></select></div>
+      <option value="supervisor" ${kind === 'supervisor' ? 'selected' : ''}>${t('dm_sup')}</option></select></div>`}
     <fieldset class="field sites" ${kind === 'hm' ? '' : 'hidden'}><legend>${t('tm_sites')}</legend><p class="hint">${t('tm_hm_hint')}</p>
       <div class="chips">${res.map(c => `<label class="chip-check"><input type="checkbox" name="site" value="${esc(c)}" ${sites.includes(c) ? 'checked' : ''}><span>${esc(bLabel(c))}</span></label>`).join('')}</div></fieldset>
-    ${s ? `<label class="check"><input type="checkbox" name="active" ${s.active ? 'checked' : ''}> ${t('tm_active')}</label>` : ''}
+    ${s && !self ? `<label class="check"><input type="checkbox" name="active" ${s.active ? 'checked' : ''}> ${t('tm_active')}</label>` : ''}
     <div class="field"><label for="st-pin">${s ? t('tm_pin_new') : t('tm_pin')}</label><div class="row"><input id="st-pin" name="pin" inputmode="numeric" maxlength="6" dir="ltr" value="${s ? '' : genPin()}"><button type="button" class="btn sm" data-act="gen-pin">${t('tm_gen')}</button></div></div>
     <p class="err" data-err="form"></p>
-    <div class="row end"><button type="button" class="btn ghost" data-act="modal-close">${t('cancel')}</button><button class="btn primary" type="submit">${t('save')}</button></div>
+    <div class="row end">${s && !self ? `<button type="button" class="btn ghost danger push-start" data-act="staff-del" data-id="${esc(s.id)}">${ICON.trash}${t('tm_delete')}</button>` : ''}<button type="button" class="btn ghost" data-act="modal-close">${t('cancel')}</button><button class="btn primary" type="submit">${t('save')}</button></div>
   </form>`);
 }
 
@@ -2288,6 +2647,7 @@ async function vSettings(alive) {
   const val = v => (v == null ? '' : esc(v));
   page(`<form class="wrap" data-form="settings" novalidate>
     <div class="sec-h"><h1>${t('se_title')}</h1><button class="btn primary" type="submit">${t('save')}</button></div>
+    <p class="muted small">${ICON.shield} ${t('se_only_you')}</p>
     <section class="card"><h3>${t('se_contractor')}</h3><div class="grid2"><div class="field"><label for="c-ar">${t('se_label_ar')}</label><input id="c-ar" name="c_ar" value="${val(st.contractor && st.contractor.ar)}"></div><div class="field"><label for="c-en">${t('se_label_en')}</label><input id="c-en" name="c_en" dir="ltr" value="${val(st.contractor && st.contractor.en)}"></div></div></section>
     <section class="card"><h3>${ICON.clock}${t('se_targets')}</h3>
       <div class="ptable-wrap"><table class="tgt"><thead><tr><th></th><th>${t('se_dispatch')}</th><th>${t('se_pickup')}</th><th>${t('se_arrive')}</th><th>${t('se_work')}</th></tr></thead><tbody>
@@ -3042,6 +3402,18 @@ const ACT = {
   'x-pdf': el => runExport(el, async () => exportPdf()),
   'x-pptx': el => runExport(el, exportPptx),
   'staff-edit': el => staffModal((S.team || []).find(s => s.id === el.dataset.id) || null),
+  'staff-del': el => {
+    const s = (S.team || []).find(x => x.id === el.dataset.id); if (!s) return;
+    closeModal(el.closest('.modal'));
+    const m = modal(`<div><h3>${esc(t('tm_delete_q', { n: s.name }))}</h3><p class="muted small">${t('tm_delete_body')}</p></div>
+      <div class="row end"><button type="button" class="btn ghost" data-act="modal-close">${t('cancel')}</button><button type="button" class="btn danger solid" data-act="staff-del-go" data-id="${esc(s.id)}">${ICON.trash}${t('tm_delete_btn')}</button></div>`);
+    m.dataset.name = s.name;
+  },
+  'staff-del-go': el => busy(el, async () => {
+    const m = el.closest('.modal'), name = m ? m.dataset.name : '';
+    await srpc('admin_remove_staff', { p_id: el.dataset.id });
+    closeModal(m); toast(t('tm_deleted', { n: name })); render();
+  }),
   'gen-pin': el => { el.closest('.row').querySelector('input').value = genPin(); },
   here: el => busy(el, async () => {
     const p = await getPosition(10000);
@@ -3056,7 +3428,12 @@ const ACT = {
   guide: el => { if (el.dataset.role) setSession(Demo.loginAs(el.dataset.role)); S.list = null; S.team = null; go(el.dataset.to); },
   'dm-unit': () => { const v = $('#dm-unit').value; S.unit = null; go('/u/' + encodeURIComponent(v)); },
   'dm-login': el => { setSession(Demo.loginAs(el.dataset.id)); S.team = null; go('/'); },
-  'dm-reset': () => { S.session = null; store.del(P + 'session'); store.del(P + 'mine'); store.del(P + 'contact'); Demo.reset(); S.list = null; S.settings = null; S.photos = {}; S.draft = {}; S.unit = null; S.rf = { b: '', st: '', p: '' }; S.bf = ''; toast(t('dm_reset_ok')); render(); }
+  'dm-reset': () => { S.session = null; store.del(P + 'session'); store.del(P + 'mine'); store.del(P + 'contact'); Demo.reset(); S.list = null; S.settings = null; S.photos = {}; S.draft = {}; S.unit = null; S.rf = { b: '', st: '', p: '' }; S.uf = { b: '', k: '' }; S.bf = ''; toast(t('dm_reset_ok')); render(); },
+  go: el => go(el.dataset.to),
+  'uf-type': el => { S.uf.k = S.uf.k === el.dataset.v ? '' : el.dataset.v; const box = $('#rep'); if (box && S.unitData) { box.innerHTML = unitsBody(); heatToNow(); const tb = $('.heat'); if (tb) tb.closest('.card').scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
+  'u-excel': el => runExport(el, exportUnitsExcel),
+  'u-pdf': el => runExport(el, async () => exportUnitsPdf()),
+  'uh-excel': el => runExport(el, exportUnitExcel)
 };
 
 /* ============================================================ forms */
@@ -3305,6 +3682,7 @@ function onChange(e) {
   if (el.matches('#nr-u') && S.draft.desk) S.draft.desk.u = el.value;
   if (el.matches('#nr-s') && S.draft.desk) S.draft.desk.staff = el.value;
   if (el.matches('form[data-form="desk-req"] input[name="issue"]') && S.draft.desk) S.draft.desk.issue = el.value;
+  if (el.matches('[data-uf]')) { S.uf[el.dataset.uf] = el.value; const box = $('#rep'); if (box && S.unitData) { box.innerHTML = unitsBody(); heatToNow(); } }
   if (el.matches('[data-rf]')) {
     S.rf[el.dataset.rf] = el.value;
     if (el.dataset.rf === 'b') render(); else { const box = $('#rep'); if (box && S.repData) box.innerHTML = reportBody(); }
@@ -3337,7 +3715,7 @@ const Demo = (function () {
   function load() {
     if (!db) {
       db = store.get(KEY, null);
-      if (!db || db.v !== 5 || !db.units || !db.units.length) { db = seed(); save(); }
+      if (!db || db.v !== 6 || !db.units || !db.units.length) { db = seed(); save(); }
       else if (Date.now() - (db.at || 0) > 3600e3) { shift(Date.now() - (db.at || Date.now())); save(); }
     }
     return db;
@@ -3499,6 +3877,22 @@ const Demo = (function () {
       });
       return Object.values(out).sort((x, y) => (x.d < y.d ? -1 : 1));
     },
+    report_units: a => {
+      auth(a.p_token, ['supervisor', 'admin']); const F = D(a.p_from).getTime(), T = D(a.p_to).getTime(), by = {};
+      db.requests.forEach(r => {
+        const c = D(r.created_at).getTime(); if (r.status === 'cancelled' || c < F || c >= T) return;
+        const k = r.unit_id + '|' + dayKey(r.created_at).slice(0, 7) + '|' + r.issue_type; by[k] = (by[k] || 0) + 1;
+      });
+      return db.units.filter(u => !a.p_building || u.building_code === a.p_building).sort((x, y) => x.building_code.localeCompare(y.building_code) || x.sort - y.sort)
+        .map(u => ({ unit_id: u.id, building_code: u.building_code, building_ar: u.building_ar, building_en: u.building_en, label_ar: u.label_ar, label_en: u.label_en, kind: u.kind, active: u.active, sort: u.sort,
+          cells: Object.keys(by).filter(k => k.indexOf(u.id + '|') === 0).sort().map(k => { const p = k.split('|'); return { m: p[1], k: p[2], n: by[k] }; }) }));
+    },
+    unit_history: a => {
+      auth(a.p_token, ['supervisor', 'admin']); const u = db.units.find(x => x.id === a.p_unit); if (!u) fail('not_found');
+      return { unit: { id: u.id, building_code: u.building_code, building_ar: u.building_ar, building_en: u.building_en, label_ar: u.label_ar, label_en: u.label_en, kind: u.kind, active: u.active },
+        requests: db.requests.filter(r => r.unit_id === u.id).sort((x, y) => D(y.created_at) - D(x.created_at))
+          .map(r => { const o = clone(r); delete o.tracking_code; delete o.photo_before; delete o.photo_after; delete o.signature; o.technician = name(r.technician_id); o.assigned_by_name = name(r.assigned_by); return o; }) };
+    },
     tech_accept: a => {
       const me = auth(a.p_token), r = find(a.p_id); if (!r) fail('not_found');
       if (r.technician_id !== me.id) fail('not_assigned'); if (r.status !== 'assigned') fail('not_ready');
@@ -3602,17 +3996,28 @@ const Demo = (function () {
       Object.assign(r, { status: 'cancelled', cancelled_at: now(), cancel_note: a.p_note.trim(), hold_kind: null, hold_at: null, hold_ref: null, hold_eta: null });
       ev(r.id, me.id, 'cancelled', a.p_note); release(r.id, r.building_code);
     },
-    team_list: a => { auth(a.p_token, ['supervisor', 'admin']); return db.staff.slice().sort((x, y) => (y.active - x.active) || x.role.localeCompare(y.role) || String(x.team).localeCompare(String(y.team)) || x.full_name.localeCompare(y.full_name)).map(s => ({ id: s.id, name: s.full_name, phone: s.phone, role: s.role, team: s.team || 'ops', sites: s.sites || [], active: s.active, locked: false, created_at: s.created_at })); },
+    admin_remove_staff: a => {
+      const me = auth(a.p_token, ['admin']), s = db.staff.find(x => x.id === a.p_id && !x.removed_at); if (!s) fail('not_found');
+      if (s.id === me.id) fail('not_self');
+      if (db.requests.some(r => r.technician_id === s.id && ['assigned', 'accepted', 'onsite'].includes(r.status))) fail('has_open_jobs');
+      Object.keys(db.sessions).forEach(k => { if (db.sessions[k] === s.id) delete db.sessions[k]; });
+      const used = db.requests.some(r => r.technician_id === s.id || r.created_by === s.id || r.assigned_by === s.id || (r.legs || []).some(l => l.staff_id === s.id)) || db.events.some(e => e.actor === s.id);
+      if (!used) { db.staff = db.staff.filter(x => x.id !== s.id); return { removed: 'deleted' }; }
+      Object.assign(s, { removed_at: now(), active: false, phone: s.phone + '-' + s.id.slice(-6) });
+      return { removed: 'archived' };
+    },
+    team_list: a => { auth(a.p_token, ['supervisor', 'admin']); return db.staff.filter(s => !s.removed_at).sort((x, y) => (y.active - x.active) || x.role.localeCompare(y.role) || String(x.team).localeCompare(String(y.team)) || x.full_name.localeCompare(y.full_name)).map(s => ({ id: s.id, name: s.full_name, phone: s.phone, role: s.role, team: s.team || 'ops', sites: s.sites || [], active: s.active, locked: false, created_at: s.created_at })); },
     admin_save_staff: a => {
       const me = auth(a.p_token, ['admin']), phone = normPhone(a.p_phone);
       if (!a.p_name || a.p_name.trim().length < 2) fail('name_required'); if (phone.length < 8) fail('phone_required');
       if (['technician', 'supervisor', 'admin'].indexOf(a.p_role) < 0) fail('bad_role'); if (a.p_pin && !/^[0-9]{6}$/.test(a.p_pin)) fail('pin_format');
+      if (a.p_role === 'admin' && a.p_id !== me.id) fail('one_admin');
       if (db.staff.some(s => s.phone === phone && s.id !== a.p_id)) fail('phone_taken');
       const team = a.p_team === 'hm' && a.p_role === 'technician' ? 'hm' : 'ops';
       const sites = team === 'hm' ? Array.from(new Set((Array.isArray(a.p_sites) ? a.p_sites : []).map(x => String(x).trim().toUpperCase()).filter(x => /^[A-Z0-9]{2,8}$/.test(x)))) : [];
       if (team === 'hm' && !sites.length) fail('sites_required');
       if (!a.p_id) { if (!a.p_pin) fail('pin_format'); const s = { id: uid(), full_name: a.p_name.trim(), phone, role: a.p_role, team, sites, pin: a.p_pin, active: true, created_at: now() }; db.staff.push(s); return { id: s.id }; }
-      const s = db.staff.find(x => x.id === a.p_id); if (!s) fail('not_found');
+      const s = db.staff.find(x => x.id === a.p_id && !x.removed_at); if (!s) fail('not_found');
       if (s.id === me.id && (a.p_role !== 'admin' || a.p_active === false)) fail('not_self');
       Object.assign(s, { full_name: a.p_name.trim(), phone, role: a.p_role, team, sites, active: a.p_active !== false }); if (a.p_pin) s.pin = a.p_pin;
       if ((a.p_pin || a.p_active === false) && s.id !== me.id) Object.keys(db.sessions).forEach(k => { if (db.sessions[k] === s.id) delete db.sessions[k]; });
@@ -3703,10 +4108,11 @@ const Demo = (function () {
     const ESC = ['الكمبروسر لا يعمل، يحتاج فني تكييف', 'العطل في لوحة الكهرباء الرئيسية', 'يحتاج سلّم ومعدات غير متوفرة في المبنى', 'التسريب من الأنبوب الرئيسي داخل الجدار', 'يحتاج فني كهرباء مختص'];
     const COMMENTS = ['شكراً، خدمة سريعة', 'Very polite technician', 'تأخر قليلاً لكن العمل ممتاز', 'Good job', 'الفني محترم ونظيف في العمل', 'وصل متأخراً'];
     const NAMES = ['أحمد', 'Fatma', 'خالد', 'Priya', 'سعيد', 'مريم', 'John', null, null];
-    const db0 = { v: 5, at: Date.now(), settings: st, units, staff, sessions: {}, requests: [], events: [], seq: { no: 1000, ev: 0 } };
+    const db0 = { v: 6, at: Date.now(), settings: st, units, staff, sessions: {}, requests: [], events: [], seq: { no: 1000, ev: 0 } };
     const iso = x => new Date(x).toISOString();
     const nowMs = Date.now(), midnight = d => { const n = d + OFFSET; return n - (n % 864e5) - OFFSET; };
-    const pushEv = (rid, at, actor, e, note) => db0.events.push({ id: ++db0.seq.ev, request_id: rid, at: iso(at), actor: actor || null, ev: e, note: note || null });
+    let quiet = false;   // the older history keeps no event log, to stay small
+    const pushEv = (rid, at, actor, e, note) => { if (!quiet) db0.events.push({ id: ++db0.seq.ev, request_id: rid, at: iso(at), actor: actor || null, ev: e, note: note || null }); };
     const sname = id => (staff.find(x => x.id === id) || {}).full_name;
     const ops = c => st.buildings[c].ops;
     const tgA = (code, p, team, origin) => ((origin && origin === code) || (team === 'hm' && !origin) ? st.targets[p].arrive : Math.max(ops(code), origin ? ops(origin) : 0));
@@ -3804,6 +4210,31 @@ const Demo = (function () {
     });
     // two cancelled duplicates, cancelled by the supervisor before giving them out
     hist.slice(5, 7).forEach(r => { const d = mk(units.find(x => x.id === r.unit_id), r.issue_type, D(r.created_at).getTime() + 9 * 60000); pushEv(d.id, D(d.created_at), null, 'submitted'); Object.assign(d, { status: 'cancelled', cancelled_at: iso(D(d.created_at).getTime() + 6 * 60000), cancel_note: 'طلب مكرر' }); pushEv(d.id, D(d.cancelled_at), 's-sup', 'cancelled', d.cancel_note); hist.push(d); });
+    // the two years before that, lighter: more AC faults in summer, heaters in winter, and a few flats
+    // whose problem keeps coming back, so the flats report has months and years to compare
+    quiet = true;
+    const thisY = new Date(nowMs + OFFSET).getUTCFullYear(), startMs = Date.UTC(thisY - 1, 0, 1) - OFFSET, endMs = nowMs - 36 * 864e5;
+    const hot = [['AZB', 'Flat 21', 'ac', 0.5], ['SAY', 'Flat 102', 'water_leak', 0.32], ['BSH', 'Flat 3', 'heater', 0.28], ['MWL', 'Flat 21', 'ac', 0.3]];
+    const arch = [];
+    const old = (u, issue, created) => { const r = mk(u, issue, created); r.photo_before = null; r.description = String(r.description).slice(0, 60); play(r, nowMs - 6 * 864e5); Object.assign(r, { photo_after: null, signature: null }); arch.push(r); };
+    for (let ms = startMs; ms < endMs; ms += 864e5) {
+      const mo = new Date(ms + OFFSET).getUTCMonth(), summer = mo >= 4 && mo <= 8, winter = mo === 11 || mo <= 1;
+      const n = Math.floor(0.55 + R() * (summer ? 1.5 : 1.1));
+      for (let i = 0; i < n; i++) {
+        const code = wpick(bldW), bunits = units.filter(u => u.building_code === code);
+        const u = pickR(R() < 0.18 ? bunits.filter(x => x.kind === 'common').concat(bunits).slice(0, 3) : bunits.filter(x => x.kind === 'flat').length ? bunits.filter(x => x.kind === 'flat') : bunits);
+        const w = Object.assign({}, u.kind === 'common' ? commonW : flatW);
+        if (w.ac) w.ac *= summer ? 2.6 : 0.6; if (w.heater) w.heater *= winter ? 2.2 : 0.5;
+        old(u, wpick(w), ms + (7 * 60 + R() * 14 * 60) * 60000);
+      }
+      if (new Date(ms + OFFSET).getUTCDate() === 10) hot.forEach(([code, label, issue, pr]) => {
+        const u = units.find(x => x.building_code === code && x.label_en === label); if (!u) return;
+        const season = issue === 'ac' ? (summer ? 1.8 : 0.4) : issue === 'heater' ? (winter ? 1.8 : 0.5) : 1;
+        if (R() < pr * season) old(u, issue, ms + (R() * 18 * 864e5) + (8 * 60 + R() * 10 * 60) * 60000);
+      });
+    }
+    hist.push(...arch.filter(r => D(r.created_at).getTime() < endMs));
+    quiet = false;
     // what is happening right now
     const at = (code, label, issue, mins) => { const u = units.find(x => x.building_code === code && x.label_en === label) || units.find(x => x.building_code === code); return mk(u, issue, nowMs - mins * 60000); };
     const ago = mins => nowMs - mins * 60000, m = mins => iso(ago(mins));
