@@ -653,3 +653,39 @@ h3.sub { margin-top: 6px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }
+
+/* ---------- version 3: the maintenance supervisor distributes the work ---------- */
+.s-assigned { background: var(--paper-2); color: var(--info); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--info) 45%, transparent); }
+.stage.st-warn { background: var(--warn-soft); color: var(--warn); }
+.kpi.attn.info { border-color: color-mix(in srgb, var(--info) 45%, var(--line)); background: var(--info-soft); }
+.kpi.attn.info .v { color: var(--info); }
+.callout.warn { background: var(--warn-soft); }
+.callout.warn .ic { color: var(--warn); }
+.a-note { display: block; margin-top: 4px; font-weight: 600; }
+/* a request waiting for the supervisor: the card, with the button joined underneath */
+.req-wrap { display: grid; min-width: 0; }
+.req-wrap .req { border-end-start-radius: 0; border-end-end-radius: 0; }
+.req-wrap .req-act { border-radius: 0 0 var(--r) var(--r); border-inline-start: 4px solid var(--gold-deep); justify-content: center; min-height: 44px; }
+.req-wrap.urgent .req-act { border-inline-start-color: var(--warn); }
+.req-wrap.is-late .req-act { border-inline-start-color: var(--bad); }
+/* choosing the person */
+.dp-h { display: grid; gap: 4px; }
+.dp-h h3 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.grp { font-size: .8rem; font-weight: 700; color: var(--muted); margin: 6px 0 -2px; text-transform: none; }
+.choices.people { grid-template-columns: 1fr; gap: 6px; }
+.choice.person span { display: grid; gap: 1px; justify-items: start; align-content: center; min-height: 56px; padding: 8px 12px; }
+.choice.person b { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-weight: 600; }
+.choice.person small { color: var(--muted); font-size: .8rem; font-weight: 400; }
+.choice.person small.free { color: var(--ok); }
+.choice.person input:checked + span small { color: var(--ink-2); }
+.choice.person input:checked + span small.free { color: var(--ok); }
+.tag { font-style: normal; font-size: .7rem; font-weight: 700; padding: 1px 7px; border-radius: 999px; white-space: nowrap; }
+.tag.ok { background: var(--ok-soft); color: var(--ok); }
+.tag.warn { background: var(--warn-soft); color: var(--warn); }
+.card.dispatch { border-color: color-mix(in srgb, var(--info) 40%, var(--line)); }
+.card.dispatch h3 { display: flex; align-items: center; gap: 8px; }
+/* demo hub: the four roles in the order the work flows */
+.demo-role { position: relative; }
+.demo-role .step-n { position: absolute; inset-inline-end: 14px; top: 14px; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--bg); font-size: .8rem; font-weight: 700; }
+.demo-role .grp { margin: 2px 0 -4px; }
+@media (max-width: 600px) { .kpis.board-k .kpi.q-lead { grid-column: 1 / -1; } }

@@ -1,8 +1,8 @@
 -- =====================================================================
---  رصد · Rasd — إعداد قاعدة البيانات على Supabase (الإصدار 2)
+--  رصد · Rasd — إعداد قاعدة البيانات على Supabase (الإصدار 3)
 --  الصق هذا الملف كاملاً في: SQL Editor ← New query ← Run
 --  Paste this whole file into Supabase → SQL Editor → New query → Run.
---  Running it again, or over the first version, is safe: it only adds what
+--  Running it again, or over an earlier version, is safe: it only adds what
 --  is missing and updates the functions. It never deletes data.
 -- =====================================================================
 
@@ -68,7 +68,7 @@ create table if not exists public.requests (
   contact_name text,
   contact_phone text,
   tracking_code text not null,
-  status text not null default 'new' check (status in ('new','accepted','onsite','finished','closed','cancelled')),
+  status text not null default 'new' check (status in ('new','assigned','accepted','onsite','finished','closed','cancelled')),
   created_at timestamptz not null default now(),
   technician_id uuid references public.staff(id),
   accepted_at timestamptz,
@@ -160,6 +160,26 @@ update public.requests set offered_at = created_at where offered_at is null;
 create index if not exists requests_hold_ref_idx on public.requests (hold_ref) where hold_ref is not null;
 create index if not exists requests_closed_idx on public.requests (closed_at);
 
+-- ------------------------------------------- version 3: the maintenance supervisor distributes the work
+-- A new request waits for the maintenance supervisor (status new). He gives it to one handyman or
+-- technician (status assigned), who accepts it, or declines it with a reason and it goes back to him.
+-- queued_at: when it reached the supervisor's list; offered_at: when he gave it to the current person.
+do $$ begin
+  if not exists (select 1 from information_schema.columns
+                  where table_schema = 'public' and table_name = 'requests' and column_name = 'queued_at') then
+    alter table public.requests add column queued_at timestamptz;
+    update public.requests set queued_at = coalesce(offered_at, created_at),
+                               offered_at = case when status = 'new' then null else offered_at end;
+  end if;
+end $$;
+alter table public.requests add column if not exists target_dispatch int;
+alter table public.requests add column if not exists assigned_by uuid references public.staff(id);
+alter table public.requests add column if not exists assign_note text;
+alter table public.requests drop constraint if exists requests_status_check;
+alter table public.requests add constraint requests_status_check
+  check (status in ('new','assigned','accepted','onsite','finished','closed','cancelled'));
+create index if not exists requests_tech_idx on public.requests (technician_id) where technician_id is not null;
+
 -- No one reads or writes the tables directly: every change goes through the
 -- functions below, which check the sign-in and stamp the server's own clock.
 alter table public.settings enable row level security;
@@ -173,10 +193,17 @@ alter table public.push_subs enable row level security;
 revoke all on public.settings, public.units, public.staff, public.sessions, public.requests, public.events,
   public.push_config, public.push_subs from anon, authenticated;
 
--- old signatures replaced in version 2
+-- old signatures replaced in versions 2 and 3
 drop function if exists public.tech_accept(text, uuid);
 drop function if exists public.tech_finish(text, uuid, text, text);
 drop function if exists public.admin_save_staff(text, uuid, text, text, text, boolean, text);
+drop trigger if exists rasd_request_new on public.requests;
+drop function if exists public._on_request_new();
+drop function if exists public._handover(uuid, text, text, uuid, text);
+drop function if exists public.mgr_assign(text, uuid, uuid);
+drop function if exists public.mgr_stage(text, uuid, text);
+drop function if exists public._team_ids(text, text);
+drop function if exists public.mgr_create_request(text, uuid, text, text, text, text, text, text, text);
 
 -- --------------------------------------------------------------- helpers
 create or replace function public._norm_phone(p text) returns text
@@ -213,21 +240,23 @@ begin
     'me', json_build_object('id', s.id, 'name', s.full_name, 'role', s.role, 'phone', s.phone, 'team', s.team, 'sites', to_json(s.sites)));
 end $$;
 
--- pickup and repair targets by priority: {pickup, work}
+-- targets by priority, in minutes: {acceptance by the technician, repair, distribution by the supervisor}
 create or replace function public._targets(p_building text, p_priority text) returns int[]
 language sql stable security definer set search_path = public, pg_temp as $$
   select array[
-    coalesce(nullif(s.data #>> array['targets', p_priority, 'pickup'], '')::int, case when p_priority = 'urgent' then 15 else 60 end),
-    coalesce(nullif(s.data #>> array['targets', p_priority, 'work'], '')::int, case when p_priority = 'urgent' then 120 else 240 end)]
+    coalesce(nullif(s.data #>> array['targets', p_priority, 'pickup'], '')::int, case when p_priority = 'urgent' then 10 else 30 end),
+    coalesce(nullif(s.data #>> array['targets', p_priority, 'work'], '')::int, case when p_priority = 'urgent' then 120 else 240 end),
+    coalesce(nullif(s.data #>> array['targets', p_priority, 'dispatch'], '')::int, case when p_priority = 'urgent' then 10 else 30 end)]
   from public.settings s where s.id = 1
 $$;
 
--- Arrival target. A handyman is already in the building, so the in-building target applies.
--- The operations room gets the building's travel time; coming from another site, the longer of the two.
+-- Arrival target. Someone already in the building (a handyman in his own building) gets the
+-- in-building target. Anyone else gets the building's travel time from the operations room,
+-- or from the site he sets out from when that is longer.
 create or replace function public._arrive_target(p_building text, p_priority text, p_team text, p_origin text default null) returns int
 language sql stable security definer set search_path = public, pg_temp as $$
   select case
-    when p_team = 'hm' or p_origin = p_building then
+    when p_origin = p_building or (p_team = 'hm' and p_origin is null) then
       coalesce(nullif(s.data #>> array['targets', p_priority, 'arrive'], '')::int, case when p_priority = 'urgent' then 15 else 60 end)
     else greatest(coalesce(nullif(s.data #>> array['buildings', p_building, 'ops'], '')::int, 60),
                   coalesce(nullif(s.data #>> array['buildings', coalesce(p_origin, ''), 'ops'], '')::int, 0))
@@ -235,19 +264,12 @@ language sql stable security definer set search_path = public, pg_temp as $$
   from public.settings s where s.id = 1
 $$;
 
--- residential buildings with a handyman start with him; everything else goes to the operations room
+-- the team a new request most likely needs: the building's handyman, or the operations room
 create or replace function public._stage_for(p_building text) returns text
 language sql stable security definer set search_path = public, pg_temp as $$
   select case when coalesce((select s.data #>> array['buildings', p_building, 'type'] from public.settings s where s.id = 1), 'res') = 'res'
                and exists (select 1 from public.staff st where st.active and st.role = 'technician' and st.team = 'hm' and p_building = any (st.sites))
               then 'hm' else 'ops' end
-$$;
-
-create or replace function public._team_ids(p_stage text, p_building text) returns uuid[]
-language sql stable security definer set search_path = public, pg_temp as $$
-  select coalesce(array_agg(st.id), '{}') from public.staff st
-   where st.active and st.role = 'technician'
-     and case when p_stage = 'hm' then st.team = 'hm' and p_building = any (st.sites) else st.team <> 'hm' end
 $$;
 
 -- supervisors and admins; with p_sup_first, supervisors only when there is one
@@ -258,11 +280,10 @@ language sql stable security definer set search_path = public, pg_temp as $$
               else (select coalesce(array_agg(id), '{}') from public.staff where active and role in ('supervisor','admin')) end
 $$;
 
--- what a technician may see: his own jobs, new requests for his team, and requests he worked on before
+-- what a technician may see: the jobs given to him, and requests he had before
 create or replace function public._sees(me public.staff, r public.requests) returns boolean
 language sql stable set search_path = public, pg_temp as $$
   select coalesce(me.role <> 'technician' or r.technician_id is not distinct from me.id
-      or (r.status = 'new' and case when r.stage = 'hm' then me.team = 'hm' and r.building_code = any (me.sites) else me.team <> 'hm' end)
       or r.legs @> jsonb_build_array(jsonb_build_object('staff_id', me.id)), false)
 $$;
 
@@ -276,6 +297,16 @@ language sql stable security definer set search_path = public, pg_temp as $$
     select building_code, 2, finished_at from public.requests
      where technician_id = p_staff and finished_at > now() - interval '90 minutes'
   ) x order by k, at desc limit 1
+$$;
+
+-- where a technician sets out from: the building of the job he is on, else a handyman's own building
+-- (null: the operations room)
+create or replace function public._origin(p_staff uuid, p_building text) returns text
+language sql stable security definer set search_path = public, pg_temp as $$
+  select coalesce(public._where(s.id),
+                  case when s.team = 'hm' and cardinality(s.sites) > 0
+                       then case when p_building = any (s.sites) then p_building else s.sites[1] end end)
+    from public.staff s where s.id = p_staff
 $$;
 
 create or replace function public._event(p_id uuid, p_actor uuid, p_ev text, p_note text default null) returns void
@@ -300,12 +331,14 @@ language sql immutable set search_path = public, pg_temp as $$
     from jsonb_array_elements(case when jsonb_typeof(p) = 'array' then p else '[]'::jsonb end) e
 $$;
 
--- the current visit as a record, when it ends
+-- the current visit as a record, when it ends (also one that was declined or moved before it was accepted)
 create or replace function public._leg(r public.requests, p_outcome text, p_note text) returns jsonb
 language sql stable security definer set search_path = public, pg_temp as $$
   select jsonb_build_object(
     'staff_id', r.technician_id, 'name', (select full_name from public.staff where id = r.technician_id),
-    'team', r.stage, 'offered_at', coalesce(r.offered_at, r.created_at), 'accepted_at', r.accepted_at,
+    'team', r.stage, 'queued_at', r.queued_at, 'target_dispatch', r.target_dispatch,
+    'assigned_by', r.assigned_by, 'assigned_by_name', (select full_name from public.staff where id = r.assigned_by),
+    'assign_note', r.assign_note, 'offered_at', coalesce(r.offered_at, r.created_at), 'accepted_at', r.accepted_at,
     'accept_method', r.accept_method, 'arrived_at', r.arrived_at, 'arrival_method', r.arrival_method,
     'ended_at', now(), 'outcome', p_outcome, 'note', p_note,
     'target_pickup', r.target_pickup, 'target_arrive', r.target_arrive, 'target_work', r.target_work, 'origin', r.origin,
@@ -315,25 +348,42 @@ language sql stable security definer set search_path = public, pg_temp as $$
                                         then greatest(0, floor(extract(epoch from now() - r.hold_at)))::int else 0 end)
 $$;
 
--- end the current visit and start the next one: back to new (p_staff null) or assigned to p_staff
-create or replace function public._handover(p_id uuid, p_outcome text, p_note text, p_staff uuid, p_stage text) returns void
+-- End the current visit and keep it in legs. With p_queue the request goes back to the supervisor's
+-- list to be given out again; without it the caller gives it straight to someone else (_offer).
+create or replace function public._end_visit(p_id uuid, p_outcome text, p_note text, p_queue boolean, p_stage text default null) returns void
 language plpgsql security definer set search_path = public, pg_temp as $$
-declare r public.requests; v_origin text := case when p_staff is not null then public._where(p_staff) end;
+declare r public.requests; v_stage text;
 begin
   select * into r from public.requests where id = p_id;
+  v_stage := coalesce(p_stage, r.stage);
   update public.requests set
      legs = case when r.technician_id is not null then r.legs || jsonb_build_array(public._leg(r, p_outcome, p_note)) else r.legs end,
-     stage = p_stage, technician_id = p_staff,
-     status = case when p_staff is null then 'new' else 'accepted' end,
-     offered_at = now(),
-     accepted_at = case when p_staff is not null then now() end,
-     accept_method = case when p_staff is not null then 'assigned' end,
+     status = 'new', stage = v_stage, technician_id = null,
+     queued_at = case when p_queue then now() end, offered_at = null, assigned_by = null, assign_note = null,
+     accepted_at = null, accept_method = null,
      arrived_at = null, arrival_method = null, arrival_note = null, arrival_lat = null, arrival_lng = null, arrival_acc = null,
-     origin = v_origin,
-     target_arrive = coalesce(public._arrive_target(r.building_code, r.priority, p_stage, v_origin), r.target_arrive),
+     origin = null, target_arrive = coalesce(public._arrive_target(r.building_code, r.priority, v_stage, null), r.target_arrive),
      hold_kind = null, hold_at = null, hold_note = null, hold_ref = null, hold_eta = null,
      paused_arrive = 0, paused_work = 0, escalated_at = null
    where id = p_id;
+end $$;
+
+-- Give the request to one handyman or technician. He accepts it from his phone (or declines it).
+create or replace function public._offer(p_id uuid, p_staff uuid, p_by uuid, p_note text) returns void
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare r public.requests; s public.staff; v_origin text; v_stage text;
+begin
+  select * into s from public.staff where id = p_staff;
+  select * into r from public.requests where id = p_id;
+  v_stage := case when s.team = 'hm' then 'hm' else 'ops' end;
+  v_origin := public._origin(p_staff, r.building_code);
+  update public.requests
+     set status = 'assigned', technician_id = p_staff, stage = v_stage, offered_at = now(),
+         assigned_by = p_by, assign_note = nullif(left(trim(coalesce(p_note, '')), 300), ''), origin = v_origin,
+         target_arrive = coalesce(public._arrive_target(r.building_code, r.priority, v_stage, v_origin), r.target_arrive),
+         escalated_at = null
+   where id = p_id;
+  perform public._push(array[p_staff], 'assigned', p_id);
 end $$;
 
 -- ------------------------------------------------------- phone notifications (sending)
@@ -350,22 +400,33 @@ language sql stable set search_path = public, pg_temp as $$
     'title', case p_kind
       when 'new' then case when p_lang = 'en' then 'New request' || case when r.priority = 'urgent' then ' · Urgent' else '' end
                            else 'طلب جديد' || case when r.priority = 'urgent' then ' · عاجل' else '' end end
-      when 'ops' then case when p_lang = 'en' then 'Sent to the operations room' || case when r.priority = 'urgent' then ' · Urgent' else '' end
-                           else 'محوّل لغرفة العمليات' || case when r.priority = 'urgent' then ' · عاجل' else '' end end
-      when 'assigned' then case when p_lang = 'en' then 'Job assigned to you' else 'أُسند إليك طلب' end
-      when 'late' then case when p_lang = 'en' then 'Not picked up yet' else 'لم يُستلم بعد' end
+      when 'ops' then case when p_lang = 'en' then 'Handyman asks for the operations room' || case when r.priority = 'urgent' then ' · Urgent' else '' end
+                           else 'الهاندي مان يطلب غرفة العمليات' || case when r.priority = 'urgent' then ' · عاجل' else '' end end
+      when 'assigned' then case when p_lang = 'en' then 'Job assigned to you' || case when r.priority = 'urgent' then ' · Urgent' else '' end
+                                else 'أُسند إليك طلب' || case when r.priority = 'urgent' then ' · عاجل' else '' end end
+      when 'unassigned' then case when p_lang = 'en' then 'A job you had was given to someone else' else 'نُقل طلب كان لديك إلى غيرك' end
+      when 'cancelled' then case when p_lang = 'en' then 'A job you had was cancelled' else 'أُلغي طلب كان لديك' end
+      when 'declined' then case when p_lang = 'en' then 'Declined: assign it again' else 'اعتذر عنه الفني: وزّعه من جديد' end
+      when 'late_dispatch' then case when p_lang = 'en' then 'Waiting to be assigned' else 'طلب ينتظر التوزيع' end
+      when 'late' then case when p_lang = 'en' then 'Not accepted yet' else 'لم يقبله الفني بعد' end
       when 'hold' then case when p_lang = 'en' then 'Waiting for parts' else 'بانتظار قطع غيار' end
       when 'next' then case when p_lang = 'en' then 'Your next job: head there now' else 'مهمتك التالية: توجّه الآن' end
       else case when p_lang = 'en' then 'Rasd notifications are on' else 'إشعارات رصد تعمل' end end,
     'body', case when p_kind = 'test' or r.id is null
-      then case when p_lang = 'en' then 'New requests will reach you here.' else 'ستصلك الطلبات الجديدة هنا.' end
+      then case when p_lang = 'en' then 'Requests and jobs will reach you here.' else 'ستصلك البلاغات والمهام هنا.' end
       else '#' || r.no || ' · ' || case when p_lang = 'en' then r.unit_en || ' · ' || r.building_en else r.unit_ar || ' · ' || r.building_ar end
            || ' · ' || coalesce((select e->>(case when p_lang = 'en' then 'en' else 'ar' end) from jsonb_array_elements(st->'issueTypes') e
                                  where e->>'k' = r.issue_type limit 1), r.issue_type)
-           || case when p_kind = 'late'
-                then case when p_lang = 'en' then ' · waiting ' || floor(extract(epoch from now() - coalesce(r.offered_at, r.created_at)) / 60)::int || ' min'
-                          else ' · منذ ' || floor(extract(epoch from now() - coalesce(r.offered_at, r.created_at)) / 60)::int || ' دقيقة' end
+           || case when p_kind in ('late', 'late_dispatch')
+                then case when p_lang = 'en' then ' · waiting ' else ' · منذ ' end
+                     || floor(extract(epoch from now() - case when p_kind = 'late' then coalesce(r.offered_at, r.created_at)
+                                                              else coalesce(r.queued_at, r.created_at) end) / 60)::int
+                     || case when p_lang = 'en' then ' min' else ' دقيقة' end
+                     || case when p_kind = 'late' then ' · ' || coalesce((select full_name from public.staff where id = r.technician_id), '') else '' end
                 when p_kind = 'hold' and r.hold_parts is not null then ' · ' || coalesce(public._parts_text(r.hold_parts), '')
+                when p_kind = 'assigned' and r.assign_note is not null then ' · ' || r.assign_note
+                when p_kind in ('declined', 'ops') and jsonb_array_length(r.legs) > 0
+                  then ' · ' || coalesce(r.legs->-1->>'name', '') || ': ' || coalesce(r.legs->-1->>'note', '')
                 else '' end end,
     'url', case when p_kind = 'test' or r.id is null then './' else '#/r/' || r.id end,
     'tag', coalesce(r.id::text, 'rasd-test'),
@@ -417,6 +478,7 @@ begin
 end $$;
 
 -- ------------------------------------------------------- creating requests
+-- A new request waits in the maintenance supervisor's list (stage: the team it most likely needs).
 create or replace function public._insert_request(u public.units, p_issue text, p_pri text, p_description text, p_photo text,
   p_lang text, p_name text, p_phone text, p_source text, p_by uuid) returns json
 language plpgsql security definer set search_path = public, extensions, pg_temp as $$
@@ -424,10 +486,10 @@ declare v_t int[] := public._targets(u.building_code, p_pri); v_stage text := pu
         v_code text := encode(gen_random_bytes(12), 'hex'); r public.requests;
 begin
   insert into public.requests (unit_id, building_code, building_ar, building_en, unit_ar, unit_en, unit_kind,
-      issue_type, priority, target_pickup, target_arrive, target_work, description, photo_before, lang,
-      contact_name, contact_phone, tracking_code, source, created_by, stage, offered_at)
+      issue_type, priority, target_pickup, target_arrive, target_work, target_dispatch, description, photo_before, lang,
+      contact_name, contact_phone, tracking_code, source, created_by, stage, queued_at)
   values (u.id, u.building_code, u.building_ar, u.building_en, u.label_ar, u.label_en, u.kind,
-      p_issue, p_pri, v_t[1], coalesce(public._arrive_target(u.building_code, p_pri, v_stage, null), 60), v_t[2],
+      p_issue, p_pri, v_t[1], coalesce(public._arrive_target(u.building_code, p_pri, v_stage, null), 60), v_t[2], v_t[3],
       left(trim(p_description), 2000), p_photo, case when p_lang = 'en' then 'en' else 'ar' end,
       nullif(left(trim(coalesce(p_name, '')), 80), ''), nullif(left(trim(coalesce(p_phone, '')), 20), ''), v_code,
       p_source, p_by, v_stage, now())
@@ -435,16 +497,6 @@ begin
   perform public._event(r.id, p_by, case when p_by is null then 'submitted' else 'logged' end, case when p_by is null then null else p_source end);
   return json_build_object('id', r.id, 'no', r.no, 'code', v_code, 'created_at', r.created_at, 'stage', r.stage);
 end $$;
-
--- every new request goes to the team it starts with (the building's handyman or the operations room) and the desk
-create or replace function public._on_request_new() returns trigger
-language plpgsql security definer set search_path = public, pg_temp as $$
-begin
-  perform public._push(public._team_ids(new.stage, new.building_code) || public._desk_ids(), 'new', new.id);
-  return new;
-end $$;
-drop trigger if exists rasd_request_new on public.requests;
-create trigger rasd_request_new after insert on public.requests for each row execute function public._on_request_new();
 
 -- --------------------------------------------------------- public (tenant)
 create or replace function public.get_settings() returns json
@@ -463,7 +515,7 @@ $$;
 create or replace function public.submit_request(p_token text, p_issue text, p_description text, p_photo text,
   p_lang text default 'ar', p_name text default null, p_phone text default null) returns json
 language plpgsql security definer set search_path = public, extensions, pg_temp as $$
-declare u public.units; v_pri text;
+declare u public.units; v_pri text; v_res json;
 begin
   select * into u from public.units where token = p_token and active;
   if not found then raise exception 'invalid_unit'; end if;
@@ -477,7 +529,9 @@ begin
   if (select count(*) from public.requests where unit_id = u.id and created_at > now() - interval '10 minutes') >= 3 then
     raise exception 'slow_down';
   end if;
-  return public._insert_request(u, p_issue, v_pri, p_description, p_photo, p_lang, p_name, p_phone, 'qr', null);
+  v_res := public._insert_request(u, p_issue, v_pri, p_description, p_photo, p_lang, p_name, p_phone, 'qr', null);
+  perform public._push(public._desk_ids(true), 'new', (v_res->>'id')::uuid);
+  return v_res;
 end $$;
 
 create or replace function public.track_request(p_id uuid, p_code text) returns json
@@ -485,7 +539,8 @@ language sql stable security definer set search_path = public, pg_temp as $$
   select json_build_object(
     'id', r.id, 'no', r.no, 'status', r.status, 'issue_type', r.issue_type, 'description', r.description,
     'building_code', r.building_code, 'building_ar', r.building_ar, 'building_en', r.building_en, 'unit_ar', r.unit_ar, 'unit_en', r.unit_en,
-    'unit_kind', r.unit_kind, 'created_at', r.created_at, 'accepted_at', r.accepted_at, 'arrived_at', r.arrived_at,
+    'unit_kind', r.unit_kind, 'created_at', r.created_at, 'assigned_at', case when r.status <> 'new' then r.offered_at end,
+    'accepted_at', r.accepted_at, 'arrived_at', r.arrived_at,
     'finished_at', r.finished_at, 'closed_at', r.closed_at, 'cancelled_at', r.cancelled_at,
     'signed_at', r.signed_at, 'signoff_method', r.signoff_method, 'rating', r.rating, 'tech_note', r.tech_note,
     'parts', case when r.status in ('finished','closed') then r.parts end,
@@ -582,10 +637,11 @@ begin
              r.finished_at, r.signed_at, r.signoff_method, r.rating, r.closed_at, r.close_method, r.cancelled_at,
              r.source, r.stage, r.offered_at, r.origin, r.hold_kind, r.hold_at, r.hold_ref, r.hold_eta,
              (select b.no from public.requests b where b.id = r.hold_ref) as hold_ref_no,
-             r.paused_arrive, r.paused_work, r.legs
+             r.paused_arrive, r.paused_work, r.legs, r.queued_at, r.target_dispatch, r.assigned_by,
+             (select a.full_name from public.staff a where a.id = r.assigned_by) as assigned_by_name, r.assign_note
         from public.requests r left join public.staff t on t.id = r.technician_id
        where public._sees(me, r)
-         and (r.status in ('new','accepted','onsite','finished')
+         and (r.status in ('new','assigned','accepted','onsite','finished')
               or ((p_from is null or r.created_at >= p_from) and (p_to is null or r.created_at < p_to)))
     ) x), '[]'::json);
 end $$;
@@ -602,6 +658,7 @@ begin
                'technician', (select t.full_name from public.staff t where t.id = r.technician_id),
                'hold_ref_no', (select b.no from public.requests b where b.id = r.hold_ref),
                'created_by_name', (select t.full_name from public.staff t where t.id = r.created_by),
+               'assigned_by_name', (select t.full_name from public.staff t where t.id = r.assigned_by),
                'events', coalesce((select jsonb_agg(jsonb_build_object('at', e.at, 'ev', e.ev, 'note', e.note,
                                                     'actor', s.full_name) order by e.at, e.id)
                                      from public.events e left join public.staff s on s.id = e.actor
@@ -622,7 +679,8 @@ begin
              r.signed_at, r.signoff_method, r.signer_name, r.rating, r.rating_comment, r.closed_at, r.close_method, r.close_note,
              r.cancelled_at, r.cancel_note, r.source, r.stage, r.offered_at, r.origin, r.hold_kind, r.hold_at, r.hold_note,
              r.hold_ref, (select b.no from public.requests b where b.id = r.hold_ref) as hold_ref_no,
-             r.hold_eta, r.hold_parts, r.paused_arrive, r.paused_work, r.legs
+             r.hold_eta, r.hold_parts, r.paused_arrive, r.paused_work, r.legs, r.queued_at, r.target_dispatch,
+             r.assigned_by, (select a.full_name from public.staff a where a.id = r.assigned_by) as assigned_by_name, r.assign_note
         from public.requests r left join public.staff t on t.id = r.technician_id
        where r.created_at < p_to
          and (r.created_at >= p_from
@@ -653,31 +711,47 @@ begin
 end $$;
 
 -- ------------------------------------------------------ staff: actions
--- Accept a new request. A technician in the middle of another job accepts with p_busy (that job)
--- or p_note (work outside Rasd): his arrival timer waits until that job is done.
+-- Accept a job the supervisor gave you. In the middle of another job, accept with p_busy (that job)
+-- or p_note (work outside Rasd): the arrival timer waits until that job is done.
 create or replace function public.tech_accept(p_token text, p_id uuid, p_busy uuid default null, p_note text default null) returns void
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare me public.staff := public._auth(p_token); r public.requests; b public.requests; v_origin text;
         v_note text := nullif(left(trim(coalesce(p_note, '')), 300), ''); v_busy boolean;
 begin
   select * into r from public.requests where id = p_id for update;
-  if not found or r.status <> 'new' then raise exception 'already_taken'; end if;
-  if me.role = 'technician' and not public._sees(me, r) then raise exception 'not_allowed'; end if;
+  if not found then raise exception 'not_found'; end if;
+  if r.technician_id is distinct from me.id then raise exception 'not_assigned'; end if;
+  if r.status <> 'assigned' then raise exception 'not_ready'; end if;
   if p_busy is not null then
     select * into b from public.requests where id = p_busy and technician_id = me.id and status in ('accepted','onsite');
     if not found then raise exception 'bad_busy'; end if;
   elsif p_note is not null and coalesce(length(v_note), 0) < 3 then raise exception 'reason_required';
   end if;
   v_busy := p_busy is not null or v_note is not null;
-  v_origin := case when p_busy is not null then b.building_code else public._where(me.id) end;
+  v_origin := case when p_busy is not null then b.building_code else public._origin(me.id, r.building_code) end;
   update public.requests
-     set status = 'accepted', technician_id = me.id, accepted_at = now(), accept_method = 'self', origin = v_origin,
+     set status = 'accepted', accepted_at = now(), accept_method = 'self', origin = v_origin,
          target_arrive = coalesce(public._arrive_target(building_code, priority, stage, v_origin), target_arrive),
          hold_kind = case when v_busy then 'busy' end, hold_at = case when v_busy then now() end,
-         hold_ref = p_busy, hold_note = case when p_busy is null then v_note end
+         hold_ref = p_busy, hold_note = case when p_busy is null then v_note end, escalated_at = null
    where id = p_id;
   perform public._event(p_id, me.id, 'accepted');
   if v_busy then perform public._event(p_id, me.id, 'hold_busy', coalesce('#' || b.no, v_note)); end if;
+end $$;
+
+-- Decline a job before accepting it, with a reason: it goes back to the supervisor's list.
+create or replace function public.tech_decline(p_token text, p_id uuid, p_note text) returns void
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare me public.staff := public._auth(p_token); r public.requests; v_note text := left(trim(coalesce(p_note, '')), 300);
+begin
+  if length(v_note) < 3 then raise exception 'reason_required'; end if;
+  select * into r from public.requests where id = p_id for update;
+  if not found then raise exception 'not_found'; end if;
+  if r.technician_id is distinct from me.id then raise exception 'not_assigned'; end if;
+  if r.status <> 'assigned' then raise exception 'not_ready'; end if;
+  perform public._end_visit(p_id, 'declined', v_note, true);
+  perform public._event(p_id, me.id, 'declined', v_note);
+  perform public._push(public._desk_ids(true), 'declined', p_id);
 end $$;
 
 -- Pause a job: busy with another job or tenant unavailable (before arrival); waiting for parts,
@@ -733,7 +807,7 @@ begin
   if r.technician_id is distinct from me.id and me.role = 'technician' then raise exception 'not_assigned'; end if;
   v_secs := greatest(0, floor(extract(epoch from now() - r.hold_at)))::int;
   if r.status = 'accepted' then
-    v_origin := public._where(r.technician_id);
+    v_origin := public._origin(r.technician_id, r.building_code);
     update public.requests
        set paused_arrive = paused_arrive + v_secs, origin = v_origin,
            target_arrive = coalesce(public._arrive_target(building_code, priority, stage, v_origin), target_arrive),
@@ -804,7 +878,8 @@ begin
   perform public._release(p_id, r.building_code);
 end $$;
 
--- The handyman inspected the job and hands it to the operations room.
+-- The handyman inspected the job and needs the operations room: it goes back to the supervisor,
+-- with what he found, for him to give it to a technician.
 create or replace function public.tech_escalate(p_token text, p_id uuid, p_note text) returns void
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare me public.staff := public._auth(p_token); r public.requests; v_note text := left(trim(coalesce(p_note, '')), 500);
@@ -813,10 +888,10 @@ begin
   select * into r from public.requests where id = p_id for update;
   if not found or r.status <> 'onsite' or r.stage <> 'hm' then raise exception 'not_ready'; end if;
   if r.technician_id is distinct from me.id and me.role = 'technician' then raise exception 'not_assigned'; end if;
-  perform public._handover(p_id, 'escalated', v_note, null, 'ops');
+  perform public._end_visit(p_id, 'escalated', v_note, true, 'ops');
   perform public._event(p_id, me.id, 'to_ops', v_note);
   perform public._release(p_id, r.building_code);
-  perform public._push(public._team_ids('ops', r.building_code) || public._desk_ids(), 'ops', p_id);
+  perform public._push(public._desk_ids(true), 'ops', p_id);
 end $$;
 
 create or replace function public.onsite_signoff(p_token text, p_id uuid, p_signature text, p_signer text,
@@ -839,48 +914,28 @@ begin
 end $$;
 
 -- -------------------------------------------------- supervisor and admin
-create or replace function public.mgr_assign(p_token text, p_id uuid, p_staff uuid) returns void
+-- Give a request to a handyman or technician, with an optional note for him. A request someone
+-- already has is moved: his visit is kept in legs and the new person accepts it from his phone.
+create or replace function public.mgr_assign(p_token text, p_id uuid, p_staff uuid, p_note text default null) returns void
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare me public.staff := public._auth(p_token, array['supervisor','admin']); r public.requests; s public.staff;
-        v_stage text; v_origin text;
+        v_note text := nullif(left(trim(coalesce(p_note, '')), 300), '');
 begin
   select * into s from public.staff where id = p_staff and active and role = 'technician';
   if not found then raise exception 'bad_technician'; end if;
   select * into r from public.requests where id = p_id for update;
-  if not found or r.status not in ('new','accepted','onsite') then raise exception 'not_ready'; end if;
+  if not found or r.status not in ('new','assigned','accepted','onsite') then raise exception 'not_ready'; end if;
   if r.technician_id = p_staff then return; end if;
-  v_stage := case when s.team = 'hm' then 'hm' else 'ops' end;
   if r.status = 'new' then
-    v_origin := public._where(p_staff);
-    update public.requests
-       set status = 'accepted', technician_id = p_staff, accepted_at = now(), accept_method = 'assigned',
-           stage = v_stage, origin = v_origin,
-           target_arrive = coalesce(public._arrive_target(building_code, priority, v_stage, v_origin), target_arrive)
-     where id = p_id;
-    perform public._event(p_id, me.id, 'assigned', s.full_name);
+    perform public._offer(p_id, p_staff, me.id, v_note);
+    perform public._event(p_id, me.id, 'assigned', concat_ws(' · ', s.full_name, v_note));
   else
-    perform public._handover(p_id, 'reassigned', s.full_name, p_staff, v_stage);
-    perform public._event(p_id, me.id, 'reassigned', s.full_name);
+    perform public._end_visit(p_id, 'reassigned', s.full_name, false);
+    perform public._offer(p_id, p_staff, me.id, v_note);
+    perform public._event(p_id, me.id, 'reassigned', concat_ws(' · ', s.full_name, v_note));
     perform public._release(p_id, r.building_code);
+    perform public._push(array[r.technician_id], 'unassigned', p_id);
   end if;
-  perform public._push(array[p_staff], 'assigned', p_id);
-end $$;
-
--- move a request that nobody has taken yet between the building handyman and the operations room
-create or replace function public.mgr_stage(p_token text, p_id uuid, p_stage text) returns void
-language plpgsql security definer set search_path = public, pg_temp as $$
-declare me public.staff := public._auth(p_token, array['supervisor','admin']); r public.requests;
-begin
-  if p_stage not in ('hm','ops') then raise exception 'bad_stage'; end if;
-  select * into r from public.requests where id = p_id for update;
-  if not found or r.status <> 'new' then raise exception 'not_ready'; end if;
-  if r.stage = p_stage then return; end if;
-  update public.requests
-     set stage = p_stage, offered_at = now(), escalated_at = null,
-         target_arrive = coalesce(public._arrive_target(building_code, priority, p_stage, null), target_arrive)
-   where id = p_id;
-  perform public._event(p_id, me.id, case when p_stage = 'ops' then 'sent_ops' else 'sent_hm' end);
-  perform public._push(public._team_ids(p_stage, r.building_code), case when p_stage = 'ops' then 'ops' else 'new' end, p_id);
 end $$;
 
 create or replace function public.mgr_priority(p_token text, p_id uuid, p_priority text) returns void
@@ -893,7 +948,7 @@ begin
   if r.priority = p_priority then return; end if;
   v_t := public._targets(r.building_code, p_priority);
   update public.requests
-     set priority = p_priority, target_pickup = v_t[1], target_work = v_t[2],
+     set priority = p_priority, target_pickup = v_t[1], target_work = v_t[2], target_dispatch = v_t[3],
          target_arrive = case when arrived_at is null
                               then coalesce(public._arrive_target(building_code, p_priority, stage, origin), target_arrive)
                               else target_arrive end
@@ -933,16 +988,24 @@ begin
    where id = p_id;
   perform public._event(p_id, me.id, 'cancelled', left(trim(p_note), 500));
   perform public._release(p_id, r.building_code);
+  if r.technician_id is not null and r.status in ('assigned','accepted','onsite') then
+    perform public._push(array[r.technician_id], 'cancelled', p_id);
+  end if;
 end $$;
 
--- the desk logs a request reported by phone, WhatsApp or in person (photo optional)
+-- the supervisor logs a request reported by phone, WhatsApp or in person (photo optional),
+-- and can give it to someone straight away
 create or replace function public.mgr_create_request(p_token text, p_unit uuid, p_issue text, p_description text,
   p_photo text default null, p_name text default null, p_phone text default null, p_source text default 'phone',
-  p_lang text default 'ar') returns json
+  p_lang text default 'ar', p_staff uuid default null, p_assign_note text default null) returns json
 language plpgsql security definer set search_path = public, extensions, pg_temp as $$
 declare me public.staff := public._auth(p_token, array['supervisor','admin']); u public.units; v_pri text;
-        v_photo text := nullif(p_photo, '');
+        v_photo text := nullif(p_photo, ''); v_res json; v_tech public.staff; v_id uuid;
 begin
+  if p_staff is not null then
+    select * into v_tech from public.staff where id = p_staff and active and role = 'technician';
+    if not found then raise exception 'bad_technician'; end if;
+  end if;
   select * into u from public.units where id = p_unit and active;
   if not found then raise exception 'invalid_unit'; end if;
   select e->>'p' into v_pri
@@ -952,8 +1015,16 @@ begin
   if coalesce(length(trim(p_description)), 0) < 3 then raise exception 'description_required'; end if;
   if v_photo is not null and (v_photo !~ '^data:image/(jpeg|png|webp);base64,' or length(v_photo) < 1000) then raise exception 'photo_required'; end if;
   if length(coalesce(v_photo, '')) > 1500000 then raise exception 'photo_too_large'; end if;
-  return public._insert_request(u, p_issue, v_pri, p_description, v_photo, p_lang, p_name, p_phone,
+  v_res := public._insert_request(u, p_issue, v_pri, p_description, v_photo, p_lang, p_name, p_phone,
     case when p_source in ('phone','whatsapp','walkin','email') then p_source else 'other' end, me.id);
+  v_id := (v_res->>'id')::uuid;
+  if p_staff is not null then
+    perform public._offer(v_id, p_staff, me.id, p_assign_note);
+    perform public._event(v_id, me.id, 'assigned', concat_ws(' · ', v_tech.full_name, nullif(left(trim(coalesce(p_assign_note, '')), 300), '')));
+  else
+    perform public._push(array_remove(public._desk_ids(true), me.id), 'new', v_id);
+  end if;
+  return v_res;
 end $$;
 
 create or replace function public.team_list(p_token text) returns json
@@ -1071,7 +1142,9 @@ begin
 end $$;
 
 -- -------------------------------------------------- reminders and notification set-up
--- a request nobody accepted within its pickup target alerts the supervisor and the admin once
+-- Reminders, once each time: a request still waiting to be given out after its distribution target
+-- (to the supervisor and the admin), and a job not accepted after its acceptance target (to them
+-- and to the person who has it).
 create or replace function public._escalate() returns int
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare q record; n int := 0; st jsonb;
@@ -1080,12 +1153,23 @@ begin
   for q in
     select r.id from public.requests r
      where r.status = 'new' and r.escalated_at is null
+       and coalesce(r.queued_at, r.created_at) < now() - make_interval(mins => coalesce(r.target_dispatch,
+             nullif(st #>> array['targets', r.priority, 'dispatch'], '')::int, case when r.priority = 'urgent' then 10 else 30 end))
+  loop
+    update public.requests set escalated_at = now() where id = q.id;
+    perform public._event(q.id, null, 'late_dispatch');
+    perform public._push(public._desk_ids(), 'late_dispatch', q.id);
+    n := n + 1;
+  end loop;
+  for q in
+    select r.id, r.technician_id from public.requests r
+     where r.status = 'assigned' and r.escalated_at is null
        and coalesce(r.offered_at, r.created_at) < now() - make_interval(mins => coalesce(r.target_pickup,
-             nullif(st #>> array['targets', r.priority, 'pickup'], '')::int, case when r.priority = 'urgent' then 15 else 60 end))
+             nullif(st #>> array['targets', r.priority, 'pickup'], '')::int, case when r.priority = 'urgent' then 10 else 30 end))
   loop
     update public.requests set escalated_at = now() where id = q.id;
     perform public._event(q.id, null, 'escalated');
-    perform public._push(public._desk_ids(), 'late', q.id);
+    perform public._push(public._desk_ids() || q.technician_id, 'late', q.id);
     n := n + 1;
   end loop;
   return n;
@@ -1169,11 +1253,12 @@ end $$;
 -- ------------------------------------------------------ who may call what
 revoke all on function public._norm_phone(text), public._auth(text, text[]), public._new_session(uuid),
   public._targets(text, text), public._arrive_target(text, text, text, text), public._stage_for(text),
-  public._team_ids(text, text), public._desk_ids(boolean), public._sees(public.staff, public.requests), public._where(uuid),
-  public._event(uuid, uuid, text, text), public._clean_parts(jsonb), public._parts_text(jsonb),
-  public._leg(public.requests, text, text), public._handover(uuid, text, text, uuid, text), public._release(uuid, text),
+  public._desk_ids(boolean), public._sees(public.staff, public.requests), public._where(uuid),
+  public._origin(uuid, text), public._event(uuid, uuid, text, text), public._clean_parts(jsonb), public._parts_text(jsonb),
+  public._leg(public.requests, text, text), public._end_visit(uuid, text, text, boolean, text),
+  public._offer(uuid, uuid, uuid, text), public._release(uuid, text),
   public._insert_request(public.units, text, text, text, text, text, text, text, text, uuid),
-  public._push(uuid[], text, uuid), public._push_text(text, public.requests, text, jsonb), public._on_request_new(), public._escalate()
+  public._push(uuid[], text, uuid), public._push_text(text, public.requests, text, jsonb), public._escalate()
   from public, anon, authenticated;
 
 revoke all on function
@@ -1186,11 +1271,11 @@ revoke all on function
   public.tech_accept(text,uuid,uuid,text), public.tech_hold(text,uuid,text,text,uuid,timestamptz,jsonb),
   public.tech_resume(text,uuid,text,text),
   public.tech_arrive(text,uuid,text,text,double precision,double precision,double precision),
-  public.tech_finish(text,uuid,text,text,jsonb), public.tech_escalate(text,uuid,text),
+  public.tech_finish(text,uuid,text,text,jsonb), public.tech_escalate(text,uuid,text), public.tech_decline(text,uuid,text),
   public.onsite_signoff(text,uuid,text,text,int,text),
-  public.mgr_assign(text,uuid,uuid), public.mgr_stage(text,uuid,text), public.mgr_priority(text,uuid,text),
+  public.mgr_assign(text,uuid,uuid,text), public.mgr_priority(text,uuid,text),
   public.mgr_close(text,uuid,text), public.mgr_cancel(text,uuid,text),
-  public.mgr_create_request(text,uuid,text,text,text,text,text,text,text), public.team_list(text),
+  public.mgr_create_request(text,uuid,text,text,text,text,text,text,text,uuid,text), public.team_list(text),
   public.admin_save_staff(text,uuid,text,text,text,boolean,text,text,jsonb), public.admin_units(text),
   public.admin_add_unit(text,text,text,text,text,text,text,int), public.admin_unit_active(text,uuid,boolean),
   public.admin_save_settings(text,jsonb),
@@ -1208,11 +1293,11 @@ grant execute on function
   public.tech_accept(text,uuid,uuid,text), public.tech_hold(text,uuid,text,text,uuid,timestamptz,jsonb),
   public.tech_resume(text,uuid,text,text),
   public.tech_arrive(text,uuid,text,text,double precision,double precision,double precision),
-  public.tech_finish(text,uuid,text,text,jsonb), public.tech_escalate(text,uuid,text),
+  public.tech_finish(text,uuid,text,text,jsonb), public.tech_escalate(text,uuid,text), public.tech_decline(text,uuid,text),
   public.onsite_signoff(text,uuid,text,text,int,text),
-  public.mgr_assign(text,uuid,uuid), public.mgr_stage(text,uuid,text), public.mgr_priority(text,uuid,text),
+  public.mgr_assign(text,uuid,uuid,text), public.mgr_priority(text,uuid,text),
   public.mgr_close(text,uuid,text), public.mgr_cancel(text,uuid,text),
-  public.mgr_create_request(text,uuid,text,text,text,text,text,text,text), public.team_list(text),
+  public.mgr_create_request(text,uuid,text,text,text,text,text,text,text,uuid,text), public.team_list(text),
   public.admin_save_staff(text,uuid,text,text,text,boolean,text,text,jsonb), public.admin_units(text),
   public.admin_add_unit(text,text,text,text,text,text,text,int), public.admin_unit_active(text,uuid,boolean),
   public.admin_save_settings(text,jsonb),
@@ -1221,7 +1306,7 @@ grant execute on function
   to anon, authenticated;
 
 -- ------------------------------------------------------------- first data
-insert into public.settings (id, data) values (1, $json${"v":2,"contractor":{"ar":"الطاؤوس","en":"Tawoos"},"targets":{"urgent":{"pickup":15,"arrive":15,"work":120},"normal":{"pickup":60,"arrive":60,"work":240}},"buildings":{"AZB":{"ar":"مبنى العذيبة","en":"Azaiba Building","type":"res","ops":30,"sort":1,"lat":null,"lng":null},"SAY":{"ar":"مبنى السيب","en":"Seeb Building","type":"res","ops":120,"sort":2,"lat":null,"lng":null},"MWL":{"ar":"مبنى الموالح","en":"Mawaleh Building","type":"res","ops":90,"sort":3,"lat":null,"lng":null},"BSH":{"ar":"مبنى بوشر","en":"Bousher Building","type":"res","ops":60,"sort":4,"lat":null,"lng":null},"HO":{"ar":"المكتب الرئيسي","en":"Head Office","type":"com","ops":30,"sort":5,"lat":null,"lng":null},"SCC":{"ar":"سابكو سنتر","en":"SABCO Centre","type":"com","ops":30,"sort":6,"lat":null,"lng":null},"OBTS":{"ar":"الواحة على الشاطئ","en":"Oasis by the Sea","type":"com","ops":30,"sort":7,"lat":null,"lng":null}},"repeatDays":30,"issueTypes":[{"k":"water_leak","p":"urgent","ar":"تسرّب مياه أو فيضان","en":"Water leak or flooding"},{"k":"no_power","p":"urgent","ar":"انقطاع الكهرباء","en":"Power outage"},{"k":"sparks","p":"urgent","ar":"شرارة أو رائحة احتراق","en":"Sparks or burning smell"},{"k":"no_water","p":"urgent","ar":"انقطاع المياه","en":"No water supply"},{"k":"drain_overflow","p":"urgent","ar":"انسداد أو طفح المجاري","en":"Blocked or overflowing drain"},{"k":"door_lock","p":"urgent","ar":"باب لا يُقفل","en":"Door will not lock"},{"k":"lift","p":"urgent","ar":"المصعد متوقف أو عالق","en":"Lift stopped or stuck"},{"k":"ac","p":"normal","ar":"المكيف لا يعمل أو لا يبرّد","en":"AC not working or not cooling"},{"k":"lights","p":"normal","ar":"إنارة لا تعمل","en":"Lights not working"},{"k":"sockets","p":"normal","ar":"أفياش أو مفاتيح كهرباء","en":"Sockets or switches"},{"k":"heater","p":"normal","ar":"سخان الماء","en":"Water heater"},{"k":"plumbing","p":"normal","ar":"حنفية أو سيفون أو شطاف","en":"Tap, toilet flush or hand spray"},{"k":"carpentry","p":"normal","ar":"أبواب أو نوافذ أو خزائن","en":"Doors, windows or cupboards"},{"k":"pests","p":"normal","ar":"حشرات","en":"Pests"},{"k":"other","p":"normal","ar":"أخرى","en":"Other"}]}$json$::jsonb)
+insert into public.settings (id, data) values (1, $json${"v":3,"contractor":{"ar":"الطاؤوس","en":"Tawoos"},"targets":{"urgent":{"dispatch":10,"pickup":10,"arrive":15,"work":120},"normal":{"dispatch":30,"pickup":30,"arrive":60,"work":240}},"buildings":{"AZB":{"ar":"مبنى العذيبة","en":"Azaiba Building","type":"res","ops":30,"sort":1,"lat":null,"lng":null},"SAY":{"ar":"مبنى السيب","en":"Seeb Building","type":"res","ops":120,"sort":2,"lat":null,"lng":null},"MWL":{"ar":"مبنى الموالح","en":"Mawaleh Building","type":"res","ops":90,"sort":3,"lat":null,"lng":null},"BSH":{"ar":"مبنى بوشر","en":"Bousher Building","type":"res","ops":60,"sort":4,"lat":null,"lng":null},"HO":{"ar":"المكتب الرئيسي","en":"Head Office","type":"com","ops":30,"sort":5,"lat":null,"lng":null},"SCC":{"ar":"سابكو سنتر","en":"SABCO Centre","type":"com","ops":30,"sort":6,"lat":null,"lng":null},"OBTS":{"ar":"الواحة على الشاطئ","en":"Oasis by the Sea","type":"com","ops":30,"sort":7,"lat":null,"lng":null}},"repeatDays":30,"issueTypes":[{"k":"water_leak","p":"urgent","ar":"تسرّب مياه أو فيضان","en":"Water leak or flooding"},{"k":"no_power","p":"urgent","ar":"انقطاع الكهرباء","en":"Power outage"},{"k":"sparks","p":"urgent","ar":"شرارة أو رائحة احتراق","en":"Sparks or burning smell"},{"k":"no_water","p":"urgent","ar":"انقطاع المياه","en":"No water supply"},{"k":"drain_overflow","p":"urgent","ar":"انسداد أو طفح المجاري","en":"Blocked or overflowing drain"},{"k":"door_lock","p":"urgent","ar":"باب لا يُقفل","en":"Door will not lock"},{"k":"lift","p":"urgent","ar":"المصعد متوقف أو عالق","en":"Lift stopped or stuck"},{"k":"ac","p":"normal","ar":"المكيف لا يعمل أو لا يبرّد","en":"AC not working or not cooling"},{"k":"lights","p":"normal","ar":"إنارة لا تعمل","en":"Lights not working"},{"k":"sockets","p":"normal","ar":"أفياش أو مفاتيح كهرباء","en":"Sockets or switches"},{"k":"heater","p":"normal","ar":"سخان الماء","en":"Water heater"},{"k":"plumbing","p":"normal","ar":"حنفية أو سيفون أو شطاف","en":"Tap, toilet flush or hand spray"},{"k":"carpentry","p":"normal","ar":"أبواب أو نوافذ أو خزائن","en":"Doors, windows or cupboards"},{"k":"pests","p":"normal","ar":"حشرات","en":"Pests"},{"k":"other","p":"normal","ar":"أخرى","en":"Other"}]}$json$::jsonb)
 on conflict (id) do nothing;
 
 -- upgrading from the first version: add the buildings and team targets, keep everything already edited
@@ -1231,8 +1316,21 @@ update public.settings s
                      from jsonb_object_keys(coalesce(d.def->'buildings', '{}'::jsonb) || coalesce(s.data->'buildings', '{}'::jsonb)) k), '{}'::jsonb)),
          '{targets}', case when s.data->'targets' = $json${"urgent":{"pickup":15,"arrive":60,"work":120},"normal":{"pickup":60,"arrive":240,"work":240}}$json$::jsonb then d.def->'targets' else coalesce(s.data->'targets', d.def->'targets') end),
        updated_at = now()
-  from (select $json${"v":2,"contractor":{"ar":"الطاؤوس","en":"Tawoos"},"targets":{"urgent":{"pickup":15,"arrive":15,"work":120},"normal":{"pickup":60,"arrive":60,"work":240}},"buildings":{"AZB":{"ar":"مبنى العذيبة","en":"Azaiba Building","type":"res","ops":30,"sort":1,"lat":null,"lng":null},"SAY":{"ar":"مبنى السيب","en":"Seeb Building","type":"res","ops":120,"sort":2,"lat":null,"lng":null},"MWL":{"ar":"مبنى الموالح","en":"Mawaleh Building","type":"res","ops":90,"sort":3,"lat":null,"lng":null},"BSH":{"ar":"مبنى بوشر","en":"Bousher Building","type":"res","ops":60,"sort":4,"lat":null,"lng":null},"HO":{"ar":"المكتب الرئيسي","en":"Head Office","type":"com","ops":30,"sort":5,"lat":null,"lng":null},"SCC":{"ar":"سابكو سنتر","en":"SABCO Centre","type":"com","ops":30,"sort":6,"lat":null,"lng":null},"OBTS":{"ar":"الواحة على الشاطئ","en":"Oasis by the Sea","type":"com","ops":30,"sort":7,"lat":null,"lng":null}},"repeatDays":30,"issueTypes":[{"k":"water_leak","p":"urgent","ar":"تسرّب مياه أو فيضان","en":"Water leak or flooding"},{"k":"no_power","p":"urgent","ar":"انقطاع الكهرباء","en":"Power outage"},{"k":"sparks","p":"urgent","ar":"شرارة أو رائحة احتراق","en":"Sparks or burning smell"},{"k":"no_water","p":"urgent","ar":"انقطاع المياه","en":"No water supply"},{"k":"drain_overflow","p":"urgent","ar":"انسداد أو طفح المجاري","en":"Blocked or overflowing drain"},{"k":"door_lock","p":"urgent","ar":"باب لا يُقفل","en":"Door will not lock"},{"k":"lift","p":"urgent","ar":"المصعد متوقف أو عالق","en":"Lift stopped or stuck"},{"k":"ac","p":"normal","ar":"المكيف لا يعمل أو لا يبرّد","en":"AC not working or not cooling"},{"k":"lights","p":"normal","ar":"إنارة لا تعمل","en":"Lights not working"},{"k":"sockets","p":"normal","ar":"أفياش أو مفاتيح كهرباء","en":"Sockets or switches"},{"k":"heater","p":"normal","ar":"سخان الماء","en":"Water heater"},{"k":"plumbing","p":"normal","ar":"حنفية أو سيفون أو شطاف","en":"Tap, toilet flush or hand spray"},{"k":"carpentry","p":"normal","ar":"أبواب أو نوافذ أو خزائن","en":"Doors, windows or cupboards"},{"k":"pests","p":"normal","ar":"حشرات","en":"Pests"},{"k":"other","p":"normal","ar":"أخرى","en":"Other"}]}$json$::jsonb as def) d
+  from (select $json${"v":3,"contractor":{"ar":"الطاؤوس","en":"Tawoos"},"targets":{"urgent":{"dispatch":10,"pickup":10,"arrive":15,"work":120},"normal":{"dispatch":30,"pickup":30,"arrive":60,"work":240}},"buildings":{"AZB":{"ar":"مبنى العذيبة","en":"Azaiba Building","type":"res","ops":30,"sort":1,"lat":null,"lng":null},"SAY":{"ar":"مبنى السيب","en":"Seeb Building","type":"res","ops":120,"sort":2,"lat":null,"lng":null},"MWL":{"ar":"مبنى الموالح","en":"Mawaleh Building","type":"res","ops":90,"sort":3,"lat":null,"lng":null},"BSH":{"ar":"مبنى بوشر","en":"Bousher Building","type":"res","ops":60,"sort":4,"lat":null,"lng":null},"HO":{"ar":"المكتب الرئيسي","en":"Head Office","type":"com","ops":30,"sort":5,"lat":null,"lng":null},"SCC":{"ar":"سابكو سنتر","en":"SABCO Centre","type":"com","ops":30,"sort":6,"lat":null,"lng":null},"OBTS":{"ar":"الواحة على الشاطئ","en":"Oasis by the Sea","type":"com","ops":30,"sort":7,"lat":null,"lng":null}},"repeatDays":30,"issueTypes":[{"k":"water_leak","p":"urgent","ar":"تسرّب مياه أو فيضان","en":"Water leak or flooding"},{"k":"no_power","p":"urgent","ar":"انقطاع الكهرباء","en":"Power outage"},{"k":"sparks","p":"urgent","ar":"شرارة أو رائحة احتراق","en":"Sparks or burning smell"},{"k":"no_water","p":"urgent","ar":"انقطاع المياه","en":"No water supply"},{"k":"drain_overflow","p":"urgent","ar":"انسداد أو طفح المجاري","en":"Blocked or overflowing drain"},{"k":"door_lock","p":"urgent","ar":"باب لا يُقفل","en":"Door will not lock"},{"k":"lift","p":"urgent","ar":"المصعد متوقف أو عالق","en":"Lift stopped or stuck"},{"k":"ac","p":"normal","ar":"المكيف لا يعمل أو لا يبرّد","en":"AC not working or not cooling"},{"k":"lights","p":"normal","ar":"إنارة لا تعمل","en":"Lights not working"},{"k":"sockets","p":"normal","ar":"أفياش أو مفاتيح كهرباء","en":"Sockets or switches"},{"k":"heater","p":"normal","ar":"سخان الماء","en":"Water heater"},{"k":"plumbing","p":"normal","ar":"حنفية أو سيفون أو شطاف","en":"Tap, toilet flush or hand spray"},{"k":"carpentry","p":"normal","ar":"أبواب أو نوافذ أو خزائن","en":"Doors, windows or cupboards"},{"k":"pests","p":"normal","ar":"حشرات","en":"Pests"},{"k":"other","p":"normal","ar":"أخرى","en":"Other"}]}$json$::jsonb as def) d
  where s.id = 1 and coalesce(s.data->>'v', '1') = '1';
+
+-- upgrading to version 3 (the supervisor distributes the work): add his distribution target, and the
+-- shorter acceptance target where the old one was never edited
+update public.settings s
+   set data = jsonb_set(s.data || '{"v": 3}'::jsonb, '{targets}',
+         (select jsonb_object_agg(p, coalesce(s.data #> array['targets', p], '{}'::jsonb)
+                 || jsonb_build_object('dispatch', coalesce(s.data #> array['targets', p, 'dispatch'], d.def #> array['targets', p, 'dispatch']))
+                 || case when s.data #>> array['targets', p, 'pickup'] = case p when 'urgent' then '15' else '60' end
+                         then jsonb_build_object('pickup', d.def #> array['targets', p, 'pickup']) else '{}'::jsonb end)
+            from unnest(array['urgent', 'normal']) p)),
+       updated_at = now()
+  from (select $json${"v":3,"contractor":{"ar":"الطاؤوس","en":"Tawoos"},"targets":{"urgent":{"dispatch":10,"pickup":10,"arrive":15,"work":120},"normal":{"dispatch":30,"pickup":30,"arrive":60,"work":240}},"buildings":{"AZB":{"ar":"مبنى العذيبة","en":"Azaiba Building","type":"res","ops":30,"sort":1,"lat":null,"lng":null},"SAY":{"ar":"مبنى السيب","en":"Seeb Building","type":"res","ops":120,"sort":2,"lat":null,"lng":null},"MWL":{"ar":"مبنى الموالح","en":"Mawaleh Building","type":"res","ops":90,"sort":3,"lat":null,"lng":null},"BSH":{"ar":"مبنى بوشر","en":"Bousher Building","type":"res","ops":60,"sort":4,"lat":null,"lng":null},"HO":{"ar":"المكتب الرئيسي","en":"Head Office","type":"com","ops":30,"sort":5,"lat":null,"lng":null},"SCC":{"ar":"سابكو سنتر","en":"SABCO Centre","type":"com","ops":30,"sort":6,"lat":null,"lng":null},"OBTS":{"ar":"الواحة على الشاطئ","en":"Oasis by the Sea","type":"com","ops":30,"sort":7,"lat":null,"lng":null}},"repeatDays":30,"issueTypes":[{"k":"water_leak","p":"urgent","ar":"تسرّب مياه أو فيضان","en":"Water leak or flooding"},{"k":"no_power","p":"urgent","ar":"انقطاع الكهرباء","en":"Power outage"},{"k":"sparks","p":"urgent","ar":"شرارة أو رائحة احتراق","en":"Sparks or burning smell"},{"k":"no_water","p":"urgent","ar":"انقطاع المياه","en":"No water supply"},{"k":"drain_overflow","p":"urgent","ar":"انسداد أو طفح المجاري","en":"Blocked or overflowing drain"},{"k":"door_lock","p":"urgent","ar":"باب لا يُقفل","en":"Door will not lock"},{"k":"lift","p":"urgent","ar":"المصعد متوقف أو عالق","en":"Lift stopped or stuck"},{"k":"ac","p":"normal","ar":"المكيف لا يعمل أو لا يبرّد","en":"AC not working or not cooling"},{"k":"lights","p":"normal","ar":"إنارة لا تعمل","en":"Lights not working"},{"k":"sockets","p":"normal","ar":"أفياش أو مفاتيح كهرباء","en":"Sockets or switches"},{"k":"heater","p":"normal","ar":"سخان الماء","en":"Water heater"},{"k":"plumbing","p":"normal","ar":"حنفية أو سيفون أو شطاف","en":"Tap, toilet flush or hand spray"},{"k":"carpentry","p":"normal","ar":"أبواب أو نوافذ أو خزائن","en":"Doors, windows or cupboards"},{"k":"pests","p":"normal","ar":"حشرات","en":"Pests"},{"k":"other","p":"normal","ar":"أخرى","en":"Other"}]}$json$::jsonb as def) d
+ where s.id = 1 and coalesce(s.data->>'v', '1')::int < 3;
 
 -- مبنى العذيبة (25)، مبنى السيب (1)، مبنى الموالح (1)، مبنى بوشر (1)، المكتب الرئيسي (1)، سابكو سنتر (1)، الواحة على الشاطئ (1) — QR codes (do not change the tokens: they are printed on the labels)
 insert into public.units (building_code, building_ar, building_en, label_ar, label_en, kind, token, sort) values
@@ -1271,4 +1369,4 @@ on conflict (token) do nothing;
 
 notify pgrst, 'reload schema';
 
-select 'رصد جاهز · Rasd is ready (v2)' as result;
+select 'رصد جاهز · Rasd is ready (v3)' as result;

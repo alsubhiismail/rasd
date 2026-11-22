@@ -4,7 +4,7 @@
 'use strict';
 
 const CFG = Object.assign({ supabaseUrl: '', supabaseKey: '', orgAr: '', orgEn: '', appUrl: '', demo: false, embedded: false }, window.RASD_CONFIG || {});
-const DEFAULTS = {"v":2,"contractor":{"ar":"الطاؤوس","en":"Tawoos"},"targets":{"urgent":{"pickup":15,"arrive":15,"work":120},"normal":{"pickup":60,"arrive":60,"work":240}},"buildings":{"AZB":{"ar":"مبنى العذيبة","en":"Azaiba Building","type":"res","ops":30,"sort":1,"lat":null,"lng":null},"SAY":{"ar":"مبنى السيب","en":"Seeb Building","type":"res","ops":120,"sort":2,"lat":null,"lng":null},"MWL":{"ar":"مبنى الموالح","en":"Mawaleh Building","type":"res","ops":90,"sort":3,"lat":null,"lng":null},"BSH":{"ar":"مبنى بوشر","en":"Bousher Building","type":"res","ops":60,"sort":4,"lat":null,"lng":null},"HO":{"ar":"المكتب الرئيسي","en":"Head Office","type":"com","ops":30,"sort":5,"lat":null,"lng":null},"SCC":{"ar":"سابكو سنتر","en":"SABCO Centre","type":"com","ops":30,"sort":6,"lat":null,"lng":null},"OBTS":{"ar":"الواحة على الشاطئ","en":"Oasis by the Sea","type":"com","ops":30,"sort":7,"lat":null,"lng":null}},"repeatDays":30,"issueTypes":[{"k":"water_leak","p":"urgent","ar":"تسرّب مياه أو فيضان","en":"Water leak or flooding"},{"k":"no_power","p":"urgent","ar":"انقطاع الكهرباء","en":"Power outage"},{"k":"sparks","p":"urgent","ar":"شرارة أو رائحة احتراق","en":"Sparks or burning smell"},{"k":"no_water","p":"urgent","ar":"انقطاع المياه","en":"No water supply"},{"k":"drain_overflow","p":"urgent","ar":"انسداد أو طفح المجاري","en":"Blocked or overflowing drain"},{"k":"door_lock","p":"urgent","ar":"باب لا يُقفل","en":"Door will not lock"},{"k":"lift","p":"urgent","ar":"المصعد متوقف أو عالق","en":"Lift stopped or stuck"},{"k":"ac","p":"normal","ar":"المكيف لا يعمل أو لا يبرّد","en":"AC not working or not cooling"},{"k":"lights","p":"normal","ar":"إنارة لا تعمل","en":"Lights not working"},{"k":"sockets","p":"normal","ar":"أفياش أو مفاتيح كهرباء","en":"Sockets or switches"},{"k":"heater","p":"normal","ar":"سخان الماء","en":"Water heater"},{"k":"plumbing","p":"normal","ar":"حنفية أو سيفون أو شطاف","en":"Tap, toilet flush or hand spray"},{"k":"carpentry","p":"normal","ar":"أبواب أو نوافذ أو خزائن","en":"Doors, windows or cupboards"},{"k":"pests","p":"normal","ar":"حشرات","en":"Pests"},{"k":"other","p":"normal","ar":"أخرى","en":"Other"}]};
+const DEFAULTS = {"v":3,"contractor":{"ar":"الطاؤوس","en":"Tawoos"},"targets":{"urgent":{"dispatch":10,"pickup":10,"arrive":15,"work":120},"normal":{"dispatch":30,"pickup":30,"arrive":60,"work":240}},"buildings":{"AZB":{"ar":"مبنى العذيبة","en":"Azaiba Building","type":"res","ops":30,"sort":1,"lat":null,"lng":null},"SAY":{"ar":"مبنى السيب","en":"Seeb Building","type":"res","ops":120,"sort":2,"lat":null,"lng":null},"MWL":{"ar":"مبنى الموالح","en":"Mawaleh Building","type":"res","ops":90,"sort":3,"lat":null,"lng":null},"BSH":{"ar":"مبنى بوشر","en":"Bousher Building","type":"res","ops":60,"sort":4,"lat":null,"lng":null},"HO":{"ar":"المكتب الرئيسي","en":"Head Office","type":"com","ops":30,"sort":5,"lat":null,"lng":null},"SCC":{"ar":"سابكو سنتر","en":"SABCO Centre","type":"com","ops":30,"sort":6,"lat":null,"lng":null},"OBTS":{"ar":"الواحة على الشاطئ","en":"Oasis by the Sea","type":"com","ops":30,"sort":7,"lat":null,"lng":null}},"repeatDays":30,"issueTypes":[{"k":"water_leak","p":"urgent","ar":"تسرّب مياه أو فيضان","en":"Water leak or flooding"},{"k":"no_power","p":"urgent","ar":"انقطاع الكهرباء","en":"Power outage"},{"k":"sparks","p":"urgent","ar":"شرارة أو رائحة احتراق","en":"Sparks or burning smell"},{"k":"no_water","p":"urgent","ar":"انقطاع المياه","en":"No water supply"},{"k":"drain_overflow","p":"urgent","ar":"انسداد أو طفح المجاري","en":"Blocked or overflowing drain"},{"k":"door_lock","p":"urgent","ar":"باب لا يُقفل","en":"Door will not lock"},{"k":"lift","p":"urgent","ar":"المصعد متوقف أو عالق","en":"Lift stopped or stuck"},{"k":"ac","p":"normal","ar":"المكيف لا يعمل أو لا يبرّد","en":"AC not working or not cooling"},{"k":"lights","p":"normal","ar":"إنارة لا تعمل","en":"Lights not working"},{"k":"sockets","p":"normal","ar":"أفياش أو مفاتيح كهرباء","en":"Sockets or switches"},{"k":"heater","p":"normal","ar":"سخان الماء","en":"Water heater"},{"k":"plumbing","p":"normal","ar":"حنفية أو سيفون أو شطاف","en":"Tap, toilet flush or hand spray"},{"k":"carpentry","p":"normal","ar":"أبواب أو نوافذ أو خزائن","en":"Doors, windows or cupboards"},{"k":"pests","p":"normal","ar":"حشرات","en":"Pests"},{"k":"other","p":"normal","ar":"أخرى","en":"Other"}]};
 const DEMO_UNITS = {"buildings":[{"code":"AZB","ar":"مبنى العذيبة","en":"Azaiba Building","units":[{"kind":"flat","label_ar":"شقة 11","label_en":"Flat 11","token":"azb11-v6jt9x","sort":11},{"kind":"flat","label_ar":"شقة 12","label_en":"Flat 12","token":"azb12-vhbyze","sort":12},{"kind":"flat","label_ar":"شقة 13","label_en":"Flat 13","token":"azb13-bky9gm","sort":13},{"kind":"flat","label_ar":"شقة 14","label_en":"Flat 14","token":"azb14-msr63u","sort":14},{"kind":"flat","label_ar":"شقة 21","label_en":"Flat 21","token":"azb21-n7qnnu","sort":21},{"kind":"flat","label_ar":"شقة 22","label_en":"Flat 22","token":"azb22-4eu76z","sort":22},{"kind":"flat","label_ar":"شقة 23","label_en":"Flat 23","token":"azb23-rt4t62","sort":23},{"kind":"flat","label_ar":"شقة 24","label_en":"Flat 24","token":"azb24-cunkud","sort":24},{"kind":"flat","label_ar":"شقة 31","label_en":"Flat 31","token":"azb31-7zped2","sort":31},{"kind":"flat","label_ar":"شقة 32","label_en":"Flat 32","token":"azb32-sj2xbm","sort":32},{"kind":"flat","label_ar":"شقة 33","label_en":"Flat 33","token":"azb33-49c27v","sort":33},{"kind":"flat","label_ar":"شقة 34","label_en":"Flat 34","token":"azb34-sv3ah9","sort":34},{"kind":"flat","label_ar":"شقة 41","label_en":"Flat 41","token":"azb41-c3u93h","sort":41},{"kind":"flat","label_ar":"شقة 42","label_en":"Flat 42","token":"azb42-abp626","sort":42},{"kind":"flat","label_ar":"شقة 43","label_en":"Flat 43","token":"azb43-yjchw5","sort":43},{"kind":"flat","label_ar":"شقة 44","label_en":"Flat 44","token":"azb44-cnxm69","sort":44},{"kind":"flat","label_ar":"شقة 51","label_en":"Flat 51","token":"azb51-7jawz3","sort":51},{"kind":"flat","label_ar":"شقة 52","label_en":"Flat 52","token":"azb52-x8c3aq","sort":52},{"kind":"flat","label_ar":"شقة 53","label_en":"Flat 53","token":"azb53-yhc6ms","sort":53},{"kind":"flat","label_ar":"شقة 54","label_en":"Flat 54","token":"azb54-eea9wx","sort":54},{"kind":"flat","label_ar":"شقة 61","label_en":"Flat 61","token":"azb61-kz68wf","sort":61},{"kind":"flat","label_ar":"شقة 62","label_en":"Flat 62","token":"azb62-wgfyu9","sort":62},{"kind":"flat","label_ar":"شقة 63","label_en":"Flat 63","token":"azb63-f3jjhw","sort":63},{"kind":"flat","label_ar":"شقة 64","label_en":"Flat 64","token":"azb64-tst374","sort":64},{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"azbc-b8xswv","sort":100}]},{"code":"SAY","ar":"مبنى السيب","en":"Seeb Building","units":[{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"sayc-a5s5va","sort":100}]},{"code":"MWL","ar":"مبنى الموالح","en":"Mawaleh Building","units":[{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"mwlc-25ss5i","sort":100}]},{"code":"BSH","ar":"مبنى بوشر","en":"Bousher Building","units":[{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"bshc-9arcwu","sort":100}]},{"code":"HO","ar":"المكتب الرئيسي","en":"Head Office","units":[{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"hoc-jxu2ur","sort":100}]},{"code":"SCC","ar":"سابكو سنتر","en":"SABCO Centre","units":[{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"sccc-2b2ze8","sort":100}]},{"code":"OBTS","ar":"الواحة على الشاطئ","en":"Oasis by the Sea","units":[{"kind":"common","label_ar":"المنطقة العامة","label_en":"Common area","token":"obtsc-tz7gxn","sort":100}]}]};
 const QS = new URLSearchParams(location.search);
 const DEMO = !!CFG.demo || QS.get('demo') === '1' || !(CFG.supabaseUrl && CFG.supabaseKey);
@@ -40,7 +40,7 @@ ar: {
   lang_other: 'English', loading: 'جارٍ التحميل…', retry: 'إعادة المحاولة', back: 'رجوع', save: 'حفظ', cancel: 'إلغاء',
   close: 'إغلاق', confirm: 'تأكيد', optional: 'اختياري', min: 'د', hr: 'س', day: 'يوم', logout: 'خروج',
   role_technician: 'فني', role_supervisor: 'مسؤول الصيانة', role_admin: 'المدير',
-  st_new: 'جديد', st_accepted: 'في الطريق', st_onsite: 'جارٍ الإصلاح', st_finished: 'بانتظار التوقيع', st_closed: 'مغلق', st_cancelled: 'ملغي',
+  st_new: 'بانتظار التوزيع', st_accepted: 'في الطريق', st_onsite: 'جارٍ الإصلاح', st_finished: 'بانتظار التوقيع', st_closed: 'مغلق', st_cancelled: 'ملغي',
   pr_urgent: 'عاجل', pr_normal: 'عادي', kind_flat: 'شقة', kind_common: 'منطقة عامة',
   land_body: 'النظام قيد التجهيز ولم يُربط بقاعدة البيانات بعد.', land_demo: 'عرض النموذج التجريبي',
   t_report: 'الإبلاغ عن مشكلة', t_report_sub: 'يصل بلاغك مباشرةً إلى فريق الصيانة، ويمكنك متابعته من هذه الصفحة.',
@@ -51,7 +51,7 @@ ar: {
   t_bad_unit: 'هذا الرمز غير صالح أو تم إيقافه. تواصل مع إدارة المبنى.', t_your: 'طلباتك من هذا الجهاز',
   t_sign_now: 'وقّع وقيّم الآن', t_view: 'متابعة', t_sent_title: 'تم استلام طلبك',
   t_sent_body: 'رقم الطلب {no}. احتفظ بهذه الصفحة لمتابعة طلبك وللتوقيع بعد الإصلاح.',
-  t_track_title: 'طلب رقم {no}', t_step_sent: 'تم استلام الطلب', t_step_acc: 'قبِل الفني الطلب', t_step_arr: 'وصل الفني',
+  t_track_title: 'طلب رقم {no}', t_step_sent: 'وصل الطلب لمسؤول الصيانة', t_step_acc: 'قبِل الفني الطلب', t_step_arr: 'وصل الفني',
   t_step_fin: 'انتهى الإصلاح', t_step_closed: 'تم الإغلاق', t_cancelled: 'تم إلغاء هذا الطلب.',
   t_confirm_title: 'أكّد انتهاء العمل', t_confirm_body: 'راجع صورة الإصلاح، ثم قيّم الخدمة ووقّع لإغلاق الطلب.',
   t_rating: 'تقييم الخدمة', t_comment: 'ملاحظة', t_signature: 'التوقيع', t_sign_here: 'وقّع هنا بإصبعك', t_clear: 'مسح',
@@ -66,10 +66,10 @@ ar: {
   s_pin2: 'أعد كتابة الرمز', s_mismatch: 'الرمزان غير متطابقين', s_submit: 'إنشاء الحساب',
   session_expired: 'انتهت الجلسة، سجّل الدخول من جديد.',
   n_jobs: 'المهام', n_history: 'سجلي', n_board: 'اللوحة', n_eval: 'التقييم', n_team: 'الفريق', n_qr: 'رموز QR', n_settings: 'الإعدادات',
-  j_mine: 'مهامي الحالية', j_new: 'طلبات جديدة', j_none_mine: 'لا توجد مهام مفتوحة لديك.', j_none_new: 'لا توجد طلبات جديدة الآن.',
+  j_mine: 'مهامي الحالية', j_new: 'مهام جديدة مسندة إليك', j_none_mine: 'لا توجد مهام مفتوحة لديك.', j_none_new: 'لا توجد مهام جديدة مسندة إليك.',
   j_alert: 'طلب جديد: {u}',
-  tm_wait: 'بانتظار الاستلام', tm_way: 'زمن الوصول', tm_work: 'زمن الإصلاح', tm_sign: 'بانتظار التوقيع', tm_total: 'المدة الإجمالية',
-  tm_pickup: 'زمن الاستلام', target: 'الهدف {m}', on_time: 'ضمن الوقت', late: 'متأخر',
+  tm_way: 'زمن الوصول', tm_work: 'زمن الإصلاح', tm_sign: 'بانتظار التوقيع', tm_total: 'المدة الإجمالية',
+  tm_pickup: 'زمن القبول', target: 'الهدف {m}', on_time: 'ضمن الوقت', late: 'متأخر',
   d_reported: 'وقت البلاغ', d_photo_before: 'صورة المشكلة', d_times: 'التوقيتات', d_log: 'سجل الأحداث',
   d_accept: 'قبول والتوجّه الآن', d_accept_ok: 'تم قبول الطلب وبدأ عدّاد الوصول.',
   d_arrive: 'وصلت: امسح رمز QR في الموقع', d_arrive_manual: 'تعذّر المسح؟ سجّل الوصول يدوياً',
@@ -81,15 +81,15 @@ ar: {
   d_wait_sign: 'اطلب من صاحب الطلب مسح رمز QR في الموقع من جواله، فيظهر له الطلب ليوقّع ويقيّم.',
   d_onsite: 'التوقيع على جهازي بدلاً من ذلك', d_signer: 'اسم الموقّع', d_signer_ph: 'مثال: صاحب الشقة أو حارس المبنى',
   d_need_signer: 'اكتب اسم الموقّع', d_onsite_warn: 'سيظهر للإدارة أن التوقيع تم على جهاز الفني.',
-  d_close_req: 'إغلاق الطلب', d_closed_ok: 'تم إغلاق الطلب.', d_mgr: 'إجراءات الإدارة', d_assign: 'إسناد إلى فني',
-  d_reassign: 'تغيير الفني', d_assign_btn: 'إسناد', d_pick_tech: 'اختر فنياً', d_assigned_ok: 'تم الإسناد.', d_priority: 'التصنيف',
+  d_close_req: 'إغلاق الطلب', d_closed_ok: 'تم إغلاق الطلب.', d_mgr: 'إجراءات الإدارة', d_assign: 'توزيع المهمة',
+  d_reassign: 'نقل المهمة لشخص آخر', d_assign_btn: 'توزيع', d_pick_tech: 'اختر الهاندي مان أو الفني', d_assigned_ok: 'تم التوزيع، ووصله إشعار ليقبل المهمة.', d_priority: 'التصنيف',
   d_manual_close: 'إغلاق يدوي', d_cancel_req: 'إلغاء الطلب', d_reason: 'السبب', d_reason_need: 'اكتب السبب',
   d_signoff: 'الإغلاق والتقييم', d_signed_tenant: 'وقّع صاحب الطلب من جواله', d_signed_onsite: 'وُقّع على جهاز الفني',
   d_closed_manual: 'أُغلق يدوياً: {n}', d_cancelled: 'أُلغي: {n}', d_location: 'موقع الفني عند الوصول',
   d_from_building: 'يبعد {d} عن المبنى', d_accuracy: 'الدقة ± {d}', d_map: 'عرض على الخريطة', d_print: 'طباعة التقرير',
   d_by_qr: 'بمسح الرمز', d_by_manual: 'يدوياً', d_no_techs: 'أضف فنيين من صفحة الفريق أولاً.',
-  ev_submitted: 'أرسل صاحب الطلب البلاغ', ev_accepted: 'قبِل الفني الطلب', ev_assigned: 'أُسند الطلب إلى {n}',
-  ev_reassigned: 'تغيّر الفني إلى {n}', ev_arrived_qr: 'وصل الفني ومسح رمز الموقع', ev_arrived_manual: 'وصل الفني (تسجيل يدوي)',
+  ev_submitted: 'أرسل صاحب الطلب البلاغ', ev_accepted: 'قبِل الفني الطلب', ev_assigned: 'وُزّع على {n}',
+  ev_reassigned: 'نُقل إلى {n}', ev_arrived_qr: 'وصل الفني ومسح رمز الموقع', ev_arrived_manual: 'وصل الفني (تسجيل يدوي)',
   ev_finished: 'انتهى الإصلاح', ev_signed_tenant: 'وقّع صاحب الطلب وقيّم الخدمة', ev_signed_onsite: 'توقيع على جهاز الفني: {n}',
   ev_closed_manual: 'أُغلق يدوياً', ev_cancelled: 'أُلغي الطلب', ev_priority_urgent: 'تغيّر التصنيف إلى عاجل',
   ev_priority_normal: 'تغيّر التصنيف إلى عادي',
@@ -97,11 +97,11 @@ ar: {
   sc_no_cam: 'تعذّر تشغيل الكاميرا. اسمح للمتصفح باستخدامها، أو سجّل الوصول يدوياً.', sc_sim: 'محاكاة مسح الرمز (تجريبي)',
   sc_found: 'تمت قراءة الرمز…',
   b_open: 'المفتوحة', b_closed: 'المغلقة', b_all: 'الكل', b_search: 'بحث برقم الطلب أو الشقة أو الفني',
-  b_k_new: 'جديدة', b_k_progress: 'قيد التنفيذ', b_k_sign: 'بانتظار التوقيع', b_k_late: 'متأخرة', b_k_today: 'أُغلقت اليوم',
-  b_none: 'لا توجد طلبات هنا.', b_unassigned: 'لم يُسند بعد',
+  b_k_new: 'بانتظار التوزيع', b_k_progress: 'قيد التنفيذ', b_k_sign: 'بانتظار التوقيع', b_k_late: 'متأخرة', b_k_today: 'أُغلقت اليوم',
+  b_none: 'لا توجد طلبات هنا.', b_unassigned: 'لم يُوزَّع بعد',
   e_title: 'التقييم الشهري', e_contractor: 'المقاول: {n}', e_requests: 'الطلبات', e_closed_open: '{c} مغلقة · {o} مفتوحة',
   e_arr_on: 'الوصول ضمن الوقت', e_fix_on: 'الإصلاح ضمن الوقت', e_rating: 'متوسط التقييم', e_rated: 'من {n} تقييم',
-  e_avg_pickup: 'متوسط الاستلام', e_avg_arrive: 'متوسط الوصول', e_avg_work: 'متوسط الإصلاح', e_score: 'الدرجة',
+  e_avg_pickup: 'متوسط القبول', e_avg_arrive: 'متوسط الوصول', e_avg_work: 'متوسط الإصلاح', e_score: 'الدرجة',
   e_techs: 'الفنيون', e_jobs: 'المهام', e_manual_arr: 'وصول دون مسح: {n}', e_onsite: 'توقيع على جهاز الفني: {n}',
   e_manual_close: 'إغلاق يدوي: {n}', e_repeat: 'عطل متكرر: {n}', e_csv: 'تنزيل CSV', e_csv_copy: 'نسخ البيانات',
   e_copied: 'تم نسخ البيانات', e_print: 'طباعة', e_none: 'لا توجد طلبات في هذا الشهر.',
@@ -112,7 +112,7 @@ ar: {
   tm_active: 'الحساب نشط', tm_inactive: 'موقوف', tm_locked: 'مقفل مؤقتاً', tm_pin: 'الرمز السري (6 أرقام)',
   tm_pin_new: 'رمز جديد (اتركه فارغاً للإبقاء على الحالي)', tm_gen: 'توليد', tm_saved: 'تم الحفظ. أعطِ {n} الرمز السري {p} ورابط الدخول.',
   tm_saved_plain: 'تم الحفظ.', tm_readonly: 'إضافة الأعضاء وتعديلهم من صلاحية المدير.', tm_share: 'رابط دخول الفريق',
-  se_title: 'الإعدادات', se_contractor: 'اسم المقاول', se_targets: 'الأوقات المستهدفة بالدقائق', se_pickup: 'الاستلام',
+  se_title: 'الإعدادات', se_contractor: 'اسم المقاول', se_targets: 'الأوقات المستهدفة بالدقائق', se_pickup: 'قبول الفني',
   se_arrive: 'وصول الهاندي مان', se_work: 'الإصلاح', se_buildings: 'المباني ووقت وصول غرفة العمليات', se_b_arrive: 'وقت الوصول لهذا المبنى حسب بعده عن المقر (اتركه فارغاً لاستخدام الوقت العام)',
   se_b_loc: 'موقع المبنى (لحساب بُعد الفني عند الوصول)', se_b_here: 'استخدم موقعي الحالي', se_issues: 'أنواع المشاكل وتصنيفها',
   se_add_issue: 'إضافة نوع', se_repeat: 'يُحتسب العطل متكرراً إذا تكرر خلال (يوم)', se_saved: 'تم حفظ الإعدادات.',
@@ -123,18 +123,18 @@ ar: {
   q_building_ar: 'اسم المبنى بالعربية', q_building_en: 'اسم المبنى بالإنجليزية', q_kind: 'النوع', q_label_ar: 'الاسم بالعربية',
   q_label_en: 'الاسم بالإنجليزية', q_added: 'تمت الإضافة.', q_disable: 'إيقاف', q_enable: 'تفعيل',
   q_scan_ar: 'للإبلاغ عن عطل امسح الرمز', q_scan_en: 'Scan to report a maintenance problem', q_print_hint: 'اطبع على ورق A4 ثم قصّ الملصقات.',
-  dm_title: 'متابعة أعمال الصيانة بالدقيقة', dm_lead: 'من بلاغ المستأجر إلى توقيعه، كل خطوة مسجّلة بوقتها: الهاندي مان في المبنى، وفنيو غرفة العمليات، وتقارير يومية وتقييم شهري تلقائي.',
-  dm_s1: 'المستأجر يمسح رمز الشقة ويرسل البلاغ مع صورة، فيصل لجوال الهاندي مان في المبنى.', dm_s2: 'يقبله ويبدأ عدّاد الوصول، ويتوقف العدّاد إذا كان مشغولاً بطلب آخر.', dm_s3: 'يمسح رمز الموقع عند وصوله، فيصلح ويكتب تقريره وقطع الغيار، أو يحوّله لغرفة العمليات.',
-  dm_s4: 'المستأجر يوقّع ويقيّم، والتقارير اليومية والتقييم الشهري جاهزة تلقائياً.', dm_body: 'اختر دوراً وجرّب بنفسك. البيانات افتراضية وتبقى على جهازك فقط.',
-  g_next: 'الخطوة التالية', g_tech: 'وصل الطلب لجوال الهاندي مان في المبنى. ادخل بدوره واستلمه.', g_tech_btn: 'ادخل كهاندي مان',
+  dm_title: 'متابعة أعمال الصيانة بالدقيقة', dm_lead: 'من بلاغ المستأجر إلى توقيعه، كل خطوة مسجّلة بوقتها: مسؤول الصيانة يوزّع، والهاندي مان أو الفني ينفّذ، والتقارير والتقييم الشهري جاهزة للمدير.',
+  dm_s1: 'المستأجر يمسح رمز الشقة ويرسل البلاغ مع صورة، فيصل مباشرةً لمسؤول الصيانة.', dm_s2: 'مسؤول الصيانة يوزّع المهمة على الهاندي مان أو فني غرفة العمليات، فيصله إشعار ليقبلها.', dm_s3: 'الفني يقبل ويتوجّه ويمسح رمز الموقع عند وصوله، ثم يكتب تقريره وقطع الغيار، أو يطلب غرفة العمليات.',
+  dm_s4: 'المستأجر يوقّع ويقيّم، والتقارير اليومية والتقييم الشهري تصل للمدير جاهزة.', dm_body: 'اختر دوراً وجرّب بنفسك. البيانات افتراضية وتبقى على جهازك فقط.',
+  g_next: 'الخطوة التالية', g_tech: 'وزّع مسؤول الصيانة المهمة على {n}. ادخل بدوره واقبلها.', g_tech_btn: 'ادخل بدوره',
   g_tenant: 'ارجع لدور المستأجر ليراجع صورة الإصلاح ويوقّع ويقيّم.', g_tenant_btn: 'افتح صفحة المستأجر',
-  g_admin: 'شاهد الطلب كما يراه المدير: التوقيتات كاملة والتقرير وقطع الغيار والتوقيع والتقييم.', g_admin_btn: 'ادخل كمدير',
-  g_ops: 'وصل الطلب لجوالات فنيي غرفة العمليات. ادخل بدور أحدهم واستلمه.', g_ops_btn: 'ادخل كفني',
+  g_admin: 'شاهد الطلب كما يراه المدير: من وزّعه ومتى، والتوقيتات كاملة، والتقرير وقطع الغيار والتوقيع والتقييم.', g_admin_btn: 'ادخل كمدير',
+  g_ops: 'طلب الهاندي مان فني غرفة العمليات، فعاد البلاغ لمسؤول الصيانة ليوزّعه. ادخل بدوره.', g_ops_btn: 'ادخل كمسؤول الصيانة',
   dm_hm: 'الهاندي مان', dm_hm_body: 'في المبنى السكني: يستلم بلاغات مبناه أولاً، فيصلحها أو يحوّلها لغرفة العمليات.',
   dm_tenant: 'المستأجر', dm_tenant_body: 'يمسح رمز الشقة، يرسل البلاغ مع صورة، ثم يوقّع ويقيّم بعد الإصلاح.', dm_open_unit: 'افتح صفحة الموقع',
   dm_tech: 'فني غرفة العمليات', dm_tech_body: 'يستلم ما يحوّله الهاندي مان، وبلاغات المكتب الرئيسي وسابكو سنتر والواحة. هدف الوصول حسب بُعد المبنى.',
-  dm_sup: 'الهيلب ديسك ومسؤول الصيانة', dm_sup_body: 'يتابع الطلبات المفتوحة والمعلّقة والمتأخرة، ويسجّل البلاغات الهاتفية، ويُسند المهام.',
-  dm_admin: 'المدير', dm_admin_body: 'التقارير اليومية والأسبوعية والشهرية، والتقييم الشهري، والفريق، والإعدادات، ورموز QR.',
+  dm_sup: 'مسؤول الصيانة', dm_sup_body: 'تصله كل البلاغات فور إرسالها، فيوزّع كل مهمة على الهاندي مان أو فني غرفة العمليات، ويتابع المتأخر والمعلّق، ويسجّل البلاغات الهاتفية.',
+  dm_admin: 'المدير', dm_admin_body: 'التقارير اليومية والأسبوعية والشهرية، والتقييم الشهري للفنيين وللتوزيع، والفريق، والإعدادات، ورموز QR.',
   dm_enter: 'دخول', dm_reset: 'إعادة البيانات التجريبية', dm_reset_ok: 'أُعيدت البيانات التجريبية.',
   err_auth_required: 'انتهت الجلسة، سجّل الدخول من جديد.', err_not_allowed: 'هذا الإجراء غير متاح لك.',
   err_already_taken: 'استلم فني آخر هذا الطلب.', err_wrong_unit: 'هذا الرمز لا يخص موقع الطلب.',
@@ -146,10 +146,10 @@ ar: {
   err_phone_required: 'اكتب رقم هاتف صحيح.', err_already_setup: 'تم إعداد النظام مسبقاً.', err_not_self: 'لا يمكنك تغيير دورك أو إيقاف حسابك.',
   err_unit_exists: 'هذا الموقع موجود مسبقاً.', err_bad_building: 'تحقق من رمز المبنى واسمه.', err_label_required: 'اكتب اسم الموقع.',
   err_bad_settings: 'تحقق من أنواع المشاكل: لكل نوع اسم بالعربية والإنجليزية.', err_bad_technician: 'اختر فنياً.',
-  err_not_found: 'غير موجود.', err_not_assigned: 'هذه المهمة لفني آخر.', err_network: 'تعذّر الاتصال. تحقق من الإنترنت ثم أعد المحاولة.',
+  err_not_found: 'غير موجود.', err_not_assigned: 'هذه المهمة ليست مسندة إليك.', err_network: 'تعذّر الاتصال. تحقق من الإنترنت ثم أعد المحاولة.',
   err_not_configured: 'النظام غير مربوط بقاعدة البيانات بعد.', err_image: 'تعذّر قراءة الصورة. جرّب صورة أخرى.',
   err_generic: 'حدث خطأ غير متوقع. أعد المحاولة.', of100: 'من 100',
-  pu_title: 'فعّل إشعارات الجوال', pu_body: 'ليصلك كل طلب جديد فوراً حتى والجوال مقفل.', pu_btn: 'تفعيل الإشعارات',
+  pu_title: 'فعّل إشعارات الجوال', pu_body: 'ليصلك كل بلاغ أو مهمة فوراً حتى والجوال مقفل.', pu_btn: 'تفعيل الإشعارات',
   pu_done: 'تم التفعيل، ووصلك الآن إشعار تجربة.', pu_ios_title: 'الإشعارات على آيفون',
   pu_ios_body: 'اضغط زر المشاركة في Safari ثم «إضافة إلى الشاشة الرئيسية»، وافتح رصد من الأيقونة الجديدة وسجّل الدخول، ثم فعّل الإشعارات من هناك.',
   pu_unsupported: 'هذا المتصفح لا يعرض الإشعارات. استخدم Chrome على أندرويد، أو أضف رصد إلى الشاشة الرئيسية على آيفون.',
@@ -158,17 +158,17 @@ ar: {
   pu_sys_intro: 'تُرسل الإشعارات عبر خدمة صغيرة في Supabase اسمها rasd-notify. بعد إنشائها اضغط الزر مرة واحدة.', pu_sys_btn: 'تفعيل إشعارات النظام',
   pu_sys_ok: 'تم إعداد الإشعارات للنظام.', pu_sender_ok: 'خدمة الإرسال تعمل.',
   pu_sender_bad: 'خدمة الإرسال لا تستجيب. تأكد من إنشاء rasd-notify في Edge Functions وإيقاف Verify JWT.',
-  pu_phones: 'الأجهزة المفعّلة: {n}، لعدد {p} من الفريق.', pu_reminders_ok: 'تذكير مسؤول الصيانة بالطلبات غير المستلمة يعمل كل 5 دقائق.',
-  pu_reminders_off: 'تذكير الطلبات غير المستلمة غير متاح (pg_cron غير مفعّل).', pu_test: 'إرسال إشعار تجربة لي',
+  pu_phones: 'الأجهزة المفعّلة: {n}، لعدد {p} من الفريق.', pu_reminders_ok: 'تذكير مسؤول الصيانة بالبلاغات غير الموزّعة والمهام غير المقبولة يعمل كل 5 دقائق.',
+  pu_reminders_off: 'التذكير غير متاح (pg_cron غير مفعّل).', pu_test: 'إرسال إشعار تجربة لي',
   pu_test_ok: 'أُرسل إشعار التجربة إلى {n} جهاز.', pu_test_none: 'لم تفعّل الإشعارات على أي جهاز بعد.', pu_on: 'الإشعارات مفعّلة', pu_off: 'لم يفعّل الإشعارات',
-  pu_here: 'تفعيل على هذا الجهاز', ev_escalated: 'تنبيه لمسؤول الصيانة: لم يُستلم في الوقت المحدد',
+  pu_here: 'تفعيل على هذا الجهاز', ev_escalated: 'تذكير: لم يقبله الفني في الوقت المحدد',
   err_push_denied: 'لم يُسمح بالإشعارات على هذا الجهاز.', err_push_not_ready: 'إشعارات النظام غير مفعّلة بعد.',
   err_push_failed: 'تعذّر تفعيل الإشعارات على هذا الجهاز. أعد المحاولة.', err_bad_subscription: 'تعذّر تفعيل الإشعارات على هذا الجهاز. أعد المحاولة.',
   err_bad_keys: 'تعذّر إعداد الإشعارات. أعد المحاولة.',
   x_export_title: 'تصدير تقرير {m}', x_excel_d: 'كل الطلبات بتوقيتاتها، مع الملخص', x_pdf_d: 'تقرير جاهز للطباعة والإرسال', x_pptx_d: 'عرض جاهز للإدارة',
   x_summary: 'الملخص', x_requests: 'الطلبات', x_generated: 'أُعدّ في {d}', x_pdf_hint: 'في نافذة الطباعة اختر «حفظ بصيغة PDF».',
   x_minutes: 'بالدقائق', x_minutes_note: 'الأوقات في الجداول بالدقائق: الفعلي / المستهدف.', x_avg_arr_min: 'متوسط الوصول (دقيقة)', x_avg_work_min: 'متوسط الإصلاح (دقيقة)',
-  x_arr_vs: 'الوصول / الهدف (د)', x_work_vs: 'الإصلاح / الهدف (د)', x_log: 'سجل الطلبات', x_count: 'عدد الطلبات: {n}', x_avg_pickup_note: 'متوسط الاستلام {v}',
+  x_arr_vs: 'الوصول / الهدف (د)', x_work_vs: 'الإصلاح / الهدف (د)', x_log: 'سجل الطلبات', x_count: 'عدد الطلبات: {n}', x_avg_pickup_note: 'متوسط القبول {v}',
   x_f_manual: 'وصول دون مسح الرمز', x_f_manual_d: 'سجّل الفني وصوله يدوياً مع ذكر السبب.', x_f_onsite: 'توقيع على جهاز الفني', x_f_onsite_d: 'وقّع صاحب الطلب على جوال الفني بدل جواله.',
   x_f_close: 'إغلاق يدوي', x_f_close_d: 'أغلقته الإدارة دون توقيع، مع ذكر السبب.', x_f_repeat: 'أعطال متكررة', x_f_repeat_d: 'بلاغ جديد بنفس المشكلة في نفس الموقع خلال {d} يوماً من الإغلاق.',
   yes: 'نعم', no: 'لا', col_accepted: 'قبول الفني', col_arrived: 'وقت الوصول', col_finished: 'انتهاء الإصلاح', col_closed: 'الإغلاق', col_repeat: 'عطل متكرر', col_desc: 'وصف المشكلة',
@@ -179,7 +179,7 @@ ar: {
   p_more: 'باقي الطلبات المتأخرة ({n}) في ملف Excel.', p_none_late: 'كل الطلبات هذا الشهر ضمن الوقت المستهدف.', p_s6: 'مؤشرات للمتابعة', p_s6_sub: 'حالات تستحق المراجعة مع المقاول',
   p_s7: 'كيف تُجمع هذه الأرقام', p_s7_note: 'كل توقيت يسجّله الخادم، ولا يُغلق طلب دون صورة الإصلاح وتوقيع صاحب الطلب أو سبب مكتوب.',
   col_no: 'رقم الطلب', col_date: 'وقت البلاغ', col_building: 'المبنى', col_unit: 'الموقع', col_issue: 'المشكلة', col_priority: 'التصنيف', col_tech: 'الفني', col_status: 'الحالة',
-  col_pickup: 'الاستلام (دقيقة)', col_arrive: 'الوصول (دقيقة)', col_arrive_t: 'هدف الوصول', col_arrive_ok: 'الوصول ضمن الوقت', col_work: 'الإصلاح (دقيقة)', col_work_t: 'هدف الإصلاح',
+  col_pickup: 'القبول (دقيقة)', col_arrive: 'الوصول (دقيقة)', col_arrive_t: 'هدف الوصول', col_arrive_ok: 'الوصول ضمن الوقت', col_work: 'الإصلاح (دقيقة)', col_work_t: 'هدف الإصلاح',
   col_work_ok: 'الإصلاح ضمن الوقت', col_total: 'الإجمالي (دقيقة)', col_qr: 'الوصول بمسح الرمز', col_rating: 'التقييم', col_close: 'طريقة الإغلاق',
   cm_tenant: 'توقيع صاحب الطلب', cm_onsite: 'توقيع على جهاز الفني', cm_manual: 'إغلاق يدوي',
   team_hm: 'هاندي مان', team_ops: 'غرفة العمليات', tech_hm: 'هاندي مان · {b}', tech_ops: 'فني · غرفة العمليات', role_hm: 'هاندي مان',
@@ -200,33 +200,33 @@ ar: {
   d_hold_note: 'ملاحظة', d_hold_warn: 'يتوقف عدّاد الإصلاح، وعند عودتك امسح رمز الموقع ليستأنف.',
   d_resume_scan: 'عدت للموقع: امسح الرمز للاستئناف', d_resume_manual: 'تعذّر المسح؟ استأنف يدوياً', d_resume_submit: 'استئناف يدوياً',
   d_resumed_ok: 'استؤنف عدّاد الإصلاح.', d_held_since: 'معلّق منذ {d}', d_held_eta: 'المتوقع: {d}',
-  d_escalate: 'تحويل لغرفة العمليات', d_escalate_body: 'عندما يحتاج الإصلاح فني غرفة العمليات. اكتب ما وجدته ليعرف الفني ماذا يحضر معه.',
-  d_findings: 'ما الذي وجدته؟', d_escalate_ph: 'مثال: الكمبروسر لا يعمل، يحتاج فني تكييف وغاز', d_escalate_submit: 'تحويل الطلب', d_escalated_ok: 'تم التحويل لغرفة العمليات.',
+  d_escalate: 'طلب فني غرفة العمليات', d_escalate_body: 'يعود البلاغ لمسؤول الصيانة ليوزّعه على فني من غرفة العمليات. اكتب ما وجدته ليعرف الفني ماذا يحضر معه.',
+  d_findings: 'ما الذي وجدته؟', d_escalate_ph: 'مثال: الكمبروسر لا يعمل، يحتاج فني تكييف وغاز', d_escalate_submit: 'إرسال لمسؤول الصيانة', d_escalated_ok: 'أُرسل لمسؤول الصيانة ليوزّعه على غرفة العمليات.',
   d_report: 'تقرير الفني', d_report_ph: 'ماذا وجدت وماذا أصلحت؟ مثال: الوصلة تحت المغسلة متآكلة، تم تغييرها وتجربة التشغيل',
   d_need_report: 'اكتب تقرير العمل', d_parts_used: 'قطع الغيار والمواد المستبدلة', d_part_name: 'اسم القطعة', d_part_qty: 'الكمية',
   d_add_part: 'إضافة قطعة', d_del_part: 'حذف', d_none_parts: 'لم تُستبدل أي قطعة', d_need_parts: 'أضف قطعة واحدة على الأقل',
-  d_legs: 'مراحل الطلب', d_leg_now: 'الآن', leg_escalated: 'حوّله لغرفة العمليات', leg_reassigned: 'أُسند لفني آخر', leg_finished: 'أصلحه', leg_open: 'يعمل عليه', leg_closed: 'أُغلق', leg_cancelled: 'أُلغي',
-  d_inspect: 'الفحص', d_send_ops: 'إرسال لغرفة العمليات', d_send_hm: 'إرسال للهاندي مان', d_stage_now: 'الطلب الآن {s}', d_sent_ok: 'تم الإرسال.',
+  d_legs: 'مراحل الطلب', d_leg_now: 'الآن', leg_escalated: 'طلب غرفة العمليات', leg_reassigned: 'نُقلت المهمة لغيره', leg_finished: 'أصلحه', leg_open: 'يعمل عليه', leg_closed: 'أُغلق', leg_cancelled: 'أُلغي',
+  d_inspect: 'الفحص',
   d_parts_list: 'القطع المستبدلة', d_parts_wait: 'القطع المنتظرة', d_source: 'المصدر',
   t_hold_busy: 'الفني ينهي عملاً آخر الآن، وسيتوجه إليك بعده مباشرة.', t_hold_access: 'تم تأجيل الزيارة إلى موعد مناسب.',
   t_hold_parts: 'طلبك بانتظار وصول قطع الغيار.', t_hold_eta: 'الموعد المتوقع: {d}', t_hold_other: 'طلبك معلّق مؤقتاً، وسيتابعه الفريق.',
   t_escalated: 'حُوِّل طلبك إلى فنيي غرفة العمليات المختصين.', t_parts: 'القطع المستبدلة',
   b_k_hold: 'معلّقة', b_hold: 'المعلّقة', b_all_buildings: 'كل المباني', b_new_req: 'بلاغ جديد',
-  n_title: 'تسجيل بلاغ', n_sub: 'لبلاغ وصل بالهاتف أو واتساب أو حضورياً. يصل للفريق كأي بلاغ آخر ويُحسب في التقارير.', n_source: 'وصل البلاغ عن طريق',
+  n_title: 'تسجيل بلاغ', n_sub: 'لبلاغ وصل بالهاتف أو واتساب أو حضورياً. يُحسب في التقارير كأي بلاغ آخر.', n_source: 'وصل البلاغ عن طريق',
   n_building: 'المبنى', n_unit: 'الموقع', n_requester: 'اسم صاحب البلاغ', n_photo: 'صورة', n_submit: 'تسجيل البلاغ',
   n_done: 'تم تسجيل البلاغ رقم {no}', n_share: 'أرسل لصاحب البلاغ رابط المتابعة ليتابع طلبه ويوقّع بعد الإصلاح.',
   n_wa: 'إرسال عبر واتساب', n_open: 'فتح الطلب', n_wa_text: 'تم استلام بلاغك رقم {no} لدى {o}. لمتابعته والتوقيع بعد الإصلاح: {u}',
   src_qr: 'رمز QR', src_phone: 'اتصال هاتفي', src_whatsapp: 'واتساب', src_walkin: 'حضورياً', src_email: 'بريد إلكتروني', src_other: 'أخرى',
-  ev_logged: 'سجّل الهيلب ديسك البلاغ ({n})', ev_hold_busy: 'الفني مشغول بعمل آخر: توقف عدّاد الوصول', ev_hold_access: 'تعليق: المستأجر غير متاح',
+  ev_logged: 'سُجّل البلاغ ({n})', ev_hold_busy: 'الفني مشغول بعمل آخر: توقف عدّاد الوصول', ev_hold_access: 'تعليق: المستأجر غير متاح',
   ev_hold_parts: 'تعليق: بانتظار قطع غيار', ev_hold_other: 'تعليق لسبب آخر', ev_resumed: 'الفني في الطريق: استؤنف عدّاد الوصول',
   ev_resumed_auto: 'بدأ عدّاد الوصول بعد إنهاء {n}', ev_resumed_qr: 'عاد الفني ومسح الرمز: استؤنف الإصلاح', ev_resumed_manual: 'عاد الفني (تسجيل يدوي): استؤنف الإصلاح',
-  ev_to_ops: 'حوّله الهاندي مان لغرفة العمليات', ev_sent_ops: 'أرسله الهيلب ديسك لغرفة العمليات', ev_sent_hm: 'أرسله الهيلب ديسك للهاندي مان',
+  ev_to_ops: 'طلب الهاندي مان فني غرفة العمليات', ev_sent_ops: 'أُرسل لغرفة العمليات', ev_sent_hm: 'أُرسل للهاندي مان',
   err_bad_busy: 'اختر عملاً مفتوحاً لديك.', err_on_hold: 'العدّاد متوقف. اضغط «أنا في الطريق الآن» أولاً.',
   err_report_required: 'اكتب تقرير العمل (5 أحرف على الأقل).', err_parts_required: 'أضف قطعة واحدة على الأقل.', err_sites_required: 'اختر مبنى الهاندي مان.',
-  tm_team: 'الفريق', tm_sites: 'المباني التي يغطيها', tm_hm_hint: 'تصله بلاغات مبانيه أولاً، ويحوّل لغرفة العمليات ما يحتاجهم.',
+  tm_team: 'الفريق', tm_sites: 'المباني التي يغطيها', tm_hm_hint: 'يوزّع عليه مسؤول الصيانة بلاغات مبانيه، ويطلب غرفة العمليات لما يحتاجهم.',
   se_b_type: 'النوع', type_res: 'سكني', type_com: 'تجاري ومكاتب', se_b_ops: 'وصول غرفة العمليات (دقيقة)',
-  se_b_hint: 'السكني يستلم بلاغه الهاندي مان أولاً إن وُجد، والتجاري يذهب لغرفة العمليات مباشرة. إذا كان الفني قادماً من مبنى آخر يُعتمد الوقت الأطول.',
-  se_hm_note: 'وصول الهاندي مان: هو في المبنى نفسه، فيُقاس وصوله بهذا الوقت. وصول غرفة العمليات يُضبط لكل مبنى في الأسفل.',
+  se_b_hint: 'للمبنى السكني يُقترح الهاندي مان أولاً إن وُجد، وللتجاري فني غرفة العمليات. إذا كان الفني قادماً من مبنى آخر يُعتمد الوقت الأطول.',
+  se_hm_note: 'التوزيع: من وصول البلاغ لمسؤول الصيانة إلى إسناده. القبول: من الإسناد إلى قبول الفني. وصول الهاندي مان: هو في المبنى نفسه فيُقاس وصوله بهذا الوقت، ووصول غرفة العمليات يُضبط لكل مبنى في الأسفل.',
   n_reports: 'التقارير', r_title: 'تقارير البلاغات', r_day: 'يومي', r_week: 'أسبوعي', r_month: 'شهري', r_today: 'اليوم', r_this_week: 'هذا الأسبوع', r_this_month: 'هذا الشهر',
   r_total: 'البلاغات', r_done: 'تم حلها', r_progress: 'قيد التنفيذ', r_hold: 'معلّقة', r_cancel: 'ملغاة', r_carried: 'مفتوحة من قبل',
   r_carried_s: 'بلاغات سابقة لم تُغلق', r_prev_day: 'عن اليوم السابق', r_prev_week: 'عن الأسبوع السابق', r_prev_month: 'عن الشهر السابق', r_same: 'نفس {p}',
@@ -236,7 +236,7 @@ ar: {
   r_list: 'كل البلاغات', r_table: 'عرض كجدول', r_holds: 'البلاغات المعلّقة', r_none: 'لا توجد بلاغات في هذه الفترة.', r_all: 'الكل',
   r_f_building: 'المبنى', r_f_status: 'الحالة', r_f_priority: 'الأهمية', r_s_open: 'مفتوحة', r_s_done: 'تم حلها', r_s_hold: 'معلّقة', r_s_cancel: 'ملغاة',
   r_week_of: '{a} – {b}', r_col_type: 'النوع', r_col_open: 'مفتوحة', r_col_avg_fix: 'متوسط الإصلاح', r_col_avg_arr: 'متوسط الوصول',
-  r_hm_fixed: 'أصلحها الهاندي مان', r_hm_handed: 'حوّلها لغرفة العمليات', r_ops_direct: 'لغرفة العمليات مباشرة', r_ops_fixed: 'أصلحها فنيو غرفة العمليات',
+  r_hm_fixed: 'أصلحها الهاندي مان', r_hm_handed: 'طلب غرفة العمليات', r_ops_direct: 'لغرفة العمليات مباشرة', r_ops_fixed: 'أصلحها فنيو غرفة العمليات',
   r_export: 'تصدير تقرير {p}', x_period_excel_d: 'كل البلاغات بتفاصيلها وتقارير الفنيين وقطع الغيار، مع الملخص', x_period_pdf_d: 'تقرير جاهز للطباعة أو الحفظ PDF',
   x_parts_sheet: 'قطع الغيار', x_holds_sheet: 'المعلّقة', x_counts_sheet: 'العدد اليومي', x_visits: 'الزيارات',
   col_time: 'الوقت', col_source: 'المصدر', col_hold: 'سبب التعليق', col_hold_since: 'معلّق منذ', col_eta: 'الموعد المتوقع', col_by: 'نفّذه',
@@ -244,14 +244,71 @@ ar: {
   col_report: 'تقرير الفني', col_parts: 'قطع الغيار المستبدلة', col_part: 'القطعة', col_qty: 'الكمية', col_comment: 'ملاحظة صاحب الطلب', col_count: 'العدد',
   col_urgent: 'عاجل', col_normal: 'عادي', col_period: 'الفترة', col_outcome: 'النتيجة', col_parts_wait: 'القطع المنتظرة', col_note: 'ملاحظة',
   e_by_team: 'حسب الفريق', e_hm_group: 'الهاندي مان', e_ops_group: 'فنيو غرفة العمليات', e_paused: 'توقف لا يُحتسب', e_self_fixed: 'أصلحها بنفسه', e_visits: 'الزيارات',
-  p_s8: 'الهاندي مان وغرفة العمليات', p_s8_sub: 'الأداء حسب الفريق', p_team_line: '{n} زيارة · الوصول {a} · الإصلاح {f}'
+  p_s8: 'الهاندي مان وغرفة العمليات', p_s8_sub: 'الأداء حسب الفريق', p_team_line: '{n} زيارة · الوصول {a} · الإصلاح {f}',
+  st_assigned: 'بانتظار قبول الفني',
+  t_step_assigned: 'أُسند إلى الفني',
+  j_alert_mine: 'أُسندت إليك مهمة: {u}',
+  j_how: 'يوزّع مسؤول الصيانة البلاغات، فتصلك مهمتك هنا مع إشعار على جوالك.',
+  tm_q: 'بانتظار التوزيع',
+  tm_ack: 'بانتظار القبول',
+  tm_dispatch: 'زمن التوزيع',
+  d_dispatch_body: 'اختر من يتولى البلاغ. يصله إشعار على جواله، ويبدأ عدّاد الوصول بعد أن يقبله.',
+  d_reassign_body: 'يبقى ما سجّله السابق في مراحل الطلب، ويصل للجديد إشعار ليقبل المهمة.',
+  d_people: 'من يتولى المهمة؟',
+  d_own_b: 'مسؤول عن هذا المبنى',
+  d_free: 'متفرغ',
+  d_load: 'مهام مفتوحة: {n}',
+  d_now_at: 'الآن في {b}',
+  d_goal: 'هدف الوصول {m}',
+  d_was_declined: 'اعتذر عنه',
+  d_note_for: 'ملاحظة له',
+  d_note_for_ph: 'مثال: المستأجر في البيت بعد العصر، والمفتاح عند الحارس',
+  d_dispatch_submit: 'توزيع المهمة',
+  d_by_line: 'وزّعه {n}',
+  d_q_declined: 'اعتذر {n}: {m}',
+  d_q_escalated: 'طلب {n} فني غرفة العمليات: {m}',
+  c_declined: 'اعتذر {n}',
+  d_wait_tech: 'بانتظار أن يقبله {n}',
+  d_your_turn: 'أسنده إليك {n}',
+  d_decline: 'اعتذار عن المهمة',
+  d_decline_title: 'الاعتذار عن المهمة',
+  d_decline_body: 'تعود المهمة لمسؤول الصيانة ليوزّعها على غيرك. اكتب السبب.',
+  d_decline_ph: 'مثال: أنا في مبنى آخر بمهمة عاجلة حتى المساء',
+  d_decline_submit: 'اعتذار',
+  d_declined_ok: 'تم الاعتذار، وعادت المهمة لمسؤول الصيانة.',
+  d_gone: 'لم تعد هذه المهمة مسندة إليك.',
+  ev_late_dispatch: 'تذكير: لم يُوزَّع في الوقت المحدد',
+  ev_declined: 'اعتذر الفني عن المهمة',
+  b_k_assigned: 'بانتظار القبول',
+  b_rest: 'قيد المتابعة',
+  e_avg_dispatch: 'متوسط التوزيع',
+  e_dispatch_on: 'التوزيع ضمن الوقت',
+  e_dispatches: 'مرات التوزيع',
+  e_declines: 'اعتذار: {n}',
+  e_sup_title: 'توزيع البلاغات',
+  e_sup_note: 'من وصول البلاغ لمسؤول الصيانة إلى إسناده لأحد الفريق. لا يدخل في درجة الفنيين.',
+  se_dispatch: 'توزيع مسؤول الصيانة',
+  g_sup: 'وصل البلاغ لمسؤول الصيانة. ادخل بدوره ووزّع المهمة على الهاندي مان أو الفني.',
+  g_sup_btn: 'ادخل كمسؤول الصيانة',
+  dm_team: 'الهاندي مان والفني',
+  dm_team_body: 'تصله المهام التي يوزّعها عليه مسؤول الصيانة، فيقبلها ويتوجّه ويمسح رمز الموقع، ثم يكتب تقريره وقطع الغيار.',
+  col_dispatch: 'التوزيع (دقيقة)',
+  col_assigned_by: 'وزّعه',
+  col_declines: 'اعتذارات',
+  leg_declined: 'اعتذر',
+  leg_waiting: 'بانتظار قبوله',
+  t_q: 'وصل طلبك لمسؤول الصيانة، وسيُسند إلى الفني المختص.',
+  n_assign: 'توزيع المهمة الآن',
+  n_assign_later: 'لاحقاً من اللوحة',
+  tm_wait_s: 'الانتظار',
+  st_assigned_me: 'بانتظار قبولك'
 },
 en: {
   app: 'Rasd', tagline: 'Maintenance tracking', demo_banner: 'Demo with sample data', demo_switch: 'Switch role',
   lang_other: 'العربية', loading: 'Loading…', retry: 'Try again', back: 'Back', save: 'Save', cancel: 'Cancel',
   close: 'Close', confirm: 'Confirm', optional: 'optional', min: 'min', hr: 'h', day: 'd', logout: 'Sign out',
-  role_technician: 'Technician', role_supervisor: 'Maintenance supervisor', role_admin: 'Admin',
-  st_new: 'New', st_accepted: 'On the way', st_onsite: 'Being fixed', st_finished: 'Awaiting sign-off', st_closed: 'Closed', st_cancelled: 'Cancelled',
+  role_technician: 'Technician', role_supervisor: 'Maintenance supervisor', role_admin: 'Manager',
+  st_new: 'To assign', st_accepted: 'On the way', st_onsite: 'Being fixed', st_finished: 'Awaiting sign-off', st_closed: 'Closed', st_cancelled: 'Cancelled',
   pr_urgent: 'Urgent', pr_normal: 'Normal', kind_flat: 'Flat', kind_common: 'Common area',
   land_body: 'The system is being set up and is not connected to its database yet.', land_demo: 'Open the demo',
   t_report: 'Report a problem', t_report_sub: 'Your report goes straight to the maintenance team, and you can follow it on this page.',
@@ -262,7 +319,7 @@ en: {
   t_bad_unit: 'This code is not valid or has been switched off. Please contact building management.', t_your: 'Your requests from this phone',
   t_sign_now: 'Sign and rate now', t_view: 'Track', t_sent_title: 'Request received',
   t_sent_body: 'Request number {no}. Keep this page to follow your request and to sign off after the repair.',
-  t_track_title: 'Request {no}', t_step_sent: 'Request received', t_step_acc: 'Technician accepted', t_step_arr: 'Technician arrived',
+  t_track_title: 'Request {no}', t_step_sent: 'Received by the maintenance supervisor', t_step_acc: 'Technician accepted', t_step_arr: 'Technician arrived',
   t_step_fin: 'Repair finished', t_step_closed: 'Closed', t_cancelled: 'This request was cancelled.',
   t_confirm_title: 'Confirm the work is done', t_confirm_body: 'Check the photo of the repair, then rate the service and sign to close the request.',
   t_rating: 'Rate the service', t_comment: 'Comment', t_signature: 'Signature', t_sign_here: 'Sign here with your finger', t_clear: 'Clear',
@@ -277,10 +334,10 @@ en: {
   s_pin2: 'Repeat the PIN', s_mismatch: 'The two PINs do not match', s_submit: 'Create account',
   session_expired: 'Your session ended. Please sign in again.',
   n_jobs: 'Jobs', n_history: 'My record', n_board: 'Board', n_eval: 'Evaluation', n_team: 'Team', n_qr: 'QR codes', n_settings: 'Settings',
-  j_mine: 'My current jobs', j_new: 'New requests', j_none_mine: 'You have no open jobs.', j_none_new: 'No new requests right now.',
+  j_mine: 'My current jobs', j_new: 'New jobs for you', j_none_mine: 'You have no open jobs.', j_none_new: 'No new jobs for you.',
   j_alert: 'New request: {u}',
-  tm_wait: 'Waiting for pickup', tm_way: 'Time to arrive', tm_work: 'Repair time', tm_sign: 'Awaiting sign-off', tm_total: 'Total time',
-  tm_pickup: 'Pickup time', target: 'target {m}', on_time: 'On time', late: 'Late',
+  tm_way: 'Time to arrive', tm_work: 'Repair time', tm_sign: 'Awaiting sign-off', tm_total: 'Total time',
+  tm_pickup: 'Time to accept', target: 'target {m}', on_time: 'On time', late: 'Late',
   d_reported: 'Reported', d_photo_before: 'Photo of the problem', d_times: 'Timings', d_log: 'Event log',
   d_accept: 'Accept and go now', d_accept_ok: 'Accepted. The arrival timer has started.',
   d_arrive: "I've arrived: scan the QR code on site", d_arrive_manual: "Can't scan? Record arrival manually",
@@ -292,15 +349,15 @@ en: {
   d_wait_sign: 'Ask the requester to scan the QR code on site with their phone. The request opens for them to sign and rate.',
   d_onsite: 'Sign on my phone instead', d_signer: "Signer's name", d_signer_ph: 'e.g. the tenant or the building guard',
   d_need_signer: "Enter the signer's name", d_onsite_warn: "Management will see this was signed on the technician's phone.",
-  d_close_req: 'Close request', d_closed_ok: 'Request closed.', d_mgr: 'Management actions', d_assign: 'Assign to a technician',
-  d_reassign: 'Change technician', d_assign_btn: 'Assign', d_pick_tech: 'Choose a technician', d_assigned_ok: 'Assigned.', d_priority: 'Priority',
+  d_close_req: 'Close request', d_closed_ok: 'Request closed.', d_mgr: 'Management actions', d_assign: 'Assign the job',
+  d_reassign: 'Give the job to someone else', d_assign_btn: 'Assign', d_pick_tech: 'Choose a handyman or technician', d_assigned_ok: 'Assigned. They have been notified to accept it.', d_priority: 'Priority',
   d_manual_close: 'Close manually', d_cancel_req: 'Cancel request', d_reason: 'Reason', d_reason_need: 'Please give a reason',
   d_signoff: 'Sign-off and rating', d_signed_tenant: 'Signed by the requester on their phone', d_signed_onsite: "Signed on the technician's phone",
   d_closed_manual: 'Closed manually: {n}', d_cancelled: 'Cancelled: {n}', d_location: "Technician's location on arrival",
   d_from_building: '{d} from the building', d_accuracy: 'accuracy ± {d}', d_map: 'Show on map', d_print: 'Print report',
   d_by_qr: 'by QR scan', d_by_manual: 'manually', d_no_techs: 'Add technicians on the Team page first.',
   ev_submitted: 'Request sent by the requester', ev_accepted: 'Technician accepted', ev_assigned: 'Assigned to {n}',
-  ev_reassigned: 'Technician changed to {n}', ev_arrived_qr: 'Technician arrived and scanned the code', ev_arrived_manual: 'Technician arrived (manual record)',
+  ev_reassigned: 'Moved to {n}', ev_arrived_qr: 'Technician arrived and scanned the code', ev_arrived_manual: 'Technician arrived (manual record)',
   ev_finished: 'Repair finished', ev_signed_tenant: 'Requester signed and rated', ev_signed_onsite: "Signed on the technician's phone: {n}",
   ev_closed_manual: 'Closed manually', ev_cancelled: 'Request cancelled', ev_priority_urgent: 'Priority changed to urgent',
   ev_priority_normal: 'Priority changed to normal',
@@ -308,11 +365,11 @@ en: {
   sc_no_cam: 'Could not start the camera. Allow camera access, or record arrival manually.', sc_sim: 'Simulate the scan (demo)',
   sc_found: 'Code read…',
   b_open: 'Open', b_closed: 'Closed', b_all: 'All', b_search: 'Search by number, flat or technician',
-  b_k_new: 'New', b_k_progress: 'In progress', b_k_sign: 'Awaiting sign-off', b_k_late: 'Late', b_k_today: 'Closed today',
+  b_k_new: 'To assign', b_k_progress: 'In progress', b_k_sign: 'Awaiting sign-off', b_k_late: 'Late', b_k_today: 'Closed today',
   b_none: 'No requests here.', b_unassigned: 'Not assigned yet',
   e_title: 'Monthly evaluation', e_contractor: 'Contractor: {n}', e_requests: 'Requests', e_closed_open: '{c} closed · {o} open',
   e_arr_on: 'Arrived on time', e_fix_on: 'Fixed on time', e_rating: 'Average rating', e_rated: 'from {n} ratings',
-  e_avg_pickup: 'Average pickup', e_avg_arrive: 'Average arrival', e_avg_work: 'Average repair', e_score: 'Score',
+  e_avg_pickup: 'Avg. time to accept', e_avg_arrive: 'Average arrival', e_avg_work: 'Average repair', e_score: 'Score',
   e_techs: 'Technicians', e_jobs: 'Jobs', e_manual_arr: 'Arrivals without scan: {n}', e_onsite: "Signed on tech's phone: {n}",
   e_manual_close: 'Closed manually: {n}', e_repeat: 'Repeat faults: {n}', e_csv: 'Download CSV', e_csv_copy: 'Copy data',
   e_copied: 'Data copied', e_print: 'Print', e_none: 'No requests in this month.',
@@ -323,7 +380,7 @@ en: {
   tm_active: 'Account active', tm_inactive: 'Disabled', tm_locked: 'Temporarily locked', tm_pin: 'PIN (6 digits)',
   tm_pin_new: 'New PIN (leave empty to keep the current one)', tm_gen: 'Generate', tm_saved: 'Saved. Give {n} the PIN {p} and the sign-in link.',
   tm_saved_plain: 'Saved.', tm_readonly: 'Only the admin can add or change members.', tm_share: 'Team sign-in link',
-  se_title: 'Settings', se_contractor: 'Contractor name', se_targets: 'Target times in minutes', se_pickup: 'Pickup',
+  se_title: 'Settings', se_contractor: 'Contractor name', se_targets: 'Target times in minutes', se_pickup: 'Technician accepts',
   se_arrive: 'Handyman arrival', se_work: 'Repair', se_buildings: 'Buildings and operations-room travel time', se_b_arrive: 'Arrival target for this building, by its distance from base (leave empty to use the general target)',
   se_b_loc: "Building location (to measure the technician's distance on arrival)", se_b_here: 'Use my current location', se_issues: 'Problem types and priority',
   se_add_issue: 'Add type', se_repeat: 'Count a fault as repeat within (days)', se_saved: 'Settings saved.',
@@ -334,18 +391,18 @@ en: {
   q_building_ar: 'Building name in Arabic', q_building_en: 'Building name in English', q_kind: 'Type', q_label_ar: 'Name in Arabic',
   q_label_en: 'Name in English', q_added: 'Added.', q_disable: 'Switch off', q_enable: 'Switch on',
   q_scan_ar: 'للإبلاغ عن عطل امسح الرمز', q_scan_en: 'Scan to report a maintenance problem', q_print_hint: 'Print on A4 paper, then cut out the labels.',
-  dm_title: 'Maintenance work, tracked to the minute', dm_lead: "From the tenant's report to their signature, every step is time-stamped: the building handymen, the operations-room technicians, daily reports and an automatic monthly score.",
-  dm_s1: "The tenant scans the flat code and sends the report with a photo; it reaches the building handyman's phone.", dm_s2: 'He accepts and the arrival timer starts; it pauses while he finishes another job.', dm_s3: 'He scans the code on arrival, then fixes it with a report and the parts used, or hands it to the operations room.',
-  dm_s4: 'The tenant signs and rates; daily reports and the monthly score are ready automatically.', dm_body: 'Pick a role and try it yourself. The data is sample data and stays on your device.',
-  g_next: 'Next step', g_tech: "The request reached the building handyman's phone. Switch to him and take it.", g_tech_btn: 'Enter as handyman',
+  dm_title: 'Maintenance work, tracked to the minute', dm_lead: 'From the tenant\'s report to their signature, every step is time-stamped: the maintenance supervisor assigns, the handyman or technician does the work, and the reports and monthly score are ready for the manager.',
+  dm_s1: 'The tenant scans the flat code and sends the report with a photo; it goes straight to the maintenance supervisor.', dm_s2: 'The supervisor gives the job to the building handyman or an operations-room technician, who is notified to accept it.', dm_s3: 'The technician accepts, heads there and scans the code on arrival, then writes the report and parts used, or asks for the operations room.',
+  dm_s4: 'The tenant signs and rates; daily reports and the monthly score reach the manager ready-made.', dm_body: 'Pick a role and try it yourself. The data is sample data and stays on your device.',
+  g_next: 'Next step', g_tech: 'The supervisor gave the job to {n}. Switch to them and accept it.', g_tech_btn: 'Enter as them',
   g_tenant: 'Switch back to the tenant to check the repair photo, sign and rate.', g_tenant_btn: 'Open the tenant page',
-  g_admin: 'See the request as the admin sees it: every timing, the report and parts, the signature and the rating.', g_admin_btn: 'Enter as admin',
-  g_ops: "The request reached the operations-room technicians' phones. Switch to one of them and take it.", g_ops_btn: 'Enter as technician',
+  g_admin: 'See the request as the manager sees it: who assigned it and when, every timing, the report and parts, the signature and the rating.', g_admin_btn: 'Enter as the manager',
+  g_ops: 'The handyman asked for the operations room, so the request went back to the supervisor to assign. Switch to him.', g_ops_btn: 'Enter as the supervisor',
   dm_hm: 'Handyman', dm_hm_body: 'In the residential building: gets its requests first, then fixes them or hands them to the operations room.',
   dm_tenant: 'Tenant', dm_tenant_body: 'Scans the flat code, sends the report with a photo, then signs and rates after the repair.', dm_open_unit: 'Open the location page',
   dm_tech: 'Operations-room technician', dm_tech_body: 'Takes what the handymen hand over, and requests at Head Office, SABCO Centre and Oasis. Arrival targets follow the distance.',
-  dm_sup: 'Helpdesk and supervisor', dm_sup_body: 'Follows open, paused and late requests, logs phone reports and assigns jobs.',
-  dm_admin: 'Admin', dm_admin_body: 'Daily, weekly and monthly reports, the monthly evaluation, the team, settings and QR codes.',
+  dm_sup: 'Maintenance supervisor', dm_sup_body: 'Gets every request as soon as it is sent and gives each job to a handyman or an operations-room technician; follows late and paused work and logs phone reports.',
+  dm_admin: 'Manager', dm_admin_body: 'Daily, weekly and monthly reports, the monthly score for the technicians and for assigning, the team, settings and QR codes.',
   dm_enter: 'Enter', dm_reset: 'Reset demo data', dm_reset_ok: 'Demo data reset.',
   err_auth_required: 'Your session ended. Please sign in again.', err_not_allowed: 'This action is not available to you.',
   err_already_taken: 'Another technician has taken this request.', err_wrong_unit: 'This code does not belong to the request location.',
@@ -357,10 +414,10 @@ en: {
   err_phone_required: 'Enter a valid phone number.', err_already_setup: 'The system is already set up.', err_not_self: 'You cannot change your own role or disable yourself.',
   err_unit_exists: 'This location already exists.', err_bad_building: 'Check the building code and name.', err_label_required: 'Enter the location name.',
   err_bad_settings: 'Check the problem types: each needs an Arabic and an English name.', err_bad_technician: 'Choose a technician.',
-  err_not_found: 'Not found.', err_not_assigned: 'This job belongs to another technician.', err_network: 'Could not connect. Check the internet and try again.',
+  err_not_found: 'Not found.', err_not_assigned: 'This job is not assigned to you.', err_network: 'Could not connect. Check the internet and try again.',
   err_not_configured: 'The system is not connected to its database yet.', err_image: 'Could not read the photo. Try another one.',
   err_generic: 'Something went wrong. Please try again.', of100: 'out of 100',
-  pu_title: 'Turn on phone notifications', pu_body: 'Get every new request right away, even when the phone is locked.', pu_btn: 'Turn on notifications',
+  pu_title: 'Turn on phone notifications', pu_body: 'Get every request or job right away, even when the phone is locked.', pu_btn: 'Turn on notifications',
   pu_done: 'Done. A test notification is on its way.', pu_ios_title: 'Notifications on iPhone',
   pu_ios_body: 'In Safari tap Share, then “Add to Home Screen”. Open Rasd from the new icon, sign in, and turn on notifications there.',
   pu_unsupported: 'This browser cannot show notifications. Use Chrome on Android, or add Rasd to the Home Screen on iPhone.',
@@ -369,17 +426,17 @@ en: {
   pu_sys_intro: 'Notifications are sent by a small Supabase service called rasd-notify. Once it exists, press the button once.', pu_sys_btn: 'Set up notifications',
   pu_sys_ok: 'Notifications are set up.', pu_sender_ok: 'The sender is working.',
   pu_sender_bad: 'The sender does not respond. Check that rasd-notify exists in Edge Functions and that Verify JWT is off.',
-  pu_phones: 'Phones with notifications: {n}, for {p} team members.', pu_reminders_ok: 'Supervisor reminders for unclaimed requests run every 5 minutes.',
+  pu_phones: 'Phones with notifications: {n}, for {p} team members.', pu_reminders_ok: 'Reminders to the supervisor for requests not yet assigned or accepted run every 5 minutes.',
   pu_reminders_off: 'Reminders are off (pg_cron is not enabled).', pu_test: 'Send me a test',
   pu_test_ok: 'Test sent to {n} device(s).', pu_test_none: 'You have not turned on notifications on any device yet.', pu_on: 'Notifications on', pu_off: 'Notifications off',
-  pu_here: 'Turn on for this device', ev_escalated: 'Supervisor alerted: not picked up in time',
+  pu_here: 'Turn on for this device', ev_escalated: 'Reminder: not accepted in time',
   err_push_denied: 'Notifications were not allowed on this device.', err_push_not_ready: 'Notifications are not set up yet.',
   err_push_failed: 'Could not turn on notifications on this device. Try again.', err_bad_subscription: 'Could not turn on notifications on this device. Try again.',
   err_bad_keys: 'Could not set up notifications. Try again.',
   x_export_title: 'Export the {m} report', x_excel_d: 'Every request with its timings, plus the summary', x_pdf_d: 'A report ready to print or send', x_pptx_d: 'A deck ready for management',
   x_summary: 'Summary', x_requests: 'Requests', x_generated: 'Generated {d}', x_pdf_hint: 'In the print window, choose “Save as PDF”.',
   x_minutes: 'in minutes', x_minutes_note: 'Times in the tables are in minutes: actual / target.', x_avg_arr_min: 'Avg arrival (min)', x_avg_work_min: 'Avg repair (min)',
-  x_arr_vs: 'Arrival / target (min)', x_work_vs: 'Repair / target (min)', x_log: 'Request log', x_count: 'Requests: {n}', x_avg_pickup_note: 'Average pickup {v}',
+  x_arr_vs: 'Arrival / target (min)', x_work_vs: 'Repair / target (min)', x_log: 'Request log', x_count: 'Requests: {n}', x_avg_pickup_note: 'Avg. time to accept {v}',
   x_f_manual: 'Arrivals without a scan', x_f_manual_d: 'The technician recorded arrival by hand, with a reason.', x_f_onsite: "Signed on the technician's phone", x_f_onsite_d: "The requester signed on the technician's phone instead of their own.",
   x_f_close: 'Closed manually', x_f_close_d: 'Management closed it without a signature, with a reason.', x_f_repeat: 'Repeat faults', x_f_repeat_d: 'A new report of the same problem at the same location within {d} days of closing.',
   yes: 'Yes', no: 'No', col_accepted: 'Accepted', col_arrived: 'Arrived', col_finished: 'Finished', col_closed: 'Closed', col_repeat: 'Repeat fault', col_desc: 'Description',
@@ -390,7 +447,7 @@ en: {
   p_more: 'The other {n} late requests are in the Excel file.', p_none_late: 'Every request this month met its targets.', p_s6: 'Points to follow up', p_s6_sub: 'Cases worth reviewing with the contractor',
   p_s7: 'Where these numbers come from', p_s7_note: "Every time is recorded by the server, and no request closes without a repair photo and the requester's signature or a written reason.",
   col_no: 'Request no.', col_date: 'Reported', col_building: 'Building', col_unit: 'Location', col_issue: 'Problem', col_priority: 'Priority', col_tech: 'Technician', col_status: 'Status',
-  col_pickup: 'Pickup (min)', col_arrive: 'Arrival (min)', col_arrive_t: 'Arrival target', col_arrive_ok: 'Arrived on time', col_work: 'Repair (min)', col_work_t: 'Repair target',
+  col_pickup: 'Accept (min)', col_arrive: 'Arrival (min)', col_arrive_t: 'Arrival target', col_arrive_ok: 'Arrived on time', col_work: 'Repair (min)', col_work_t: 'Repair target',
   col_work_ok: 'Fixed on time', col_total: 'Total (min)', col_qr: 'Arrival by QR scan', col_rating: 'Rating', col_close: 'Closed by',
   cm_tenant: 'Requester signature', cm_onsite: "Signed on technician's phone", cm_manual: 'Closed manually',
   team_hm: 'Handyman', team_ops: 'Operations room', tech_hm: 'Handyman · {b}', tech_ops: 'Technician · Operations room', role_hm: 'Handyman',
@@ -411,33 +468,33 @@ en: {
   d_hold_note: 'Note', d_hold_warn: 'The repair timer stops. When you are back, scan the location code to resume.',
   d_resume_scan: "I'm back on site: scan to resume", d_resume_manual: "Can't scan? Resume manually", d_resume_submit: 'Resume manually',
   d_resumed_ok: 'The repair timer is running again.', d_held_since: 'On hold for {d}', d_held_eta: 'Expected: {d}',
-  d_escalate: 'Hand over to the operations room', d_escalate_body: 'When the repair needs an operations-room technician. Write what you found so they know what to bring.',
-  d_findings: 'What did you find?', d_escalate_ph: 'e.g. the compressor is dead; needs an AC technician and gas', d_escalate_submit: 'Hand over', d_escalated_ok: 'Handed over to the operations room.',
+  d_escalate: 'Ask for the operations room', d_escalate_body: 'The request goes back to the maintenance supervisor to give to an operations-room technician. Write what you found so they know what to bring.',
+  d_findings: 'What did you find?', d_escalate_ph: 'e.g. the compressor is dead; needs an AC technician and gas', d_escalate_submit: 'Send to the supervisor', d_escalated_ok: 'Sent to the supervisor to give to the operations room.',
   d_report: "Technician's report", d_report_ph: 'What did you find and fix? e.g. the hose under the sink was corroded; replaced and tested',
   d_need_report: 'Write the work report', d_parts_used: 'Parts and materials replaced', d_part_name: 'Part', d_part_qty: 'Qty',
   d_add_part: 'Add part', d_del_part: 'Remove', d_none_parts: 'No parts replaced', d_need_parts: 'Add at least one part',
-  d_legs: 'Visits', d_leg_now: 'now', leg_escalated: 'Handed over to the operations room', leg_reassigned: 'Reassigned', leg_finished: 'Fixed it', leg_open: 'Working on it', leg_closed: 'Closed', leg_cancelled: 'Cancelled',
-  d_inspect: 'Inspection', d_send_ops: 'Send to the operations room', d_send_hm: 'Send to the handyman', d_stage_now: 'The request is {s}', d_sent_ok: 'Sent.',
+  d_legs: 'Visits', d_leg_now: 'now', leg_escalated: 'Asked for the operations room', leg_reassigned: 'Moved to someone else', leg_finished: 'Fixed it', leg_open: 'Working on it', leg_closed: 'Closed', leg_cancelled: 'Cancelled',
+  d_inspect: 'Inspection',
   d_parts_list: 'Parts replaced', d_parts_wait: 'Parts awaited', d_source: 'Source',
   t_hold_busy: 'The technician is finishing another job and will come to you right after.', t_hold_access: 'The visit has been moved to a convenient time.',
   t_hold_parts: 'Your request is waiting for spare parts.', t_hold_eta: 'Expected: {d}', t_hold_other: 'Your request is on hold for now; the team is following it.',
   t_escalated: 'Your request has been passed to the specialist technicians.', t_parts: 'Parts replaced',
   b_k_hold: 'On hold', b_hold: 'On hold', b_all_buildings: 'All buildings', b_new_req: 'New request',
-  n_title: 'Log a request', n_sub: 'For a report received by phone, WhatsApp or in person. It reaches the team like any other and counts in the reports.', n_source: 'Received by',
+  n_title: 'Log a request', n_sub: 'For a report received by phone, WhatsApp or in person. It counts in the reports like any other.', n_source: 'Received by',
   n_building: 'Building', n_unit: 'Location', n_requester: "Requester's name", n_photo: 'Photo', n_submit: 'Log the request',
   n_done: 'Request {no} logged', n_share: 'Send the requester the tracking link so they can follow it and sign after the repair.',
   n_wa: 'Send by WhatsApp', n_open: 'Open the request', n_wa_text: 'We received your request no. {no} at {o}. Follow it and sign after the repair here: {u}',
   src_qr: 'QR code', src_phone: 'Phone call', src_whatsapp: 'WhatsApp', src_walkin: 'In person', src_email: 'Email', src_other: 'Other',
-  ev_logged: 'Logged by the desk ({n})', ev_hold_busy: 'Technician busy with another job: arrival timer paused', ev_hold_access: 'Paused: tenant unavailable',
+  ev_logged: 'Logged ({n})', ev_hold_busy: 'Technician busy with another job: arrival timer paused', ev_hold_access: 'Paused: tenant unavailable',
   ev_hold_parts: 'Paused: waiting for parts', ev_hold_other: 'Paused, other reason', ev_resumed: 'Technician on the way: arrival timer running',
   ev_resumed_auto: 'Arrival timer started after finishing {n}', ev_resumed_qr: 'Technician back on site (QR): repair resumed', ev_resumed_manual: 'Technician back on site (manual): repair resumed',
-  ev_to_ops: 'Handed over to the operations room by the handyman', ev_sent_ops: 'Sent to the operations room by the desk', ev_sent_hm: 'Sent to the handyman by the desk',
+  ev_to_ops: 'Handyman asked for the operations room', ev_sent_ops: 'Sent to the operations room', ev_sent_hm: 'Sent to the handyman',
   err_bad_busy: 'Choose one of your open jobs.', err_on_hold: 'The timer is paused. Tap “On my way now” first.',
   err_report_required: 'Write the work report (at least 5 characters).', err_parts_required: 'Add at least one part.', err_sites_required: "Choose the handyman's building.",
-  tm_team: 'Team', tm_sites: 'Buildings covered', tm_hm_hint: 'Gets the requests from his buildings first, and hands to the operations room what needs them.',
+  tm_team: 'Team', tm_sites: 'Buildings covered', tm_hm_hint: 'The supervisor gives him the requests of his buildings; he asks for the operations room when needed.',
   se_b_type: 'Type', type_res: 'Residential', type_com: 'Commercial and offices', se_b_ops: 'Operations-room arrival (min)',
-  se_b_hint: 'In residential buildings the handyman gets the request first, if there is one; commercial buildings go straight to the operations room. Coming from another building, the longer time applies.',
-  se_hm_note: 'Handyman arrival: he is in the building, so his arrival is measured against this time. Operations-room arrival is set per building below.',
+  se_b_hint: 'For residential buildings the handyman is suggested first, if there is one; for commercial buildings an operations-room technician. Coming from another building, the longer time applies.',
+  se_hm_note: 'Assign: from the request reaching the maintenance supervisor to its assignment. Accept: from the assignment to the technician accepting. Handyman arrival: he is in the building, so it is measured against this time; operations-room arrival is set per building below.',
   n_reports: 'Reports', r_title: 'Request reports', r_day: 'Daily', r_week: 'Weekly', r_month: 'Monthly', r_today: 'Today', r_this_week: 'This week', r_this_month: 'This month',
   r_total: 'Requests', r_done: 'Fixed', r_progress: 'In progress', r_hold: 'On hold', r_cancel: 'Cancelled', r_carried: 'Open from before',
   r_carried_s: 'Earlier requests not closed yet', r_prev_day: 'vs the day before', r_prev_week: 'vs the week before', r_prev_month: 'vs the month before', r_same: 'Same as {p}',
@@ -447,7 +504,7 @@ en: {
   r_list: 'All requests', r_table: 'Show as a table', r_holds: 'Requests on hold', r_none: 'No requests in this period.', r_all: 'All',
   r_f_building: 'Building', r_f_status: 'Status', r_f_priority: 'Priority', r_s_open: 'Open', r_s_done: 'Fixed', r_s_hold: 'On hold', r_s_cancel: 'Cancelled',
   r_week_of: '{a} – {b}', r_col_type: 'Type', r_col_open: 'Open', r_col_avg_fix: 'Avg repair', r_col_avg_arr: 'Avg arrival',
-  r_hm_fixed: 'Fixed by the handyman', r_hm_handed: 'Handed to the operations room', r_ops_direct: 'Straight to the operations room', r_ops_fixed: 'Fixed by the operations room',
+  r_hm_fixed: 'Fixed by the handyman', r_hm_handed: 'Asked for the operations room', r_ops_direct: 'Straight to the operations room', r_ops_fixed: 'Fixed by the operations room',
   r_export: 'Export the {p} report', x_period_excel_d: "Every request in detail, with the technicians' reports and parts, plus the summary", x_period_pdf_d: 'A report ready to print or save as PDF',
   x_parts_sheet: 'Parts', x_holds_sheet: 'On hold', x_counts_sheet: 'Daily counts', x_visits: 'Visits',
   col_time: 'Time', col_source: 'Source', col_hold: 'On hold for', col_hold_since: 'On hold since', col_eta: 'Expected', col_by: 'Done by',
@@ -455,7 +512,64 @@ en: {
   col_report: "Technician's report", col_parts: 'Parts replaced', col_part: 'Part', col_qty: 'Qty', col_comment: "Requester's comment", col_count: 'Count',
   col_urgent: 'Urgent', col_normal: 'Normal', col_period: 'Period', col_outcome: 'Outcome', col_parts_wait: 'Parts awaited', col_note: 'Note',
   e_by_team: 'By team', e_hm_group: 'Handymen', e_ops_group: 'Operations-room technicians', e_paused: 'Paused, not counted', e_self_fixed: 'Fixed himself', e_visits: 'Visits',
-  p_s8: 'Handymen and the operations room', p_s8_sub: 'Performance by team', p_team_line: '{n} visits · arrival {a} · repair {f}'
+  p_s8: 'Handymen and the operations room', p_s8_sub: 'Performance by team', p_team_line: '{n} visits · arrival {a} · repair {f}',
+  st_assigned: 'Awaiting acceptance',
+  t_step_assigned: 'Assigned to a technician',
+  j_alert_mine: 'New job for you: {u}',
+  j_how: 'The maintenance supervisor assigns the requests; your jobs arrive here with a phone notification.',
+  tm_q: 'Waiting to be assigned',
+  tm_ack: 'Waiting for acceptance',
+  tm_dispatch: 'Time to assign',
+  d_dispatch_body: 'Choose who takes this request. They get a phone notification, and the arrival timer starts once they accept.',
+  d_reassign_body: 'What the previous person recorded stays in the request stages, and the new person is notified to accept the job.',
+  d_people: 'Who takes the job?',
+  d_own_b: 'Covers this building',
+  d_free: 'Free',
+  d_load: 'Open jobs: {n}',
+  d_now_at: 'Now at {b}',
+  d_goal: 'Arrival target {m}',
+  d_was_declined: 'Declined it',
+  d_note_for: 'Note for them',
+  d_note_for_ph: 'e.g. The tenant is home after 4 pm; the key is with the guard',
+  d_dispatch_submit: 'Assign the job',
+  d_by_line: 'Assigned by {n}',
+  d_q_declined: '{n} declined: {m}',
+  d_q_escalated: '{n} asked for the operations room: {m}',
+  c_declined: '{n} declined',
+  d_wait_tech: 'Waiting for {n} to accept',
+  d_your_turn: 'Given to you by {n}',
+  d_decline: 'Decline the job',
+  d_decline_title: 'Decline the job',
+  d_decline_body: 'The job goes back to the maintenance supervisor to give to someone else. Write the reason.',
+  d_decline_ph: 'e.g. I am at another building on an urgent job until the evening',
+  d_decline_submit: 'Decline',
+  d_declined_ok: 'Declined. The job is back with the maintenance supervisor.',
+  d_gone: 'This job is no longer assigned to you.',
+  ev_late_dispatch: 'Reminder: not assigned in time',
+  ev_declined: 'Declined the job',
+  b_k_assigned: 'Awaiting acceptance',
+  b_rest: 'In hand',
+  e_avg_dispatch: 'Avg. time to assign',
+  e_dispatch_on: 'Assigned on time',
+  e_dispatches: 'Assignments',
+  e_declines: 'Declined: {n}',
+  e_sup_title: 'Assigning requests',
+  e_sup_note: 'From the request reaching the maintenance supervisor to its assignment. It is not part of the technicians\' score.',
+  se_dispatch: 'Supervisor assigns',
+  g_sup: 'The request reached the maintenance supervisor. Switch to him and give the job to a handyman or technician.',
+  g_sup_btn: 'Enter as the supervisor',
+  dm_team: 'Handyman or technician',
+  dm_team_body: 'Gets the jobs the supervisor gives him, accepts, heads there and scans the location code, then writes the report and the parts used.',
+  col_dispatch: 'Assign (min)',
+  col_assigned_by: 'Assigned by',
+  col_declines: 'Declines',
+  leg_declined: 'Declined',
+  leg_waiting: 'Not accepted yet',
+  t_q: 'Your request is with the maintenance supervisor, who will assign it to the right technician.',
+  n_assign: 'Assign the job now',
+  n_assign_later: 'Later, from the board',
+  tm_wait_s: 'Waiting',
+  st_assigned_me: 'Waiting for you to accept'
 }
 };
 function t(k, p) {
@@ -618,7 +732,7 @@ const issueList = () => ((S.settings && S.settings.issueTypes) || DEFAULTS.issue
 function issueLabel(k) { const i = issueList().find(x => x.k === k) || DEFAULTS.issueTypes.find(x => x.k === k); return i ? i[LANG] : k; }
 function targetsFor(r) {
   const tg = ((S.settings || DEFAULTS).targets || {})[r.priority] || {};
-  return { pickup: tg.pickup || (r.priority === 'urgent' ? 15 : 60), arrive: r.target_arrive, work: r.target_work };
+  return { dispatch: tg.dispatch || (r.priority === 'urgent' ? 10 : 30), pickup: tg.pickup || (r.priority === 'urgent' ? 10 : 30), arrive: r.target_arrive, work: r.target_work };
 }
 function setSession(res) {
   S.session = { token: res.token, me: res.me };
@@ -807,10 +921,11 @@ async function loadList(force) {
   const list = await srpc('staff_requests', { p_from: new Date(Date.now() - 10 * 864e5).toISOString() });
   S.list = Array.isArray(list) ? list : [];
   S.listAt = Date.now();
-  const fresh = S.list.filter(r => r.status === 'new');
+  const me = S.session.me, tech = me.role === 'technician';
+  const fresh = S.list.filter(r => (tech ? r.status === 'assigned' && r.technician_id === me.id : r.status === 'new'));
   if (S.seenNew) {
     const added = fresh.filter(r => !S.seenNew.has(r.id));
-    if (added.length) { chime(); toast(t('j_alert', { u: uName(added[0]) + ' · ' + issueLabel(added[0].issue_type) })); }
+    if (added.length) { chime(); toast(t(tech ? 'j_alert_mine' : 'j_alert', { u: uName(added[0]) + ' · ' + issueLabel(added[0].issue_type) })); }
   }
   S.seenNew = new Set(fresh.map(r => r.id));
   document.title = (fresh.length ? '(' + fresh.length + ') ' : '') + t('app');
@@ -830,13 +945,17 @@ function statusChip(r) {
   if (typeof r === 'string') return `<span class="status s-${r}">${t('st_' + r)}</span>`;
   if (r.hold_kind === 'busy') return `<span class="status s-queued">${t('st_queued')}</span>`;
   if (r.hold_kind) return `<span class="status s-hold">${esc(holdLabel(r))}</span>`;
+  if (r.status === 'assigned' && S.session && r.technician_id === S.session.me.id) return `<span class="status s-assigned">${t('st_assigned_me')}</span>`;
   return `<span class="status s-${r.status}">${t('st_' + r.status)}</span>`;
 }
 const stageChip = r => (r.status === 'new' && r.stage ? `<span class="stage st-${r.stage}">${r.stage === 'hm' ? t('team_hm') : t('team_ops')}</span>` : '');
 const pickupTarget = r => r.target_pickup || targetsFor(r).pickup;
+const dispatchTarget = r => r.target_dispatch || targetsFor(r).dispatch;
+const lastLeg = r => (r.legs && r.legs.length ? r.legs[r.legs.length - 1] : null);
 function phase(r) {
   if (r.hold_kind) return null;
-  if (r.status === 'new') return { from: r.offered_at || r.created_at, target: pickupTarget(r), label: 'tm_wait' };
+  if (r.status === 'new') return { from: r.queued_at || r.created_at, target: dispatchTarget(r), label: 'tm_wait_s' };
+  if (r.status === 'assigned') return { from: r.offered_at || r.created_at, target: pickupTarget(r), label: 'tm_wait_s' };
   if (r.status === 'accepted') return { from: isoPlus(r.accepted_at, secs(r.paused_arrive)), target: r.target_arrive, label: 'tm_way' };
   if (r.status === 'onsite') return { from: isoPlus(r.arrived_at, secs(r.paused_work)), target: r.target_work, label: 'tm_work' };
   if (r.status === 'finished') return { from: r.finished_at, target: 24 * 60, label: 'tm_sign' };
@@ -863,13 +982,15 @@ function byUrgency(a, b) {
   if (a.priority !== b.priority) return a.priority === 'urgent' ? -1 : 1;
   return D(a.created_at) - D(b.created_at);
 }
-function reqCard(r) {
-  const handed = (r.legs || []).some(l => l.outcome === 'escalated');
+function reqCard(r, o) {
+  o = o || {};
+  const handed = (r.legs || []).some(l => l.outcome === 'escalated'), ll = lastLeg(r);
+  const back = r.status === 'new' && ll && ll.outcome === 'declined' ? `<span class="stage st-warn">${ICON.alert}${esc(t('c_declined', { n: ll.name || '' }))}</span>` : '';
   return `<a class="req ${r.priority} st-${r.status} ${r.hold_kind ? 'held' : ''} ${isLate(r) ? 'is-late' : ''}" href="#/r/${esc(r.id)}">
-    <div class="req-top">${prBadge(r.priority)}<b class="no num">#${r.no}</b><span class="where">${esc(uName(r))}<small> · ${esc(bName(r))}</small></span>${statusChip(r)}</div>
-    <div class="req-issue">${esc(issueLabel(r.issue_type))}${stageChip(r)}${handed && r.status !== 'new' ? `<span class="stage st-ops">${ICON.handover}${t('team_ops')}</span>` : ''}</div>
+    <div class="req-top">${prBadge(r.priority)}<b class="no num">#${r.no}</b><span class="where">${esc(uName(r))}<small> · ${esc(bName(r))}</small></span>${o.queue ? '' : statusChip(r)}</div>
+    <div class="req-issue">${esc(issueLabel(r.issue_type))}${stageChip(r)}${handed && r.status !== 'new' ? `<span class="stage st-ops">${ICON.handover}${t('team_ops')}</span>` : ''}${back}</div>
     <div class="req-desc">${esc(r.description)}</div>
-    <div class="req-foot"><span class="tech">${ICON.user}${r.technician ? esc(r.technician) : `<i>${t('b_unassigned')}</i>`}</span>${timerChip(r)}</div>
+    <div class="req-foot">${o.queue ? `<span class="tech muted">${r.contact_name ? ICON.user + esc(r.contact_name) : ''}</span>` : `<span class="tech">${ICON.user}${r.technician ? esc(r.technician) : `<i>${t('b_unassigned')}</i>`}</span>`}${timerChip(r)}</div>
   </a>`;
 }
 function starsRo(n) { let h = ''; for (let i = 1; i <= 5; i++) h += `<span class="${i <= n ? '' : 'off'}">${ICON.star}</span>`; return `<span class="stars-ro" aria-label="${n}/5">${h}</span>`; }
@@ -1238,23 +1359,25 @@ async function vTrack(id, code, alive) {
       <div><p class="issue-l">${esc(issueLabel(r.issue_type))}</p><p class="muted desc">${esc(r.description)}</p></div>
       ${r.status === 'cancelled' ? `<p class="callout">${ICON.alert}${t('t_cancelled')}</p>` : trackNotes(r) + stepper(r)}
     </section>
-    ${DEMO && r.status === 'new' ? guide(r.stage === 'ops' ? 'g_ops' : 'g_tech', r.stage === 'ops' ? 'g_ops_btn' : 'g_tech_btn', '/r/' + r.id, Demo.firstFor(r.building_code, r.stage)) : ''}
+    ${DEMO && r.status === 'new' ? guide(r.escalated ? 'g_ops' : 'g_sup', 'g_sup_btn', '/r/' + r.id, 's-sup') : ''}
+    ${DEMO && r.status === 'assigned' ? guide('g_tech', 'g_tech_btn', '/r/' + r.id, Demo.assignee(r.id), { n: r.technician || '' }) : ''}
     ${r.status === 'finished' ? tenantSignForm(r) : ''}
     ${r.status === 'closed' ? `<section class="card"><div class="success">${ICON.check}<div><b>${t('t_thanks')}</b>${r.rating ? `<p>${starsRo(r.rating)}</p>` : ''}${r.signoff_method === 'onsite' ? `<p class="muted small">${t('t_signed_onsite')}</p>` : ''}</div></div>${r.photo_after ? `<figure class="ph"><img src="${r.photo_after}" alt="" data-act="zoom"><figcaption>${t('t_after_photo')}</figcaption></figure>` : ''}${reportBlock(r)}</section>` : ''}
     ${DEMO && r.status === 'closed' ? guide('g_admin', 'g_admin_btn', '/r/' + r.id, 's-admin') : ''}
     ${token ? `<a class="btn block" href="#/u/${esc(encodeURIComponent(token))}">${ICON.plus}${t('t_new_req')}</a>` : ''}
   </div>`, { tenant: true });
   initPads();
-  if (['new', 'accepted', 'onsite'].includes(r.status)) {
+  if (['new', 'assigned', 'accepted', 'onsite'].includes(r.status)) {
     startPoll(async () => {
       const n = await rpc('track_request', { p_id: id, p_code: code });
-      if (n && (n.status !== S.track.r.status || n.hold_kind !== S.track.r.hold_kind || n.escalated !== S.track.r.escalated)) render();
+      if (n && (n.status !== S.track.r.status || n.hold_kind !== S.track.r.hold_kind || n.escalated !== S.track.r.escalated || n.technician !== S.track.r.technician)) render();
     }, 20000);
   }
 }
 function trackNotes(r) {
   const n = [];
   if (r.escalated && !['finished', 'closed'].includes(r.status)) n.push(`<p class="callout">${ICON.handover}<span>${t('t_escalated')}</span></p>`);
+  else if (r.status === 'new') n.push(`<p class="callout">${ICON.user}<span>${t('t_q')}</span></p>`);
   if (r.hold_kind) {
     const eta = r.hold_eta ? ' ' + t('t_hold_eta', { d: fmt(r.hold_eta, { weekday: 'long', day: 'numeric', month: 'long' }) }) : '';
     n.push(`<p class="callout hold">${ICON.pause}<span>${t('t_hold_' + r.hold_kind)}${r.hold_kind === 'busy' ? '' : esc(eta)}</span></p>`);
@@ -1270,7 +1393,7 @@ function reportBlock(r) {
   return `<div class="report-b">${r.tech_note ? `<p class="note"><b>${t('t_tech_note')}:</b> ${esc(r.tech_note)}</p>` : ''}${r.parts && r.parts.length ? `<div><span class="lbl">${t('t_parts')}</span>${partsList(r.parts)}</div>` : ''}</div>`;
 }
 function stepper(r) {
-  const steps = [['t_step_sent', r.created_at], ['t_step_acc', r.accepted_at, r.technician], ['t_step_arr', r.arrived_at], ['t_step_fin', r.finished_at], ['t_step_closed', r.closed_at]];
+  const steps = [['t_step_sent', r.created_at], ['t_step_assigned', r.status === 'new' ? null : r.assigned_at, r.status === 'assigned' ? r.technician : null], ['t_step_acc', r.accepted_at, r.technician], ['t_step_arr', r.arrived_at], ['t_step_fin', r.finished_at], ['t_step_closed', r.closed_at]];
   const cur = steps.findIndex(s => !s[1]);
   return `<ol class="steps">${steps.map((s, i) => `<li class="${s[1] ? 'done' : i === cur ? 'now' : ''}"><span class="dot">${s[1] ? ICON.check : ''}</span><div><b>${t(s[0])}</b>${s[1] ? `<small class="num">${fDT(s[1])}${s[2] ? ' · ' + esc(s[2]) : ''}</small>` : ''}</div></li>`).join('')}</ol>`;
 }
@@ -1334,13 +1457,13 @@ function jobOrder(a, b) {
 }
 function jobsBody(list) {
   const me = S.session.me;
+  const given = list.filter(r => r.technician_id === me.id && r.status === 'assigned').sort(byUrgency);
   const mine = list.filter(r => r.technician_id === me.id && ['accepted', 'onsite', 'finished'].includes(r.status)).sort(jobOrder);
-  const fresh = list.filter(r => r.status === 'new').sort(byUrgency);
   return `<p class="team-line">${me.team === 'hm' ? ICON.building : ICON.wrench}<span>${esc(teamLine(me))}</span></p>
+    ${given.length ? `<h2 class="sec">${t('j_new')}<span class="count">${given.length}</span></h2><div class="cards">${given.map(reqCard).join('')}</div>` : ''}
     <h2 class="sec">${t('j_mine')}<span class="count">${mine.length}</span></h2>
-    ${mine.length ? `<div class="cards">${mine.map(reqCard).join('')}</div>` : `<p class="empty-line">${t('j_none_mine')}</p>`}
-    <h2 class="sec">${t('j_new')}<span class="count">${fresh.length}</span></h2>
-    ${fresh.length ? `<div class="cards">${fresh.map(reqCard).join('')}</div>` : `<p class="empty-line">${t('j_none_new')}</p>`}`;
+    ${mine.length ? `<div class="cards">${mine.map(reqCard).join('')}</div>` : `<p class="empty-line">${t(given.length ? 'j_none_mine' : 'j_none_new')}</p>`}
+    <p class="muted small">${t('j_how')}</p>`;
 }
 async function vHistory(alive) {
   page(loadingBox(), { staff: true, nav: isMgr() ? 'board' : 'history' });
@@ -1369,7 +1492,7 @@ async function vReq(id, alive) {
   try {
     await settings();
     r = await srpc('staff_request', { p_id: id });
-    if (isMgr()) team = await srpc('team_list').catch(() => null);
+    if (isMgr()) [team] = await Promise.all([srpc('team_list').catch(() => null), loadList().catch(() => null)]);
   } catch (e) { if (alive()) page(errorBox(e), { staff: true, nav: navKey() }); return; }
   if (!alive()) return;
   S.req = r; S.team = team || S.team;
@@ -1412,7 +1535,7 @@ function reqView(r, team) {
         ${actionPanel(r)}
         <section class="card"><h3>${ICON.clock}${t('d_times')}</h3>${timesTable(r)}</section>
         ${legsCard(r)}
-        ${mgrPanel(r, team)}
+        ${mgrPanel(r)}
         <section class="card"><h3>${t('d_log')}</h3>${eventsList(r.events || [])}</section>
       </div>
     </div>
@@ -1452,11 +1575,25 @@ function partsEditor(id, parts, min1) {
 const readParts = root => $$('.part-row', root).map(r => ({ n: $('[name="pn"]', r).value.trim(), q: Math.max(0.1, Math.round((+$('[name="pq"]', r).value || 1) * 100) / 100) })).filter(x => x.n);
 function actionPanel(r) {
   const me = S.session.me, mine = r.technician_id === me.id, can = mine || isMgr();
-  if (r.status === 'new' && me.role === 'technician') {
-    return `<section class="card">${bigTimer(r.offered_at || r.created_at, pickupTarget(r), 'tm_wait')}
-      <button class="btn primary block big" type="button" data-act="accept">${ICON.check}${t('d_accept')}</button>
-      <button class="btn block" type="button" data-act="accept-busy">${ICON.pause}${t('d_accept_busy')}</button></section>`;
+  if (r.status === 'new' && isMgr()) {
+    return `<section class="card dispatch">${bigTimer(r.queued_at || r.created_at, dispatchTarget(r), 'tm_q')}
+      <div><h3>${ICON.send}${t('d_assign')}</h3><p class="muted small">${t('d_dispatch_body')}</p></div>
+      ${dispatchForm(r, S.team, S.list, false)}</section>`;
   }
+  if (r.status === 'assigned' && mine) {
+    return `<section class="card">${bigTimer(r.offered_at || r.created_at, pickupTarget(r), 'tm_ack')}
+      ${r.assigned_by_name || r.assign_note ? `<p class="callout">${ICON.user}<span>${r.assigned_by_name ? esc(t('d_your_turn', { n: r.assigned_by_name })) : ''}${r.assign_note ? `<b class="a-note">${esc(r.assign_note)}</b>` : ''}</span></p>` : ''}
+      <p class="muted small">${esc(arriveTargetNote(r))}</p>
+      <button class="btn primary block big" type="button" data-act="accept">${ICON.check}${t('d_accept')}</button>
+      <button class="btn block" type="button" data-act="accept-busy">${ICON.pause}${t('d_accept_busy')}</button>
+      <button class="btn block ghost danger" type="button" data-act="decline">${t('d_decline')}</button></section>`;
+  }
+  if (r.status === 'assigned' && isMgr()) {
+    return `${DEMO ? guide('g_tech', 'g_tech_btn', '/r/' + r.id, r.technician_id, { n: r.technician || '' }) : ''}<section class="card">${bigTimer(r.offered_at || r.created_at, pickupTarget(r), 'tm_ack')}
+      <p class="callout">${ICON.user}<span>${esc(t('d_wait_tech', { n: r.technician || '' }))}${r.assign_note ? `<b class="a-note">${esc(r.assign_note)}</b>` : ''}</span></p>
+      <button class="btn block" type="button" data-act="move">${ICON.handover}${t('d_reassign')}</button></section>`;
+  }
+  if (me.role === 'technician' && !mine && !['closed', 'cancelled'].includes(r.status)) return `<p class="callout">${ICON.alert}<span>${t('d_gone')}</span></p>`;
   if (r.status === 'accepted' && can) {
     if (r.hold_kind) return pausedPanel(r, holdInfo(r), `<button class="btn primary block big" type="button" data-act="go-now">${ICON.play}${t('d_go_now')}</button>`);
     return `<section class="card">${bigTimer(isoPlus(r.accepted_at, secs(r.paused_arrive)), r.target_arrive, 'tm_way', arriveTargetNote(r))}
@@ -1504,7 +1641,8 @@ function timesTable(r) {
   const open = !['closed', 'cancelled'].includes(r.status), held = !!r.hold_kind;
   const pa = secs(r.paused_arrive), pw = secs(r.paused_work);
   const rows = [
-    { k: 'tm_pickup', a: r.offered_at || r.created_at, b: r.accepted_at, tg: pickupTarget(r), live: r.status === 'new', p: 0 },
+    { k: 'tm_dispatch', a: r.queued_at, b: r.status === 'new' ? null : r.offered_at, tg: dispatchTarget(r), live: r.status === 'new', p: 0, note: r.assigned_by_name && r.status !== 'new' ? t('d_by_line', { n: r.assigned_by_name }) : '' },
+    { k: 'tm_pickup', a: r.offered_at, b: r.accepted_at, tg: pickupTarget(r), live: r.status === 'assigned', p: 0 },
     { k: 'tm_way', a: r.accepted_at, b: r.arrived_at, tg: r.target_arrive, live: r.status === 'accepted', p: pa,
       note: [r.arrival_method ? t(r.arrival_method === 'qr' ? 'd_by_qr' : 'd_by_manual') : '', r.accepted_at ? arriveTargetNote(r).replace(/^[^·]*· ?/, '') : ''].filter(Boolean).join(' · ') },
     { k: 'tm_work', a: r.arrived_at, b: r.finished_at, tg: r.target_work, live: r.status === 'onsite', p: pw },
@@ -1525,13 +1663,14 @@ function legsCard(r) {
   if (!r.legs || !r.legs.length) return '';
   const L2 = legsOf(r);
   const row = l => {
-    const out = l.current ? (r.status === 'new' ? '' : t('leg_' + (l.outcome === 'open' ? 'open' : l.outcome))) : t('leg_' + l.outcome);
+    const out = l.current ? (r.status === 'assigned' ? t('leg_waiting') : t('leg_' + l.outcome)) : t('leg_' + l.outcome);
     const bits = [];
+    if (l.assigned_by_name) bits.push(esc(t('d_by_line', { n: l.assigned_by_name })));
     if (l.arrive != null) bits.push(`${t('tm_way')} <b class="${l.arrOk === false ? 'bad' : ''}">${fDur(l.arrive)}</b> / ${l.t_arrive} ${t('min')}`);
     if (l.outcome === 'escalated' && l.arrived_at) bits.push(`${t('d_inspect')} <b>${fDur(D(l.ended_at) - D(l.arrived_at) - l.pw)}</b>`);
     if (l.work != null) bits.push(`${t('tm_work')} <b class="${l.workOk === false ? 'bad' : ''}">${fDur(l.work)}</b> / ${l.t_work} ${t('min')}`);
     return `<li class="${l.current ? 'now' : ''}"><div class="lg-h"><b>${esc(l.name || '—')}</b><span class="stage st-${l.team}">${l.team === 'hm' ? t('team_hm') : t('team_ops')}</span>${out ? `<span class="muted">${esc(out)}</span>` : ''}</div>
-      ${bits.length ? `<p class="lg-t">${bits.join(' · ')}</p>` : ''}${l.note && l.outcome === 'escalated' ? `<p class="quote">${esc(l.note)}</p>` : ''}</li>`;
+      ${bits.length ? `<p class="lg-t">${bits.join(' · ')}</p>` : ''}${l.note && (l.outcome === 'escalated' || l.outcome === 'declined') ? `<p class="quote">${esc(l.note)}</p>` : ''}</li>`;
   };
   const tail = r.technician_id ? '' : `<li class="now"><div class="lg-h"><i class="muted">${t('b_unassigned')}</i><span class="stage st-${r.stage}">${r.stage === 'hm' ? t('team_hm') : t('team_ops')}</span></div></li>`;
   return `<section class="card"><h3>${ICON.handover}${t('d_legs')}</h3><ol class="legs">${L2.map(row).join('')}${tail}</ol></section>`;
@@ -1563,31 +1702,77 @@ function locationBlock(r) {
     <p class="mono" dir="ltr">${(+r.arrival_lat).toFixed(5)}, ${(+r.arrival_lng).toFixed(5)}</p>
     <a href="${url}" target="_blank" rel="noopener">${t('d_map')}</a></section>`;
 }
-function techOptions(team, selected, building, stage) {
-  const techs = (team || []).filter(s => s.active && s.role === 'technician');
-  const hm = techs.filter(s => s.team === 'hm').sort((a, b) => ((b.sites || []).includes(building) - (a.sites || []).includes(building)) || a.name.localeCompare(b.name));
-  const ops = techs.filter(s => s.team !== 'hm');
-  const opt = s => `<option value="${esc(s.id)}" ${s.id === selected ? 'selected' : ''}>${esc(s.name)}${s.team === 'hm' && (s.sites || []).length ? ' · ' + esc((s.sites || []).map(bLabel).join('، ')) : ''}</option>`;
-  const g1 = hm.length ? `<optgroup label="${esc(t('team_hm'))}">${hm.map(opt).join('')}</optgroup>` : '', g2 = ops.length ? `<optgroup label="${esc(t('team_ops'))}">${ops.map(opt).join('')}</optgroup>` : '';
-  return (selected ? '' : `<option value="" selected disabled>${esc(t('d_pick_tech'))}</option>`) + (stage === 'ops' ? g2 + g1 : g1 + g2);
+// Where someone sets out from, and the arrival target that gives (the database works it out the same way)
+function arrivePreview(r, team, origin) {
+  const st = S.settings || DEFAULTS, tg = (st.targets || {})[r.priority] || {}, b = st.buildings || {};
+  if (origin === r.building_code || (team === 'hm' && !origin)) return tg.arrive || (r.priority === 'urgent' ? 15 : 60);
+  return Math.max(+((b[r.building_code] || {}).ops) || 60, origin ? +((b[origin] || {}).ops) || 0 : 0);
 }
-function mgrPanel(r, team) {
+// every active handyman and technician, with what he has on hand now
+function peopleFor(r, team, list) {
+  const open = (list || []).filter(x => x.id !== r.id && ['assigned', 'accepted', 'onsite'].includes(x.status));
+  const declined = new Set((r.legs || []).filter(l => l.outcome === 'declined').map(l => l.staff_id));
+  return (team || []).filter(s => s.active && s.role === 'technician' && s.id !== r.technician_id).map(s => {
+    const has = open.filter(x => x.technician_id === s.id), hm = s.team === 'hm', sites = s.sites || [];
+    const on = has.filter(x => x.status === 'onsite' && !x.hold_kind).sort((a, b) => D(b.arrived_at) - D(a.arrived_at))[0];
+    const fin = (list || []).filter(x => x.technician_id === s.id && x.finished_at && Date.now() - D(x.finished_at) < 90 * 60000).sort((a, b) => D(b.finished_at) - D(a.finished_at))[0];
+    const at = on ? on.building_code : fin ? fin.building_code : null, own = hm && sites.includes(r.building_code);
+    const origin = at || (hm && sites.length ? (own ? r.building_code : sites[0]) : null);
+    return { s, hm, own, at, load: has.length, goal: arrivePreview(r, hm ? 'hm' : 'ops', origin), declined: declined.has(s.id) };
+  });
+}
+// the person the request most likely needs: the building's handyman, else the least busy technician
+function suggestFor(r, people) {
+  const ok = people.filter(p => !p.declined), byLoad = (a, b) => a.load - b.load || a.goal - b.goal || a.s.name.localeCompare(b.s.name);
+  const own = ok.filter(p => p.own).sort(byLoad), ops = ok.filter(p => !p.hm).sort(byLoad);
+  return (r.stage === 'ops' ? ops[0] || own[0] : own[0] || ops[0]) || ok.slice().sort(byLoad)[0] || null;
+}
+function dispatchForm(r, team, list, inModal) {
+  const people = peopleFor(r, team, list);
+  if (!people.length) return `<p class="muted small">${t('d_no_techs')}</p>`;
+  const sug = suggestFor(r, people), ll = r.status === 'new' ? lastLeg(r) : null;
+  const why = ll && ll.outcome === 'declined' ? t('d_q_declined', { n: ll.name || '', m: ll.note || '' }) : ll && ll.outcome === 'escalated' ? t('d_q_escalated', { n: ll.name || '', m: ll.note || '' }) : '';
+  const order = (a, b) => (b.own - a.own) || a.load - b.load || a.s.name.localeCompare(b.s.name);
+  const hm = people.filter(p => p.hm).sort(order), ops = people.filter(p => !p.hm).sort(order);
+  const groups = (r.stage === 'ops' ? [['e_ops_group', ops], ['e_hm_group', hm]] : [['e_hm_group', hm], ['e_ops_group', ops]]).filter(g => g[1].length);
+  const fid = 'dp-' + esc(r.id) + (inModal ? '-m' : '');
+  const person = p => {
+    const where = p.hm ? (p.s.sites || []).map(bLabel).join('، ') : '';
+    const tags = [p.own ? `<em class="tag ok">${t('d_own_b')}</em>` : '', p.declined ? `<em class="tag warn">${t('d_was_declined')}</em>` : ''].join('');
+    const state = [p.load ? t('d_load', { n: p.load }) : t('d_free'), p.at ? t('d_now_at', { b: bLabel(p.at) }) : '', t('d_goal', { m: p.goal + ' ' + t('min') })].filter(Boolean).join(' · ');
+    return `<label class="choice person"><input type="radio" name="staff" value="${esc(p.s.id)}" ${p === sug ? 'checked' : ''}><span><b>${esc(p.s.name)}${tags}</b>${where ? `<small>${esc(where)}</small>` : ''}<small class="${p.load ? '' : 'free'}">${esc(state)}</small></span></label>`;
+  };
+  return `<form class="form" data-form="dispatch" data-id="${esc(r.id)}" novalidate>
+    ${why ? `<p class="callout ${ll.outcome === 'declined' ? 'warn' : ''}">${ll.outcome === 'declined' ? ICON.alert : ICON.handover}<span>${esc(why)}</span></p>` : ''}
+    <fieldset class="field"><legend>${t('d_people')}</legend>
+      ${groups.map(g => `<p class="grp">${t(g[0])}</p><div class="choices one people">${g[1].map(person).join('')}</div>`).join('')}
+      <p class="err" data-err="staff"></p></fieldset>
+    <div class="field"><label for="${fid}-n">${t('d_note_for')} <span class="opt">(${t('optional')})</span></label><textarea id="${fid}-n" name="note" rows="2" maxlength="300" placeholder="${esc(t('d_note_for_ph'))}"></textarea></div>
+    ${inModal ? `<div class="row end"><button type="button" class="btn ghost" data-act="modal-close">${t('cancel')}</button><button class="btn primary" type="submit">${ICON.send}${t('d_dispatch_submit')}</button></div>`
+      : `<button class="btn primary block big" type="submit">${ICON.send}${t('d_dispatch_submit')}</button>`}
+  </form>`;
+}
+function dispatchModal(r) {
+  const moving = r.status !== 'new';
+  modal(`<div class="dp-h"><h3>${ICON.send} ${t(moving ? 'd_reassign' : 'd_assign')} · <span class="num">#${r.no}</span></h3>
+    <p class="muted small">${prBadge(r.priority)} ${esc(issueLabel(r.issue_type))} · ${esc(uName(r))} · ${esc(bName(r))}</p>
+    <p class="muted small">${t(moving ? 'd_reassign_body' : 'd_dispatch_body')}</p></div>${dispatchForm(r, S.team, S.list, true)}`);
+}
+function mgrPanel(r) {
   if (!isMgr() || ['closed', 'cancelled'].includes(r.status)) return '';
-  const techs = (team || []).filter(s => s.active && s.role === 'technician');
-  const hasHm = techs.some(s => s.team === 'hm' && (s.sites || []).includes(r.building_code)) && (bMeta(r.building_code).type || 'res') === 'res';
-  const stageBtns = r.status === 'new' ? `<div class="field"><span class="lbl">${esc(t('d_stage_now', { s: r.stage === 'hm' ? t('stage_hm') : t('stage_ops') }))}</span><div class="row">${r.stage === 'hm' ? `<button class="btn sm" type="button" data-act="stage" data-v="ops">${ICON.handover}${t('d_send_ops')}</button>` : hasHm ? `<button class="btn sm" type="button" data-act="stage" data-v="hm">${ICON.handover}${t('d_send_hm')}</button>` : ''}</div></div>` : '';
-  const assign = r.status !== 'finished' ? (techs.length ? `<form class="form" data-form="assign"><div class="field"><label for="as-s">${r.technician_id ? t('d_reassign') : t('d_assign')}</label><div class="row"><select id="as-s" name="staff">${techOptions(team, r.technician_id, r.building_code, r.stage)}</select><button class="btn" type="submit">${t('d_assign_btn')}</button></div></div></form>` : `<p class="muted small">${t('d_no_techs')}</p>`) : '';
+  const move = ['accepted', 'onsite'].includes(r.status) ? `<button class="btn block" type="button" data-act="move">${ICON.handover}${t('d_reassign')}</button>` : '';
   return `<section class="card mgr no-print"><h3>${t('d_mgr')}</h3>
-    ${stageBtns}${assign}
+    ${move}
     <div class="field"><span class="lbl">${t('d_priority')}</span><div class="seg">${['urgent', 'normal'].map(p => `<button type="button" data-act="prio" data-v="${p}" class="${r.priority === p ? 'on' : ''}">${t('pr_' + p)}</button>`).join('')}</div></div>
-    <div class="row">${r.status !== 'new' ? `<button class="btn sm" type="button" data-act="mclose">${t('d_manual_close')}</button>` : ''}<button class="btn sm danger" type="button" data-act="mcancel">${t('d_cancel_req')}</button></div>
+    <div class="row">${['accepted', 'onsite', 'finished'].includes(r.status) ? `<button class="btn sm" type="button" data-act="mclose">${t('d_manual_close')}</button>` : ''}<button class="btn sm danger" type="button" data-act="mcancel">${t('d_cancel_req')}</button></div>
   </section>`;
 }
-function guide(textKey, btnKey, to, role) {
-  return `<section class="guide no-print"><div><small>${t('g_next')}</small><p>${t(textKey)}</p></div><button class="btn primary" type="button" data-act="guide" data-to="${esc(to)}" data-role="${esc(role || '')}">${t(btnKey)}</button></section>`;
+function guide(textKey, btnKey, to, role, params) {
+  return `<section class="guide no-print"><div><small>${t('g_next')}</small><p>${esc(t(textKey, params))}</p></div><button class="btn primary" type="button" data-act="guide" data-to="${esc(to)}" data-role="${esc(role || '')}">${t(btnKey)}</button></section>`;
 }
-function reasonModal(title, fn, danger) {
-  const m = modal(`<form class="form" data-form="reason" novalidate><h3>${esc(title)}</h3><div class="field"><label for="rs-n">${t('d_reason')}</label><textarea id="rs-n" name="note" rows="3" maxlength="300"></textarea><p class="err" data-err="note"></p></div><div class="row end"><button type="button" class="btn ghost" data-act="modal-close">${t('cancel')}</button><button type="submit" class="btn ${danger ? 'danger solid' : 'primary'}">${t('confirm')}</button></div></form>`);
+function reasonModal(title, fn, danger, o) {
+  o = o || {};
+  const m = modal(`<form class="form" data-form="reason" novalidate><div><h3>${esc(title)}</h3>${o.body ? `<p class="muted small">${esc(o.body)}</p>` : ''}</div><div class="field"><label for="rs-n">${t('d_reason')}</label><textarea id="rs-n" name="note" rows="3" maxlength="300" placeholder="${esc(o.ph || '')}"></textarea><p class="err" data-err="note"></p></div><div class="row end"><button type="button" class="btn ghost" data-act="modal-close">${t('cancel')}</button><button type="submit" class="btn ${danger ? 'danger solid' : 'primary'}">${esc(o.submit || t('confirm'))}</button></div></form>`);
   m._reason = fn;
   setTimeout(() => { const ta = $('textarea', m); if (ta) ta.focus(); }, 60);
 }
@@ -1627,7 +1812,7 @@ function escalateModal() {
 
 /* ============================================================ views: board */
 const isHeld = r => !!r.hold_kind && r.hold_kind !== 'busy' && ['accepted', 'onsite'].includes(r.status);
-const isOpen = r => ['new', 'accepted', 'onsite', 'finished'].includes(r.status);
+const isOpen = r => ['new', 'assigned', 'accepted', 'onsite', 'finished'].includes(r.status);
 async function vBoard(alive) {
   page(loadingBox(), { staff: true, nav: 'board' });
   await settings();
@@ -1656,22 +1841,31 @@ function boardKpis(list) {
   const late = open.filter(isLate).length, held = open.filter(isHeld).length;
   const today = list.filter(r => r.closed_at && D(r.closed_at) >= dayStart()).length;
   const k = (v, l, cls) => `<div class="kpi ${cls || ''}"><span class="v">${v}</span><span class="l">${l}</span></div>`;
-  return `<div class="kpis tight">${k(open.filter(r => r.status === 'new').length, t('b_k_new'))}${k(open.filter(r => (r.status === 'accepted' || r.status === 'onsite') && !isHeld(r)).length, t('b_k_progress'))}${k(held, t('b_k_hold'), held ? 'attn warn' : '')}${k(open.filter(r => r.status === 'finished').length, t('b_k_sign'))}${k(late, t('b_k_late'), late ? 'attn bad' : '')}${k(today, t('b_k_today'))}</div>`;
+  const q = open.filter(r => r.status === 'new').length;
+  return `<div class="kpis tight board-k">${k(q, t('b_k_new'), 'q-lead' + (q ? ' attn info' : ''))}${k(open.filter(r => r.status === 'assigned').length, t('b_k_assigned'))}${k(open.filter(r => (r.status === 'accepted' || r.status === 'onsite') && !isHeld(r)).length, t('b_k_progress'))}${k(held, t('b_k_hold'), held ? 'attn warn' : '')}${k(open.filter(r => r.status === 'finished').length, t('b_k_sign'))}${k(late, t('b_k_late'), late ? 'attn bad' : '')}${k(today, t('b_k_today'))}</div>`;
 }
 function boardList(list) {
   const q = S.q.trim().toLowerCase();
   let rows = list.filter(r => (!S.bf || r.building_code === S.bf) && (S.boardTab === 'all' || (S.boardTab === 'open' ? isOpen(r) : S.boardTab === 'hold' ? isHeld(r) : !isOpen(r))));
   if (q) rows = rows.filter(r => [r.no, r.unit_ar, r.unit_en, r.building_ar, r.building_en, r.technician, issueLabel(r.issue_type), r.description].join(' ').toLowerCase().includes(q.replace(/^#/, '')));
   rows.sort(S.boardTab === 'open' || S.boardTab === 'hold' ? byUrgency : (a, b) => D(b.closed_at || b.cancelled_at || b.created_at) - D(a.closed_at || a.cancelled_at || a.created_at));
-  return rows.length ? `<div class="cards">${rows.slice(0, 200).map(reqCard).join('')}</div>` : `<p class="empty-line">${t('b_none')}</p>`;
+  if (!rows.length) return `<p class="empty-line">${t('b_none')}</p>`;
+  if (S.boardTab !== 'open') return `<div class="cards">${rows.slice(0, 200).map(reqCard).join('')}</div>`;
+  // the supervisor's queue first: what still needs to be given to someone
+  const queue = rows.filter(r => r.status === 'new'), rest = rows.filter(r => r.status !== 'new');
+  return (queue.length ? `<h2 class="sec">${t('b_k_new')}<span class="count">${queue.length}</span></h2><div class="cards">${queue.map(dispatchCard).join('')}</div>` : '')
+    + (rest.length ? `${queue.length ? `<h2 class="sec">${t('b_rest')}<span class="count">${rest.length}</span></h2>` : ''}<div class="cards">${rest.slice(0, 200).map(reqCard).join('')}</div>` : '');
+}
+function dispatchCard(r) {
+  return `<div class="req-wrap ${r.priority} ${isLate(r) ? 'is-late' : ''}">${reqCard(r, { queue: true })}<button class="btn primary req-act" type="button" data-act="dispatch" data-id="${esc(r.id)}">${ICON.send}${t('d_assign')}</button></div>`;
 }
 
-/* ============================================================ views: the desk logs a request */
+/* ============================================================ views: the supervisor logs a request */
 async function vNewReq(alive) {
   page(loadingBox(), { staff: true, nav: 'board' });
-  const [st, units] = await Promise.all([settings(), srpc('admin_units')]);
+  const [st, units, team] = await Promise.all([settings(), srpc('admin_units'), srpc('team_list').catch(() => null)]);
   if (!alive()) return;
-  S.units = units;
+  S.units = units; S.team = team || S.team;
   const codes = bCodes().filter(c => units.some(u => u.building_code === c && u.active));
   units.forEach(u => { if (u.active && !codes.includes(u.building_code)) codes.push(u.building_code); });
   const d = S.draft.desk || (S.draft.desk = { b: codes[0] || '', u: '', issue: '', desc: '', cname: '', cphone: '', src: 'phone' });
@@ -1694,9 +1888,19 @@ async function vNewReq(alive) {
         <div class="field"><label for="nr-phone">${t('t_phone')} <span class="opt">(${t('optional')})</span></label><input id="nr-phone" name="cphone" type="tel" inputmode="tel" dir="ltr" maxlength="20" value="${esc(d.cphone)}"></div>
       </div>
       <div class="field"><span class="lbl">${t('n_photo')} <span class="opt">(${t('optional')})</span></span>${photoField('before:desk', 'nr-photo')}</div>
+      <div class="grid2">
+        <div class="field"><label for="nr-s">${t('n_assign')} <span class="opt">(${t('optional')})</span></label><select id="nr-s" name="staff">${staffOptions(S.team, d.staff)}</select></div>
+        <div class="field"><label for="nr-an">${t('d_note_for')} <span class="opt">(${t('optional')})</span></label><input id="nr-an" name="anote" maxlength="300" value="${esc(d.anote || '')}" placeholder="${esc(t('d_note_for_ph'))}"></div>
+      </div>
       <button class="btn primary block big" type="submit">${t('n_submit')}</button>
     </form>
   </div>`, { staff: true, nav: 'board' });
+}
+function staffOptions(team, sel) {
+  const techs = (team || []).filter(s => s.active && s.role === 'technician');
+  const opt = s => `<option value="${esc(s.id)}" ${s.id === sel ? 'selected' : ''}>${esc(s.name)}${s.team === 'hm' && (s.sites || []).length ? ' · ' + esc((s.sites || []).map(bLabel).join('، ')) : ''}</option>`;
+  const grp = (k, a) => (a.length ? `<optgroup label="${esc(t(k))}">${a.map(opt).join('')}</optgroup>` : '');
+  return `<option value="">${esc(t('n_assign_later'))}</option>` + grp('e_hm_group', techs.filter(s => s.team === 'hm')) + grp('e_ops_group', techs.filter(s => s.team !== 'hm'));
 }
 function unitOptions(code, sel) {
   return (S.units || []).filter(u => u.building_code === code && u.active).sort((a, b) => a.sort - b.sort)
@@ -1715,18 +1919,25 @@ function deskDone(res, phone) {
 /* ============================================================ visits (legs) and measures */
 // Every request is one or more visits: the handyman's, then the operations room's, or a replaced technician's.
 function legsOf(r) {
+  const tg = targetsFor(r);
   const out = (r.legs || []).map(l => ({
-    staff_id: l.staff_id, name: l.name, team: l.team || 'ops', offered_at: l.offered_at || r.created_at, accepted_at: l.accepted_at, accept_method: l.accept_method,
-    arrived_at: l.arrived_at, arrival_method: l.arrival_method, ended_at: l.ended_at, outcome: l.outcome, note: l.note,
+    staff_id: l.staff_id, name: l.name, team: l.team || 'ops', queued_at: l.queued_at || null, offered_at: l.offered_at || r.created_at, accepted_at: l.accepted_at, accept_method: l.accept_method,
+    assigned_by_name: l.assigned_by_name || null, assign_note: l.assign_note || null,
+    arrived_at: l.arrived_at, arrival_method: l.arrival_method, ended_at: l.ended_at, outcome: l.outcome, note: l.note, t_dispatch: l.target_dispatch || tg.dispatch, t_pickup: l.target_pickup || tg.pickup,
     t_arrive: l.target_arrive, t_work: l.target_work, origin: l.origin, pa: secs(l.paused_arrive), pw: secs(l.paused_work), current: false, finished: false, r
   }));
   if (r.technician_id) out.push({
-    staff_id: r.technician_id, name: r.technician, team: r.stage || 'ops', offered_at: r.offered_at || r.created_at, accepted_at: r.accepted_at, accept_method: r.accept_method,
+    staff_id: r.technician_id, name: r.technician, team: r.stage || 'ops', queued_at: r.queued_at || null, offered_at: r.offered_at || r.created_at, accepted_at: r.accepted_at, accept_method: r.accept_method,
+    assigned_by_name: r.assigned_by_name || null, assign_note: r.assign_note || null,
     arrived_at: r.arrived_at, arrival_method: r.arrival_method, ended_at: r.finished_at || r.closed_at || r.cancelled_at || null,
     outcome: r.finished_at ? 'finished' : r.status === 'cancelled' ? 'cancelled' : r.status === 'closed' ? 'closed' : 'open',
+    t_dispatch: r.target_dispatch || tg.dispatch, t_pickup: r.target_pickup || tg.pickup,
     t_arrive: r.target_arrive, t_work: r.target_work, origin: r.origin, pa: secs(r.paused_arrive), pw: secs(r.paused_work), current: true, finished: !!r.finished_at, r
   });
   out.forEach(l => {
+    l.visit = !!l.accepted_at;
+    l.dispatch = l.queued_at && l.offered_at ? Math.max(0, D(l.offered_at) - D(l.queued_at)) : null;
+    l.dispOk = l.dispatch == null ? null : l.dispatch <= l.t_dispatch * 60000;
     l.pickup = l.accepted_at ? D(l.accepted_at) - D(l.offered_at) : null;
     l.arrive = l.accepted_at && l.arrived_at ? Math.max(0, D(l.arrived_at) - D(l.accepted_at) - l.pa) : null;
     l.work = l.finished && l.arrived_at ? Math.max(0, D(r.finished_at) - D(l.arrived_at) - l.pw) : null;
@@ -1742,8 +1953,10 @@ function metricsL(legs, repeatOf, reqs) {
   const avg = a => (a.length ? a.reduce((s, x) => s + x, 0) / a.length : null);
   const rs = reqs || Array.from(new Set(legs.map(l => l.r)));
   const arrOn = arr.filter(l => l.arrOk).length, fixOn = fin.filter(l => l.workOk).length;
+  const disp = legs.filter(l => l.dispatch != null), dispOn = disp.filter(l => l.dispOk).length;
   const m = {
-    n: rs.length, visits: legs.length, closed: rs.filter(r => r.status === 'closed').length, open: rs.filter(r => !['closed', 'cancelled'].includes(r.status)).length,
+    n: rs.length, visits: legs.filter(l => l.visit).length, closed: rs.filter(r => r.status === 'closed').length, open: rs.filter(r => !['closed', 'cancelled'].includes(r.status)).length,
+    dispN: disp.length, dispOn, dispRate: disp.length ? dispOn / disp.length : null, dispatch: avg(disp.map(l => l.dispatch)), declines: legs.filter(l => l.outcome === 'declined').length,
     arrN: arr.length, arrOn, arrRate: arr.length ? arrOn / arr.length : null,
     fixN: fin.length, fixOn, fixRate: fin.length ? fixOn / fin.length : null,
     ratedN: rated.length, rating: avg(rated.map(l => l.rating)),
@@ -1778,8 +1991,12 @@ function evaluate(list, from, to, st) {
     .sort((a, b) => (b.score == null ? -1 : b.score) - (a.score == null ? -1 : a.score) || b.visits - a.visits);
   const late = legs.filter(l => l.arrOk === false || l.workOk === false);
   const byTeam = k => legs.filter(l => (l.team === 'hm') === (k === 'hm'));
+  // the supervisor's side: how quickly requests were given out, by whom
+  const disp = {};
+  legs.filter(l => l.dispatch != null).forEach(l => { const k = l.assigned_by_name || '—'; (disp[k] || (disp[k] = [])).push(l); });
+  const dispatchers = Object.keys(disp).map(k => Object.assign({ name: k }, metricsL(disp[k], repeatOf))).sort((a, b) => b.dispN - a.dispN);
   return {
-    month, real, repeatOf, legs, techs, late, cancelled: month.length - real.length, all: metricsL(legs, repeatOf, real),
+    month, real, repeatOf, legs, techs, late, dispatchers, cancelled: month.length - real.length, all: metricsL(legs, repeatOf, real),
     team: { hm: metricsL(byTeam('hm'), repeatOf), ops: metricsL(byTeam('ops'), repeatOf) },
     pri: { urgent: metricsL(legs.filter(l => l.r.priority === 'urgent'), repeatOf, real.filter(r => r.priority === 'urgent')), normal: metricsL(legs.filter(l => l.r.priority === 'normal'), repeatOf, real.filter(r => r.priority === 'normal')) }
   };
@@ -1802,6 +2019,7 @@ function kpiGrid(m) {
 }
 function flagsOf(m) {
   const f = [];
+  if (m.declines) f.push(t('e_declines', { n: m.declines }));
   if (m.manualArr) f.push(t('e_manual_arr', { n: m.manualArr }));
   if (m.onsite) f.push(t('e_onsite', { n: m.onsite }));
   if (m.manualClose) f.push(t('e_manual_close', { n: m.manualClose }));
@@ -1850,6 +2068,13 @@ async function vEval(ym, alive) {
       ${ev.team.hm.visits ? `<p class="muted small">${esc(t('r_hm_fixed'))}: <b>${ev.team.hm.selfFixed}</b> · ${esc(t('r_hm_handed'))}: <b>${ev.team.hm.handed}</b></p>` : ''}</section>
     <section class="card"><h3>${t('e_by_priority')}</h3><div class="ptable-wrap"><table class="ptable"><thead><tr><th></th><th>${t('e_visits')}</th><th>${t('e_arr_on')}</th><th>${t('e_fix_on')}</th><th>${t('e_avg_arrive')}</th><th>${t('e_avg_work')}</th><th>${t('e_rating')}</th></tr></thead><tbody>${prow(t('pr_urgent'), ev.pri.urgent)}${prow(t('pr_normal'), ev.pri.normal)}</tbody></table></div>
       ${flagsOf(ev.all)}${ev.cancelled ? `<p class="muted small">${t('e_cancelled', { n: ev.cancelled })}</p>` : ''}</section>
+    ${ev.all.dispN ? `<section class="card"><h3>${ICON.send}${t('e_sup_title')}</h3><div class="kpis">
+      <div class="kpi"><span class="v">${ev.all.dispN}</span><span class="l">${t('e_dispatches')}</span></div>
+      <div class="kpi"><span class="v">${fDur(ev.all.dispatch)}</span><span class="l">${t('e_avg_dispatch')}</span></div>
+      <div class="kpi ${ev.all.dispRate != null && ev.all.dispRate < 0.8 ? 'attn warn' : ''}"><span class="v">${pct(ev.all.dispRate)}</span><span class="l">${t('e_dispatch_on')}</span><span class="s">${ev.all.dispOn} / ${ev.all.dispN}</span></div>
+      <div class="kpi"><span class="v">${ev.all.declines}</span><span class="l">${t('leg_declined')}</span></div></div>
+      ${ev.dispatchers.length > 1 ? `<div class="ptable-wrap"><table class="ptable"><thead><tr><th></th><th>${t('e_dispatches')}</th><th>${t('e_avg_dispatch')}</th><th>${t('e_dispatch_on')}</th></tr></thead><tbody>${ev.dispatchers.map(x => `<tr><th>${esc(x.name)}</th><td>${x.dispN}</td><td>${fDur(x.dispatch)}</td><td>${pct(x.dispRate)}</td></tr>`).join('')}</tbody></table></div>` : ''}
+      <p class="muted small">${t('e_sup_note')}</p></section>` : ''}
     ${hmT.length ? `<h2 class="sec">${t('e_hm_group')}<span class="count">${hmT.length}</span></h2><div class="tech-grid">${hmT.map(techCard).join('')}</div>` : ''}
     ${opsT.length ? `<h2 class="sec">${t('e_ops_group')}<span class="count">${opsT.length}</span></h2><div class="tech-grid">${opsT.map(techCard).join('')}</div>` : ''}
     ${ev.late.length ? `<section class="card"><h3>${ICON.alert}${t('e_late_list')}<span class="count">${ev.late.length}</span></h3><div class="late-list">${ev.late.slice().sort((a, b) => D(b.r.created_at) - D(a.r.created_at)).map(lateRow).join('')}</div></section>` : ''}
@@ -1871,18 +2096,21 @@ function evalCsv() {
 }
 // one row per request for tables and exports: the visit that fixed it, net of paused time
 function reqRow(r, repeatOf) {
-  const legs = legsOf(r), last = legs[legs.length - 1] || null, fin = legs.find(l => l.finished) || null, hm = legs.find(l => l.team === 'hm') || null;
+  const legs = legsOf(r), last = legs[legs.length - 1] || null, fin = legs.find(l => l.finished) || null, hm = legs.find(l => l.team === 'hm' && l.visit) || null;
+  const firstAcc = legs.find(l => l.visit) || null;
   return {
     r, legs, last, fin, hm, handed: legs.some(l => l.outcome === 'escalated'),
     by: (fin || last || {}).name || '', team: (fin || last || {}).team || r.stage || 'ops',
-    pickup: legs.length ? minsOf(legs[0].pickup) : null,
+    assignedBy: (fin || last || {}).assigned_by_name || '', declines: legs.filter(l => l.outcome === 'declined').length,
+    dispatch: legs.length && legs[0].dispatch != null ? minsOf(legs[0].dispatch) : null, dispOk: legs.length ? legs[0].dispOk : null,
+    pickup: firstAcc ? minsOf(firstAcc.pickup) : null,
     arr: last ? minsOf(last.arrive) : null, arrT: last ? last.t_arrive : r.target_arrive, arrOk: last ? last.arrOk : null,
     work: fin ? minsOf(fin.work) : null, workT: r.target_work, workOk: fin ? fin.workOk : null,
     pa: minsOf(legs.reduce((s, l) => s + l.pa, 0)), pw: minsOf(legs.reduce((s, l) => s + l.pw, 0)),
     total: minsOf(ms(r.created_at, r.closed_at || r.cancelled_at)), repeat: repeatOf ? repeatOf.has(r.id) : false
   };
 }
-const statusText = r => (r.hold_kind && ['accepted', 'onsite'].includes(r.status) ? (r.hold_kind === 'busy' ? t('st_queued') : t('st_hold') + ': ' + holdLabel(r)) : t('st_' + r.status));
+const statusText = r => (r.hold_kind && ['accepted', 'onsite'].includes(r.status) ? (r.hold_kind === 'busy' ? t('st_queued') : t('st_hold') + ': ' + holdLabel(r)) : t('st_' + r.status) + (r.status === 'assigned' && r.technician ? ': ' + r.technician : ''));
 const partsText = p => (p || []).map(x => x.n + (+x.q !== 1 ? ' ×' + x.q : '')).join('، ');
 
 /* ============================================================ views: reports (day, week, month) */
@@ -1928,7 +2156,8 @@ function repModel() {
   const legs = [];
   inP.filter(r => r.status !== 'cancelled').forEach(r => legsOf(r).forEach(l => legs.push(l)));
   const m = metricsL(legs, new Set(), inP.filter(r => r.status !== 'cancelled'));
-  const hmReqs = inP.filter(r => { const L2 = legsOf(r); return L2.length && L2[0].team === 'hm'; });
+  const visits = r => legsOf(r).filter(l => l.visit);
+  const hmReqs = inP.filter(r => { const L2 = visits(r); return L2.length && L2[0].team === 'hm'; });
   const hmFixed = hmReqs.filter(r => legsOf(r).some(l => l.finished && l.team === 'hm')).length, hmHanded = hmReqs.filter(r => legsOf(r).some(l => l.outcome === 'escalated')).length;
   const cmap = {}; (counts || []).forEach(c => { cmap[c.d] = c; });
   const trend = P.buckets.map(k => Object.assign({ d: k, n: 0, urgent: 0, done: 0, cancelled: 0 }, cmap[k] || {}));
@@ -1938,7 +2167,7 @@ function repModel() {
   inP.forEach(r => { const k = r.issue_type, x = types[k] || (types[k] = { k, p: r.priority, n: 0, open: 0, done: 0, work: [], urgent: 0 }); x.n++; if (r.priority === 'urgent') x.urgent++; if (['finished', 'closed'].includes(r.status)) x.done++; else if (r.status !== 'cancelled') x.open++; const fin = legsOf(r).find(l => l.finished); if (fin && fin.work != null) x.work.push(fin.work); });
   const blds = {};
   inP.forEach(r => { const k = r.building_code, x = blds[k] || (blds[k] = { k, name: bName(r), n: 0, done: 0, hold: 0, open: 0, arr: [] }); x.n++; const g = rGroup(r); if (g === 'done') x.done++; else if (g === 'hold') x.hold++; else if (g === 'progress') x.open++; legsOf(r).forEach(l => { if (l.arrive != null) x.arr.push(l.arrive); }); });
-  const team = { hmFixed, hmHanded, opsDirect: inP.filter(r => { const L2 = legsOf(r); return r.status !== 'cancelled' && (L2.length ? L2[0].team !== 'hm' : r.stage === 'ops'); }).length, opsFixed: inP.filter(r => legsOf(r).some(l => l.finished && l.team !== 'hm')).length };
+  const team = { hmFixed, hmHanded, opsDirect: inP.filter(r => { const L2 = visits(r); return r.status !== 'cancelled' && (L2.length ? L2[0].team !== 'hm' : r.stage === 'ops'); }).length, opsFixed: inP.filter(r => legsOf(r).some(l => l.finished && l.team !== 'hm')).length };
   const holds = scoped.filter(isHeld).sort((a, b) => D(a.hold_at) - D(b.hold_at));
   return { P, st, scoped, inP, carried, groups, shown, m, trend, curN, prevN, types: Object.values(types), blds: Object.values(blds), team, holds, firstLine: hmFixed + hmHanded ? hmFixed / (hmFixed + hmHanded) : null };
 }
@@ -1978,6 +2207,7 @@ function reportBody() {
     <div class="kpis rep-kpis">
       ${k(M.inP.length, t('r_total'), deltaText(M), 'lead')}${k(M.groups.done, t('r_done'))}${k(M.groups.progress, t('r_progress'))}${k(M.groups.hold, t('r_hold'), '', M.groups.hold ? 'attn warn' : '')}${k(M.groups.cancel, t('r_cancel'))}
       ${k(M.carried.filter(isOpen).length, t('r_carried'), t('r_carried_s'))}${k(pct(M.m.arrRate), t('r_arr_on'), M.m.arrN ? M.m.arrOn + ' / ' + M.m.arrN : '')}${k(pct(M.m.fixRate), t('r_fix_on'), M.m.fixN ? M.m.fixOn + ' / ' + M.m.fixN : '')}${M.firstLine != null ? k(pct(M.firstLine), t('r_first_line'), M.team.hmFixed + ' / ' + (M.team.hmFixed + M.team.hmHanded)) : ''}
+      ${M.m.dispN ? k(fDur(M.m.dispatch), t('e_avg_dispatch'), t('e_dispatch_on') + ' ' + pct(M.m.dispRate)) : ''}
     </div>
     ${EMB ? '' : `<section class="card export no-print"><h3>${ICON.download}${esc(t('r_export', { p: P.label }))}</h3><div class="x-grid">
       <button class="x-btn" type="button" data-act="r-excel"><b>Excel</b><span>${t('x_period_excel_d')}</span></button>
@@ -2060,8 +2290,8 @@ async function vSettings(alive) {
     <div class="sec-h"><h1>${t('se_title')}</h1><button class="btn primary" type="submit">${t('save')}</button></div>
     <section class="card"><h3>${t('se_contractor')}</h3><div class="grid2"><div class="field"><label for="c-ar">${t('se_label_ar')}</label><input id="c-ar" name="c_ar" value="${val(st.contractor && st.contractor.ar)}"></div><div class="field"><label for="c-en">${t('se_label_en')}</label><input id="c-en" name="c_en" dir="ltr" value="${val(st.contractor && st.contractor.en)}"></div></div></section>
     <section class="card"><h3>${ICON.clock}${t('se_targets')}</h3>
-      <div class="ptable-wrap"><table class="tgt"><thead><tr><th></th><th>${t('se_pickup')}</th><th>${t('se_arrive')}</th><th>${t('se_work')}</th></tr></thead><tbody>
-      ${['urgent', 'normal'].map(p => `<tr><th>${t('pr_' + p)}</th>${['pickup', 'arrive', 'work'].map(k => `<td><input type="number" min="1" max="10080" inputmode="numeric" name="tg_${p}_${k}" id="tg-${p}-${k}" aria-label="${t('pr_' + p)} ${t('se_' + k)}" value="${val((tg[p] || {})[k])}"></td>`).join('')}</tr>`).join('')}
+      <div class="ptable-wrap"><table class="tgt"><thead><tr><th></th><th>${t('se_dispatch')}</th><th>${t('se_pickup')}</th><th>${t('se_arrive')}</th><th>${t('se_work')}</th></tr></thead><tbody>
+      ${['urgent', 'normal'].map(p => `<tr><th>${t('pr_' + p)}</th>${['dispatch', 'pickup', 'arrive', 'work'].map(k => `<td><input type="number" min="1" max="10080" inputmode="numeric" name="tg_${p}_${k}" id="tg-${p}-${k}" aria-label="${t('pr_' + p)} ${t('se_' + k)}" value="${val((tg[p] || {})[k])}"></td>`).join('')}</tr>`).join('')}
       </tbody></table></div><p class="hint">${t('se_hm_note')}</p><p class="hint">${t('se_note')}</p></section>
     <section class="card"><h3>${ICON.building}${t('se_buildings')}</h3><p class="hint">${t('se_b_hint')}</p>
       ${codes.map(c => { const b = bMeta(c), u = units.find(x => x.building_code === c) || {}; const name = (LANG === 'ar' ? b.ar || u.building_ar : b.en || u.building_en) || c; return `<div class="bld" data-code="${esc(c)}"><b>${esc(name)} <span class="muted mono">${esc(c)}</span></b>
@@ -2137,15 +2367,14 @@ function vDemo() {
     <ol class="flow">${['dm_s1', 'dm_s2', 'dm_s3', 'dm_s4'].map(k => `<li>${t(k)}</li>`).join('')}</ol>
     <p class="muted">${t('dm_body')}</p>
     <div class="demo-grid">
-      <article class="demo-role"><div class="ic-b">${ICON.door}</div><h3>${t('dm_tenant')}</h3><p>${t('dm_tenant_body')}</p>
+      <article class="demo-role"><span class="step-n num">1</span><div class="ic-b">${ICON.door}</div><h3>${t('dm_tenant')}</h3><p>${t('dm_tenant_body')}</p>
         <div class="field"><label class="vh" for="dm-unit">${t('q_building')}</label><select id="dm-unit">${order.map(c => { const us = units.filter(u => u.building_code === c); return us.length ? `<optgroup label="${esc(bLabel(c))}">${us.map(u => `<option value="${esc(u.token)}" ${myRequests().some(m => m.token === u.token) ? 'selected' : ''}>${esc(LANG === 'ar' ? u.label_ar : u.label_en)} · ${esc(LANG === 'ar' ? u.building_ar : u.building_en)}</option>`).join('')}</optgroup>` : ''; }).join('')}</select></div>
         <button class="btn primary" type="button" data-act="dm-unit">${t('dm_open_unit')}</button></article>
-      <article class="demo-role"><div class="ic-b">${ICON.building}</div><h3>${t('dm_hm')}</h3><p>${t('dm_hm_body')}</p>
-        <div class="row">${hm.map(s => `<button class="btn" type="button" data-act="dm-login" data-id="${esc(s.id)}">${esc(s.full_name)}<small class="muted">${esc((s.sites || []).map(bLabel).join('، '))}</small></button>`).join('')}</div></article>
-      <article class="demo-role"><div class="ic-b">${ICON.wrench}</div><h3>${t('dm_tech')}</h3><p>${t('dm_tech_body')}</p>
-        <div class="row">${ops.map(s => `<button class="btn" type="button" data-act="dm-login" data-id="${esc(s.id)}">${esc(s.full_name)}</button>`).join('')}</div></article>
-      <article class="demo-role"><div class="ic-b">${ICON.list}</div><h3>${t('dm_sup')}</h3><p>${t('dm_sup_body')}</p><button class="btn primary" type="button" data-act="dm-login" data-id="s-sup">${t('dm_enter')}</button></article>
-      <article class="demo-role"><div class="ic-b">${ICON.chartbig}</div><h3>${t('dm_admin')}</h3><p>${t('dm_admin_body')}</p><button class="btn primary" type="button" data-act="dm-login" data-id="s-admin">${t('dm_enter')}</button></article>
+      <article class="demo-role"><span class="step-n num">2</span><div class="ic-b">${ICON.list}</div><h3>${t('dm_sup')}</h3><p>${t('dm_sup_body')}</p><button class="btn primary" type="button" data-act="dm-login" data-id="s-sup">${t('dm_enter')}</button></article>
+      <article class="demo-role"><span class="step-n num">3</span><div class="ic-b">${ICON.wrench}</div><h3>${t('dm_team')}</h3><p>${t('dm_team_body')}</p>
+        <p class="grp">${t('e_hm_group')}</p><div class="row">${hm.map(s => `<button class="btn" type="button" data-act="dm-login" data-id="${esc(s.id)}">${esc(s.full_name)}<small class="muted">${esc((s.sites || []).map(bLabel).join('، '))}</small></button>`).join('')}</div>
+        <p class="grp">${t('e_ops_group')}</p><div class="row">${ops.map(s => `<button class="btn" type="button" data-act="dm-login" data-id="${esc(s.id)}">${esc(s.full_name)}</button>`).join('')}</div></article>
+      <article class="demo-role"><span class="step-n num">4</span><div class="ic-b">${ICON.chartbig}</div><h3>${t('dm_admin')}</h3><p>${t('dm_admin_body')}</p><button class="btn primary" type="button" data-act="dm-login" data-id="s-admin">${t('dm_enter')}</button></article>
     </div>
     <div class="row"><button class="btn ghost" type="button" data-act="dm-reset">${t('dm_reset')}</button></div>
   </div>`, { staff: !!S.session });
@@ -2214,6 +2443,10 @@ async function exportExcel() {
   kpi(t('e_arr_on'), k.arrRate, '0%', k.arrN ? k.arrOn + ' / ' + k.arrN : '');
   kpi(t('e_fix_on'), k.fixRate, '0%', k.fixN ? k.fixOn + ' / ' + k.fixN : '');
   kpi(t('e_rating'), k.rating == null ? null : +k.rating.toFixed(2), '0.0', k.ratedN ? t('e_rated', { n: k.ratedN }) : '');
+  if (k.dispN) {
+    kpi(t('e_avg_dispatch'), minsOf(k.dispatch), '0', t('x_minutes') + ' · ' + t('e_sup_note'));
+    kpi(t('e_dispatch_on'), k.dispRate, '0%', k.dispOn + ' / ' + k.dispN, k.dispRate != null && k.dispRate < 0.8 ? C.warn : C.ok);
+  }
   kpi(t('e_avg_pickup'), minsOf(k.pickup), '0', t('x_minutes'));
   kpi(t('e_avg_arrive'), minsOf(k.arrive), '0', t('x_minutes'));
   kpi(t('e_avg_work'), minsOf(k.work), '0', t('x_minutes'));
@@ -2274,17 +2507,19 @@ function requestsSheet(wb, rows, X, name) {
   const { font, fill, box, align, head, C } = X, rtl = LANG === 'ar';
   const q = wb.addWorksheet(name || t('x_requests'), { views: [{ rightToLeft: rtl, state: 'frozen', ySplit: 1 }] });
   const cols = [['col_no', 10], ['col_date', 17], ['col_building', 16], ['col_unit', 14], ['col_source', 12], ['col_issue', 26], ['col_priority', 10], ['col_status', 22],
-    ['col_by', 18], ['col_team', 14], ['col_handed', 12], ['col_hm', 16], ['col_pickup', 11], ['col_arrive', 11], ['col_arrive_t', 11], ['col_arrive_ok', 11], ['col_paused_a', 13],
+    ['col_assigned_by', 16], ['col_dispatch', 11], ['col_by', 18], ['col_team', 14], ['col_handed', 12], ['col_hm', 16], ['col_declines', 10], ['col_pickup', 11], ['col_arrive', 11], ['col_arrive_t', 11], ['col_arrive_ok', 11], ['col_paused_a', 13],
     ['col_work', 11], ['col_work_t', 11], ['col_work_ok', 11], ['col_paused_w', 13], ['col_total', 11], ['col_method', 13], ['col_report', 44], ['col_parts', 32],
     ['col_rating', 9], ['col_comment', 26], ['col_close', 20], ['col_repeat', 11], ['col_desc', 44]];
+  const ix = k => cols.findIndex(c => c[0] === k) + 1;
   q.columns = cols.map(c => ({ width: c[1] }));
   head(q.getRow(1), cols.map(c => t(c[0])));
   const yn = v => (v == null ? '' : v ? t('yes') : t('no'));
-  const wide = new Set([5, 7, 23, 24, 26, 29]);
+  const wide = new Set(['col_issue', 'col_status', 'col_report', 'col_parts', 'col_comment', 'col_desc'].map(k => ix(k) - 1));
+  const bad = { size: 10, bold: true, color: { argb: C.bad } };
   rows.forEach((x, i) => {
     const rr = x.r, row = q.getRow(i + 2);
     const vals = [rr.no, xlDate(rr.created_at), bName(rr), uName(rr), t('src_' + (rr.source || 'qr')), issueLabel(rr.issue_type), t('pr_' + rr.priority), statusText(rr),
-      x.by, x.team === 'hm' ? t('team_hm') : t('team_ops'), x.handed ? t('yes') : '', x.hm ? x.hm.name || '' : '', x.pickup, x.arr, x.arrT, yn(x.arrOk), x.pa || null,
+      x.assignedBy, x.dispatch, x.by, x.team === 'hm' ? t('team_hm') : t('team_ops'), x.handed ? t('yes') : '', x.hm ? x.hm.name || '' : '', x.declines || null, x.pickup, x.arr, x.arrT, yn(x.arrOk), x.pa || null,
       x.work, x.workT, yn(x.workOk), x.pw || null, x.total, rr.arrival_method ? t(rr.arrival_method === 'qr' ? 'm_qr' : 'm_manual') : '', rr.tech_note || '', partsText(rr.parts),
       rr.rating || null, rr.rating_comment || '', closedBy(rr), x.repeat ? t('yes') : '', rr.description || ''];
     vals.forEach((v, j) => {
@@ -2292,10 +2527,11 @@ function requestsSheet(wb, rows, X, name) {
       c.alignment = align(wide.has(j) ? {} : { horizontal: 'center' });
       if (v instanceof Date) c.numFmt = 'yyyy-mm-dd hh:mm';
     });
-    if (x.arrOk === false) [14, 16].forEach(j => (row.getCell(j).font = font({ size: 10, bold: true, color: { argb: C.bad } })));
-    if (x.workOk === false) [18, 20].forEach(j => (row.getCell(j).font = font({ size: 10, bold: true, color: { argb: C.bad } })));
-    if (rr.arrival_method === 'manual') row.getCell(23).font = font({ size: 10, bold: true, color: { argb: C.warn } });
-    if (isHeld(rr)) row.getCell(8).font = font({ size: 10, bold: true, color: { argb: C.warn } });
+    if (x.dispOk === false) row.getCell(ix('col_dispatch')).font = font(bad);
+    if (x.arrOk === false) ['col_arrive', 'col_arrive_ok'].forEach(k => (row.getCell(ix(k)).font = font(bad)));
+    if (x.workOk === false) ['col_work', 'col_work_ok'].forEach(k => (row.getCell(ix(k)).font = font(bad)));
+    if (rr.arrival_method === 'manual') row.getCell(ix('col_method')).font = font({ size: 10, bold: true, color: { argb: C.warn } });
+    if (isHeld(rr)) row.getCell(ix('col_status')).font = font({ size: 10, bold: true, color: { argb: C.warn } });
     if (rr.status === 'cancelled') for (let j = 1; j <= cols.length; j++) row.getCell(j).font = font({ size: 10, color: { argb: C.muted } });
     if (i % 2) for (let j = 1; j <= cols.length; j++) row.getCell(j).fill = fill(C.soft);
   });
@@ -2305,23 +2541,27 @@ function requestsSheet(wb, rows, X, name) {
 function visitsSheet(wb, legs, X) {
   const { font, fill, box, align, head, C } = X, rtl = LANG === 'ar';
   const q = wb.addWorksheet(t('x_visits'), { views: [{ rightToLeft: rtl, state: 'frozen', ySplit: 1 }] });
-  const cols = [['col_no', 10], ['col_date', 17], ['col_building', 16], ['col_unit', 14], ['col_tech', 18], ['col_team', 14], ['col_outcome', 22], ['col_pickup', 11],
+  const cols = [['col_no', 10], ['col_date', 17], ['col_building', 16], ['col_unit', 14], ['col_tech', 18], ['col_team', 14], ['col_outcome', 22], ['col_assigned_by', 16], ['col_dispatch', 11], ['col_pickup', 11],
     ['col_arrive', 11], ['col_arrive_t', 11], ['col_arrive_ok', 11], ['col_paused_a', 13], ['col_work', 11], ['col_work_t', 11], ['col_work_ok', 11], ['col_paused_w', 13], ['col_method', 13], ['col_note', 40]];
+  const ix = k => cols.findIndex(c => c[0] === k) + 1;
   q.columns = cols.map(c => ({ width: c[1] }));
   head(q.getRow(1), cols.map(c => t(c[0])));
   const yn = v => (v == null ? '' : v ? t('yes') : t('no'));
-  legs.slice().sort((a, b) => a.r.no - b.r.no).forEach((l, i) => {
+  const bad = { size: 10, bold: true, color: { argb: C.bad } };
+  legs.slice().sort((a, b) => a.r.no - b.r.no || D(a.offered_at) - D(b.offered_at)).forEach((l, i) => {
     const row = q.getRow(i + 2);
-    const vals = [l.r.no, xlDate(l.accepted_at || l.offered_at), bName(l.r), uName(l.r), l.name || '', l.team === 'hm' ? t('team_hm') : t('team_ops'), t('leg_' + l.outcome), minsOf(l.pickup),
+    const vals = [l.r.no, xlDate(l.accepted_at || l.offered_at), bName(l.r), uName(l.r), l.name || '', l.team === 'hm' ? t('team_hm') : t('team_ops'), t(l.current && l.r.status === 'assigned' ? 'leg_waiting' : 'leg_' + l.outcome),
+      l.assigned_by_name || '', minsOf(l.dispatch), minsOf(l.pickup),
       minsOf(l.arrive), l.t_arrive, yn(l.arrOk), minsOf(l.pa) || null, minsOf(l.work), l.work != null ? l.t_work : null, yn(l.workOk), minsOf(l.pw) || null,
-      l.arrival_method ? t(l.arrival_method === 'qr' ? 'm_qr' : 'm_manual') : '', l.outcome === 'escalated' ? l.note || '' : ''];
+      l.arrival_method ? t(l.arrival_method === 'qr' ? 'm_qr' : 'm_manual') : '', ['escalated', 'declined'].includes(l.outcome) ? l.note || '' : l.assign_note || ''];
     vals.forEach((v, j) => {
       const c = row.getCell(j + 1); c.value = v == null ? null : v; c.border = box; c.font = font({ size: 10 });
-      c.alignment = align(j === 17 || j === 6 ? {} : { horizontal: 'center' });
+      c.alignment = align(j === ix('col_note') - 1 || j === ix('col_outcome') - 1 ? {} : { horizontal: 'center' });
       if (v instanceof Date) c.numFmt = 'yyyy-mm-dd hh:mm';
     });
-    if (l.arrOk === false) row.getCell(9).font = font({ size: 10, bold: true, color: { argb: C.bad } });
-    if (l.workOk === false) row.getCell(13).font = font({ size: 10, bold: true, color: { argb: C.bad } });
+    if (l.dispOk === false) row.getCell(ix('col_dispatch')).font = font(bad);
+    if (l.arrOk === false) row.getCell(ix('col_arrive')).font = font(bad);
+    if (l.workOk === false) row.getCell(ix('col_work')).font = font(bad);
     if (i % 2) for (let j = 1; j <= cols.length; j++) row.getCell(j).fill = fill(C.soft);
   });
   q.autoFilter = { from: { row: 1, column: 1 }, to: { row: Math.max(1, legs.length + 1), column: cols.length } };
@@ -2343,7 +2583,7 @@ function reportHtml(m) {
       <div class="rp-t"><h1>${t('e_title')} · ${esc(m.month)}</h1><p>${esc([m.cname ? t('e_contractor', { n: m.cname }) : '', m.buildings].filter(Boolean).join(' · '))}</p><small>${esc(t('x_generated', { d: m.stamp }))}</small></div></header>
     <section class="rp-sum"><div class="rp-score ${cls(k.score)}"><span>${t('e_score')}</span><b>${num(k.score)}</b><small>${t('of100')}</small></div>
       <div class="rp-ks">${kp(k.n, t('e_requests'), t('e_closed_open', { c: k.closed, o: k.open }))}${kp(pct(k.arrRate), t('e_arr_on'), k.arrN ? k.arrOn + ' / ' + k.arrN : '')}${kp(pct(k.fixRate), t('e_fix_on'), k.fixN ? k.fixOn + ' / ' + k.fixN : '')}${kp(k.rating == null ? '—' : k.rating.toFixed(1), t('e_rating'), k.ratedN ? t('e_rated', { n: k.ratedN }) : '')}
-        ${kp(fDur(k.pickup), t('e_avg_pickup'))}${kp(fDur(k.arrive), t('e_avg_arrive'))}${kp(fDur(k.work), t('e_avg_work'))}${kp(ev.cancelled, t('st_cancelled'))}</div></section>
+        ${k.dispN ? kp(fDur(k.dispatch), t('e_avg_dispatch'), t('e_dispatch_on') + ' ' + pct(k.dispRate)) : ''}${kp(fDur(k.pickup), t('e_avg_pickup'))}${kp(fDur(k.arrive), t('e_avg_arrive'))}${kp(fDur(k.work), t('e_avg_work'))}${kp(ev.cancelled, t('st_cancelled'))}</div></section>
     <div class="rp-flags">${flag(k.manualArr, t('x_f_manual'))}${flag(k.onsite, t('x_f_onsite'))}${flag(k.manualClose, t('x_f_close'))}${flag(k.repeats, t('x_f_repeat'))}</div>
     <h2>${t('e_techs')}</h2>
     <table class="rp-tb">${th([t('dm_tech'), t('col_team'), t('e_visits'), t('e_arr_on'), t('e_fix_on'), t('e_rating'), t('e_avg_arrive'), t('e_avg_work'), t('e_score')])}<tbody>
@@ -2465,7 +2705,7 @@ function exportPeriodPdf() {
     <header class="rp-h"><div class="rp-brand">${MARK}<div><b>${t('app')}</b><span>${esc(org() || t('tagline'))}</span></div></div>
       <div class="rp-t"><h1>${t('r_title')} · ${esc(P.label)}</h1><p>${esc([S.rf.b ? bLabel(S.rf.b) : t('b_all_buildings'), S.rf.p ? t('pr_' + S.rf.p) : '', S.rf.st ? t('r_s_' + S.rf.st) : ''].filter(Boolean).join(' · '))}</p><small>${esc(t('x_generated', { d: stamp }))}</small></div></header>
     <div class="rp-ks rp-ks5">${kp(M.inP.length, t('r_total'), (d > 0 ? '+' : '') + d + ' ' + esc(t('r_prev_' + P.unit)))}${kp(M.groups.done, t('r_done'))}${kp(M.groups.progress, t('r_progress'))}${kp(M.groups.hold, t('r_hold'))}${kp(M.groups.cancel, t('r_cancel'))}
-      ${kp(M.carried.filter(isOpen).length, t('r_carried'))}${kp(pct(M.m.arrRate), t('r_arr_on'))}${kp(pct(M.m.fixRate), t('r_fix_on'))}${kp(M.firstLine == null ? '—' : pct(M.firstLine), t('r_first_line'))}${kp(fDur(M.m.work), t('e_avg_work'))}</div>
+      ${kp(M.carried.filter(isOpen).length, t('r_carried'))}${kp(pct(M.m.arrRate), t('r_arr_on'))}${kp(pct(M.m.fixRate), t('r_fix_on'))}${kp(M.firstLine == null ? '—' : pct(M.firstLine), t('r_first_line'))}${kp(M.m.dispN ? fDur(M.m.dispatch) : '—', t('e_avg_dispatch'), M.m.dispN ? t('e_dispatch_on') + ' ' + pct(M.m.dispRate) : '')}</div>
     <h2>${t('r_by_type')}</h2>
     <table class="rp-tb">${th([t('r_col_type'), t('col_priority'), t('col_count'), t('r_done'), t('r_col_open'), t('r_col_avg_fix')])}<tbody>
       ${['urgent', 'normal'].map(p => M.types.filter(x => x.p === p).sort((a, b) => b.n - a.n).map(x => tr([esc(issueLabel(x.k)), `<span class="${p === 'urgent' ? 'bad' : ''}">${t('pr_' + p)}</span>`, x.n, x.done, x.open, x.work.length ? fDur(x.work.reduce((a, b) => a + b, 0) / x.work.length) : '—'])).join('')).join('')}</tbody></table>
@@ -2750,7 +2990,17 @@ const ACT = {
   }),
   'part-add': el => { const box = $('#' + el.dataset.to); box.insertAdjacentHTML('beforeend', partRow({ n: '', q: 1 })); const rows = $$('.part-row', box); $('input', rows[rows.length - 1]).focus(); },
   'part-del': el => el.closest('.part-row').remove(),
-  stage: el => busy(el, async () => { await srpc('mgr_stage', { p_id: S.req.id, p_stage: el.dataset.v }); toast(t('d_sent_ok')); S.list = null; render(); }),
+  dispatch: el => busy(el, async () => {
+    const [r, team] = await Promise.all([srpc('staff_request', { p_id: el.dataset.id }), S.team ? Promise.resolve(S.team) : srpc('team_list'), loadList()]);
+    S.team = team; dispatchModal(r);
+  }),
+  move: el => busy(el, async () => {
+    const [team] = await Promise.all([S.team ? Promise.resolve(S.team) : srpc('team_list'), loadList(true)]);
+    S.team = team; dispatchModal(S.req);
+  }),
+  decline: () => reasonModal(t('d_decline_title'), async note => {
+    await srpc('tech_decline', { p_id: S.req.id, p_note: note }); toast(t('d_declined_ok')); S.list = null; go('/jobs');
+  }, true, { body: t('d_decline_body'), ph: t('d_decline_ph'), submit: t('d_decline_submit') }),
   src: el => { $$('[data-act="src"]', el.parentElement).forEach(b => b.classList.toggle('on', b === el)); if (S.draft.desk) S.draft.desk.src = el.dataset.v; },
   'modal-close-go': el => { closeModal(el.closest('.modal')); go(el.getAttribute('href').slice(1)); },
   'r-excel': el => runExport(el, exportPeriodExcel),
@@ -2803,9 +3053,9 @@ const ACT = {
   'issue-del': el => { if ($$('#issues .issue-row').length > 1) el.closest('.issue-row').remove(); },
   'unit-new': () => unitModal(),
   'unit-toggle': el => busy(el, async () => { await srpc('admin_unit_active', { p_id: el.dataset.id, p_active: el.dataset.on === '1' }); render(); }),
-  guide: el => { if (el.dataset.role) setSession(Demo.loginAs(el.dataset.role)); S.list = null; go(el.dataset.to); },
+  guide: el => { if (el.dataset.role) setSession(Demo.loginAs(el.dataset.role)); S.list = null; S.team = null; go(el.dataset.to); },
   'dm-unit': () => { const v = $('#dm-unit').value; S.unit = null; go('/u/' + encodeURIComponent(v)); },
-  'dm-login': el => { setSession(Demo.loginAs(el.dataset.id)); go('/'); },
+  'dm-login': el => { setSession(Demo.loginAs(el.dataset.id)); S.team = null; go('/'); },
   'dm-reset': () => { S.session = null; store.del(P + 'session'); store.del(P + 'mine'); store.del(P + 'contact'); Demo.reset(); S.list = null; S.settings = null; S.photos = {}; S.draft = {}; S.unit = null; S.rf = { b: '', st: '', p: '' }; S.bf = ''; toast(t('dm_reset_ok')); render(); }
 };
 
@@ -2932,7 +3182,7 @@ const FORM = {
     if (!ok) return firstErr(f);
     await busy(f.querySelector('[type="submit"]'), async () => {
       const phone = v('cphone').trim();
-      const res = await srpc('mgr_create_request', { p_unit: unit, p_issue: issue, p_description: desc, p_photo: S.photos['before:desk'] || null, p_name: v('cname').trim() || null, p_phone: phone || null, p_source: d.src || 'phone', p_lang: LANG });
+      const res = await srpc('mgr_create_request', { p_unit: unit, p_issue: issue, p_description: desc, p_photo: S.photos['before:desk'] || null, p_name: v('cname').trim() || null, p_phone: phone || null, p_source: d.src || 'phone', p_lang: LANG, p_staff: v('staff') || null, p_assign_note: v('anote').trim() || null });
       delete S.draft.desk; delete S.photos['before:desk']; S.list = null;
       if (DEMO) addMine({ id: res.id, code: res.code, no: res.no, token: null, at: new Date().toISOString() });
       go('/board'); setTimeout(() => deskDone(res, phone), 350);
@@ -2951,10 +3201,15 @@ const FORM = {
       toast(t('d_closed_ok')); S.list = null; render();
     });
   },
-  assign: async f => {
-    const staff = f.querySelector('[name="staff"]').value;
-    if (!staff || staff === S.req.technician_id) return;
-    await busy(f.querySelector('[type="submit"]'), async () => { await srpc('mgr_assign', { p_id: S.req.id, p_staff: staff }); toast(t('d_assigned_ok')); S.list = null; render(); });
+  dispatch: async f => {
+    clearErrs(f);
+    const staff = (f.querySelector('input[name="staff"]:checked') || {}).value, note = f.querySelector('[name="note"]').value.trim();
+    if (!staff) return setErr(f, 'staff', t('d_pick_tech'));
+    await busy(f.querySelector('[type="submit"]'), async () => {
+      await srpc('mgr_assign', { p_id: f.dataset.id, p_staff: staff, p_note: note || null });
+      const m = f.closest('.modal'); if (m) closeModal(m);
+      toast(t('d_assigned_ok')); S.list = null; render();
+    });
   },
   reason: async f => {
     clearErrs(f);
@@ -2985,8 +3240,8 @@ const FORM = {
     const st = clone(S.settings || DEFAULTS);
     st.contractor = { ar: v('c_ar'), en: v('c_en') };
     st.targets = {};
-    ['urgent', 'normal'].forEach(p => { const dflt = (DEFAULTS.targets || {})[p] || {}; st.targets[p] = { pickup: num(`tg_${p}_pickup`, dflt.pickup), arrive: num(`tg_${p}_arrive`, dflt.arrive), work: num(`tg_${p}_work`, dflt.work) }; });
-    st.v = 2;
+    ['urgent', 'normal'].forEach(p => { const dflt = (DEFAULTS.targets || {})[p] || {}; st.targets[p] = { dispatch: num(`tg_${p}_dispatch`, dflt.dispatch), pickup: num(`tg_${p}_pickup`, dflt.pickup), arrive: num(`tg_${p}_arrive`, dflt.arrive), work: num(`tg_${p}_work`, dflt.work) }; });
+    st.v = 3;
     st.buildings = st.buildings || {};
     $$('.bld[data-code]', f).forEach(el => {
       const code = el.dataset.code, prev = st.buildings[code] || {}, u = (S.unitsForSettings || []).find(x => x.building_code === code) || {};
@@ -3048,6 +3303,7 @@ function onChange(e) {
   if (el.matches('#b-bld')) { S.bf = el.value; refreshBoard(); }
   if (el.matches('#nr-b')) { if (S.draft.desk) { S.draft.desk.b = el.value; S.draft.desk.u = ''; } $('#nr-u').innerHTML = unitOptions(el.value, ''); }
   if (el.matches('#nr-u') && S.draft.desk) S.draft.desk.u = el.value;
+  if (el.matches('#nr-s') && S.draft.desk) S.draft.desk.staff = el.value;
   if (el.matches('form[data-form="desk-req"] input[name="issue"]') && S.draft.desk) S.draft.desk.issue = el.value;
   if (el.matches('[data-rf]')) {
     S.rf[el.dataset.rf] = el.value;
@@ -3060,7 +3316,7 @@ function onInput(e) {
   const el = e.target;
   if (el.dataset.input === 'q') { S.q = el.value; const b = $('#blist'); if (b) { b.innerHTML = boardList(S.list || []); tick(); } return; }
   const fd = el.closest('form[data-form="desk-req"]');
-  if (fd && S.draft.desk && ['desc', 'cname', 'cphone'].includes(el.name)) { S.draft.desk[el.name] = el.value; return; }
+  if (fd && S.draft.desk && ['desc', 'cname', 'cphone', 'anote'].includes(el.name)) { S.draft.desk[el.name] = el.value; return; }
   const f = el.closest('form[data-form="submit-req"]');
   if (f && S.unit && S.draft[S.unit.token] && ['desc', 'cname', 'cphone'].includes(el.name)) {
     S.draft[S.unit.token][el.name] = el.value;
@@ -3075,20 +3331,20 @@ const Demo = (function () {
   const now = () => new Date().toISOString();
   const uid = () => 'x' + Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 6);
   const fail = c => { throw new Error(c); };
-  const LIGHT = ['id', 'no', 'unit_id', 'building_code', 'building_ar', 'building_en', 'unit_ar', 'unit_en', 'unit_kind', 'issue_type', 'priority', 'target_pickup', 'target_arrive', 'target_work', 'description', 'lang', 'contact_name', 'contact_phone', 'status', 'created_at', 'technician_id', 'accepted_at', 'accept_method', 'arrived_at', 'arrival_method', 'finished_at', 'signed_at', 'signoff_method', 'rating', 'closed_at', 'close_method', 'cancelled_at', 'source', 'stage', 'offered_at', 'origin', 'hold_kind', 'hold_at', 'hold_ref', 'hold_eta', 'paused_arrive', 'paused_work', 'legs'];
+  const LIGHT = ['id', 'no', 'unit_id', 'building_code', 'building_ar', 'building_en', 'unit_ar', 'unit_en', 'unit_kind', 'issue_type', 'priority', 'target_pickup', 'target_arrive', 'target_work', 'description', 'lang', 'contact_name', 'contact_phone', 'status', 'created_at', 'technician_id', 'accepted_at', 'accept_method', 'arrived_at', 'arrival_method', 'finished_at', 'signed_at', 'signoff_method', 'rating', 'closed_at', 'close_method', 'cancelled_at', 'source', 'stage', 'offered_at', 'origin', 'hold_kind', 'hold_at', 'hold_ref', 'hold_eta', 'paused_arrive', 'paused_work', 'legs', 'queued_at', 'target_dispatch', 'assigned_by', 'assign_note'];
   const FULL = LIGHT.concat(['tech_note', 'parts', 'signer_name', 'rating_comment', 'close_note', 'cancel_note', 'hold_note', 'hold_parts']);
-  const TIMES = ['created_at', 'offered_at', 'accepted_at', 'arrived_at', 'finished_at', 'signed_at', 'closed_at', 'cancelled_at', 'hold_at', 'hold_eta'];
+  const TIMES = ['created_at', 'queued_at', 'offered_at', 'accepted_at', 'arrived_at', 'finished_at', 'signed_at', 'closed_at', 'cancelled_at', 'hold_at', 'hold_eta'];
   function load() {
     if (!db) {
       db = store.get(KEY, null);
-      if (!db || db.v !== 4 || !db.units || !db.units.length) { db = seed(); save(); }
+      if (!db || db.v !== 5 || !db.units || !db.units.length) { db = seed(); save(); }
       else if (Date.now() - (db.at || 0) > 3600e3) { shift(Date.now() - (db.at || Date.now())); save(); }
     }
     return db;
   }
   function shift(delta) {
     const add = x => (x ? new Date(D(x).getTime() + delta).toISOString() : x);
-    db.requests.forEach(r => { TIMES.forEach(k => { r[k] = add(r[k]); }); (r.legs || []).forEach(l => ['offered_at', 'accepted_at', 'arrived_at', 'ended_at'].forEach(k => { l[k] = add(l[k]); })); });
+    db.requests.forEach(r => { TIMES.forEach(k => { r[k] = add(r[k]); }); (r.legs || []).forEach(l => ['queued_at', 'offered_at', 'accepted_at', 'arrived_at', 'ended_at'].forEach(k => { l[k] = add(l[k]); })); });
     db.events.forEach(e => { e.at = add(e.at); });
     db.at = Date.now();
   }
@@ -3104,19 +3360,22 @@ const Demo = (function () {
   function session(s) { const tok = uid() + uid(); db.sessions[tok] = s.id; return { token: tok, me: meOf(s) }; }
   function ev(rid, actor, e, note) { db.events.push({ id: ++db.seq.ev, request_id: rid, at: now(), actor: actor || null, ev: e, note: note ? String(note).trim().slice(0, 500) || null : null }); }
   const bset = code => ((db.settings.buildings || {})[code]) || {};
-  function targets(p) { const tg = (db.settings.targets || {})[p] || {}; return [tg.pickup || (p === 'urgent' ? 15 : 60), tg.work || (p === 'urgent' ? 120 : 240)]; }
+  function targets(p) { const tg = (db.settings.targets || {})[p] || {}; return [tg.pickup || (p === 'urgent' ? 10 : 30), tg.work || (p === 'urgent' ? 120 : 240), tg.dispatch || (p === 'urgent' ? 10 : 30)]; }
   function arriveTarget(code, p, team, origin) {
-    if (team === 'hm' || (origin && origin === code)) return ((db.settings.targets || {})[p] || {}).arrive || (p === 'urgent' ? 15 : 60);
+    if ((origin && origin === code) || (team === 'hm' && !origin)) return ((db.settings.targets || {})[p] || {}).arrive || (p === 'urgent' ? 15 : 60);
     return Math.max(+bset(code).ops || 60, origin ? +bset(origin).ops || 0 : 0);
   }
   const stageFor = code => ((bset(code).type || 'res') === 'res' && db.staff.some(s => s.active && s.role === 'technician' && s.team === 'hm' && (s.sites || []).includes(code)) ? 'hm' : 'ops');
-  const teamIds = (stage, code) => db.staff.filter(s => s.active && s.role === 'technician' && (stage === 'hm' ? s.team === 'hm' && (s.sites || []).includes(code) : s.team !== 'hm')).map(s => s.id);
-  const sees = (me, r) => me.role !== 'technician' || r.technician_id === me.id || (r.status === 'new' && (r.stage === 'hm' ? me.team === 'hm' && (me.sites || []).includes(r.building_code) : me.team !== 'hm')) || (r.legs || []).some(l => l.staff_id === me.id);
+  const sees = (me, r) => me.role !== 'technician' || r.technician_id === me.id || (r.legs || []).some(l => l.staff_id === me.id);
   function where(staffId) {
     const on = db.requests.filter(r => r.technician_id === staffId && r.status === 'onsite' && !r.hold_kind).sort((a, b) => D(b.arrived_at) - D(a.arrived_at))[0];
     if (on) return on.building_code;
     const fin = db.requests.filter(r => r.technician_id === staffId && r.finished_at && Date.now() - D(r.finished_at) < 90 * 60000).sort((a, b) => D(b.finished_at) - D(a.finished_at))[0];
     return fin ? fin.building_code : null;
+  }
+  function originOf(staffId, code) {
+    const s = db.staff.find(x => x.id === staffId) || {}, sites = s.sites || [];
+    return where(staffId) || (s.team === 'hm' && sites.length ? (sites.includes(code) ? code : sites[0]) : null);
   }
   const secsSince = x => Math.max(0, Math.floor((Date.now() - D(x)) / 1000));
   function cleanParts(p) {
@@ -3126,14 +3385,19 @@ const Demo = (function () {
   const partsTxt = p => (p || []).map(x => x.n + (+x.q !== 1 ? ' ×' + x.q : '')).join(', ');
   function leg(r, outcome, note) {
     const held = r.hold_kind ? secsSince(r.hold_at) : 0;
-    return { staff_id: r.technician_id, name: name(r.technician_id), team: r.stage, offered_at: r.offered_at || r.created_at, accepted_at: r.accepted_at, accept_method: r.accept_method, arrived_at: r.arrived_at, arrival_method: r.arrival_method, ended_at: now(), outcome, note: note || null, target_pickup: r.target_pickup, target_arrive: r.target_arrive, target_work: r.target_work, origin: r.origin || null, paused_arrive: (r.paused_arrive || 0) + (r.arrived_at ? 0 : held), paused_work: (r.paused_work || 0) + (r.arrived_at ? held : 0) };
+    return { staff_id: r.technician_id, name: name(r.technician_id), team: r.stage, queued_at: r.queued_at || null, target_dispatch: r.target_dispatch || null, assigned_by: r.assigned_by || null, assigned_by_name: name(r.assigned_by), assign_note: r.assign_note || null, offered_at: r.offered_at || r.created_at, accepted_at: r.accepted_at, accept_method: r.accept_method, arrived_at: r.arrived_at, arrival_method: r.arrival_method, ended_at: now(), outcome, note: note || null, target_pickup: r.target_pickup, target_arrive: r.target_arrive, target_work: r.target_work, origin: r.origin || null, paused_arrive: (r.paused_arrive || 0) + (r.arrived_at ? 0 : held), paused_work: (r.paused_work || 0) + (r.arrived_at ? held : 0) };
   }
   const clearHold = r => Object.assign(r, { hold_kind: null, hold_at: null, hold_note: null, hold_ref: null, hold_eta: null });
-  function handover(r, outcome, note, staffId, stage) {
-    const origin = staffId ? where(staffId) : null;
+  // end the current visit: back to the supervisor's list (queue) or straight to someone else (offer)
+  function endVisit(r, outcome, note, queue, stage) {
     if (r.technician_id) r.legs = (r.legs || []).concat([leg(r, outcome, note)]);
-    Object.assign(r, { stage, technician_id: staffId || null, status: staffId ? 'accepted' : 'new', offered_at: now(), accepted_at: staffId ? now() : null, accept_method: staffId ? 'assigned' : null, arrived_at: null, arrival_method: null, arrival_note: null, arrival_lat: null, arrival_lng: null, arrival_acc: null, origin, target_arrive: arriveTarget(r.building_code, r.priority, stage, origin), paused_arrive: 0, paused_work: 0, escalated_at: null });
+    const st2 = stage || r.stage;
+    Object.assign(r, { status: 'new', stage: st2, technician_id: null, queued_at: queue ? now() : null, offered_at: null, assigned_by: null, assign_note: null, accepted_at: null, accept_method: null, arrived_at: null, arrival_method: null, arrival_note: null, arrival_lat: null, arrival_lng: null, arrival_acc: null, origin: null, target_arrive: arriveTarget(r.building_code, r.priority, st2, null), paused_arrive: 0, paused_work: 0, escalated_at: null });
     clearHold(r);
+  }
+  function offer(r, staffId, by, note) {
+    const s = db.staff.find(x => x.id === staffId), stage = s.team === 'hm' ? 'hm' : 'ops', origin = originOf(staffId, r.building_code);
+    Object.assign(r, { status: 'assigned', technician_id: staffId, stage, offered_at: now(), assigned_by: by, assign_note: String(note || '').trim().slice(0, 300) || null, origin, target_arrive: arriveTarget(r.building_code, r.priority, stage, origin), escalated_at: null });
   }
   function release(ref, code) {
     const b = find(ref);
@@ -3155,10 +3419,11 @@ const Demo = (function () {
   const pick = (r, keys) => { const o = {}; keys.forEach(k => (o[k] = r[k] == null ? null : r[k])); return o; };
   function insertRequest(u, it, a, source, by) {
     const tg = targets(it.p), stage = stageFor(u.building_code), at = now();
-    const r = { id: uid(), no: ++db.seq.no, unit_id: u.id, building_code: u.building_code, building_ar: u.building_ar, building_en: u.building_en, unit_ar: u.label_ar, unit_en: u.label_en, unit_kind: u.kind, issue_type: it.k, priority: it.p, target_pickup: tg[0], target_arrive: arriveTarget(u.building_code, it.p, stage, null), target_work: tg[1], description: String(a.p_description).trim().slice(0, 2000), photo_before: a.p_photo || null, lang: a.p_lang === 'en' ? 'en' : 'ar', contact_name: (a.p_name || '').trim() || null, contact_phone: (a.p_phone || '').trim() || null, tracking_code: uid() + uid(), status: 'new', created_at: at, offered_at: at, source, created_by: by || null, stage, paused_arrive: 0, paused_work: 0, parts: [], legs: [] };
+    const r = { id: uid(), no: ++db.seq.no, unit_id: u.id, building_code: u.building_code, building_ar: u.building_ar, building_en: u.building_en, unit_ar: u.label_ar, unit_en: u.label_en, unit_kind: u.kind, issue_type: it.k, priority: it.p, target_pickup: tg[0], target_arrive: arriveTarget(u.building_code, it.p, stage, null), target_work: tg[1], target_dispatch: tg[2], description: String(a.p_description).trim().slice(0, 2000), photo_before: a.p_photo || null, lang: a.p_lang === 'en' ? 'en' : 'ar', contact_name: (a.p_name || '').trim() || null, contact_phone: (a.p_phone || '').trim() || null, tracking_code: uid() + uid(), status: 'new', created_at: at, queued_at: at, offered_at: null, source, created_by: by || null, stage, paused_arrive: 0, paused_work: 0, parts: [], legs: [] };
     db.requests.push(r); ev(r.id, by || null, by ? 'logged' : 'submitted', by ? source : null);
     return { id: r.id, no: r.no, code: r.tracking_code, created_at: r.created_at, stage: r.stage };
   }
+  const techOf = id => db.staff.find(x => x.id === id && x.active && x.role === 'technician');
   const issueOf = k => db.settings.issueTypes.find(i => i.k === k);
   const H = {
     get_settings: () => db.settings,
@@ -3177,11 +3442,15 @@ const Demo = (function () {
       const it = issueOf(a.p_issue); if (!it) fail('issue_required');
       if (!a.p_description || a.p_description.trim().length < 3) fail('description_required');
       if (a.p_photo && !isImg(a.p_photo)) fail('photo_required');
-      return insertRequest(u, it, a, ['phone', 'whatsapp', 'walkin', 'email'].includes(a.p_source) ? a.p_source : 'other', me.id);
+      const s2 = a.p_staff ? techOf(a.p_staff) : null; if (a.p_staff && !s2) fail('bad_technician');
+      const res = insertRequest(u, it, a, ['phone', 'whatsapp', 'walkin', 'email'].includes(a.p_source) ? a.p_source : 'other', me.id);
+      if (s2) { const r = find(res.id); offer(r, s2.id, me.id, a.p_assign_note); ev(r.id, me.id, 'assigned', [s2.full_name, r.assign_note].filter(Boolean).join(' · ')); }
+      return res;
     },
     track_request: a => {
       const r = db.requests.find(x => x.id === a.p_id && x.tracking_code === a.p_code); if (!r) return null;
       const o = pick(r, ['id', 'no', 'status', 'issue_type', 'description', 'building_code', 'building_ar', 'building_en', 'unit_ar', 'unit_en', 'unit_kind', 'created_at', 'accepted_at', 'arrived_at', 'finished_at', 'closed_at', 'cancelled_at', 'signed_at', 'signoff_method', 'rating', 'tech_note', 'hold_kind', 'hold_eta', 'stage']);
+      o.assigned_at = r.status !== 'new' ? r.offered_at || null : null;
       o.parts = ['finished', 'closed'].includes(r.status) ? r.parts || [] : null;
       o.escalated = (r.legs || []).some(l => l.outcome === 'escalated');
       o.photo_after = ['finished', 'closed'].includes(r.status) ? r.photo_after || null : null; o.technician = name(r.technician_id);
@@ -3201,15 +3470,15 @@ const Demo = (function () {
     staff_me: a => meOf(auth(a.p_token)),
     staff_requests: a => {
       const me = auth(a.p_token), F = a.p_from ? D(a.p_from).getTime() : -Infinity, T = a.p_to ? D(a.p_to).getTime() : Infinity;
-      return db.requests.filter(r => sees(me, r) && (['new', 'accepted', 'onsite', 'finished'].includes(r.status) || (D(r.created_at) >= F && D(r.created_at) < T)))
+      return db.requests.filter(r => sees(me, r) && (['new', 'assigned', 'accepted', 'onsite', 'finished'].includes(r.status) || (D(r.created_at) >= F && D(r.created_at) < T)))
         .sort((x, y) => D(y.created_at) - D(x.created_at))
-        .map(r => { const o = pick(r, LIGHT); o.description = (r.description || '').slice(0, 280); o.technician = name(r.technician_id); o.legs = r.legs || []; o.hold_ref_no = r.hold_ref ? (find(r.hold_ref) || {}).no || null : null; return o; });
+        .map(r => { const o = pick(r, LIGHT); o.description = (r.description || '').slice(0, 280); o.technician = name(r.technician_id); o.assigned_by_name = name(r.assigned_by); o.legs = r.legs || []; o.hold_ref_no = r.hold_ref ? (find(r.hold_ref) || {}).no || null : null; return o; });
     },
     staff_request: a => {
       const me = auth(a.p_token), r = find(a.p_id); if (!r) fail('not_found');
       if (me.role === 'technician' && !sees(me, r)) fail('not_allowed');
       const o = clone(r); delete o.tracking_code;
-      o.technician = name(r.technician_id); o.created_by_name = name(r.created_by);
+      o.technician = name(r.technician_id); o.created_by_name = name(r.created_by); o.assigned_by_name = name(r.assigned_by);
       o.hold_ref_no = r.hold_ref ? (find(r.hold_ref) || {}).no || null : null;
       o.events = db.events.filter(e => e.request_id === r.id).sort((x, y) => D(x.at) - D(y.at) || x.id - y.id).map(e => ({ at: e.at, ev: e.ev, note: e.note, actor: name(e.actor) }));
       const u = db.units.find(x => x.id === r.unit_id); o._token = u ? u.token : null;
@@ -3219,7 +3488,7 @@ const Demo = (function () {
       auth(a.p_token, ['supervisor', 'admin']); const F = D(a.p_from).getTime(), T = D(a.p_to).getTime();
       return db.requests.filter(r => { const c = D(r.created_at).getTime(), end = r.closed_at || r.cancelled_at; return c < T && (c >= F || !end || D(end).getTime() >= F); })
         .sort((x, y) => D(x.created_at) - D(y.created_at))
-        .map(r => { const o = pick(r, FULL); o.technician = name(r.technician_id); o.legs = r.legs || []; o.parts = r.parts || []; o.hold_ref_no = r.hold_ref ? (find(r.hold_ref) || {}).no || null : null; return o; });
+        .map(r => { const o = pick(r, FULL); o.technician = name(r.technician_id); o.assigned_by_name = name(r.assigned_by); o.legs = r.legs || []; o.parts = r.parts || []; o.hold_ref_no = r.hold_ref ? (find(r.hold_ref) || {}).no || null : null; return o; });
     },
     report_counts: a => {
       auth(a.p_token, ['supervisor', 'admin']); const F = D(a.p_from).getTime(), T = D(a.p_to).getTime(), out = {};
@@ -3231,15 +3500,20 @@ const Demo = (function () {
       return Object.values(out).sort((x, y) => (x.d < y.d ? -1 : 1));
     },
     tech_accept: a => {
-      const me = auth(a.p_token), r = find(a.p_id); if (!r || r.status !== 'new') fail('already_taken');
-      if (me.role === 'technician' && !sees(me, r)) fail('not_allowed');
+      const me = auth(a.p_token), r = find(a.p_id); if (!r) fail('not_found');
+      if (r.technician_id !== me.id) fail('not_assigned'); if (r.status !== 'assigned') fail('not_ready');
       let b = null; const note = String(a.p_note || '').trim().slice(0, 300);
       if (a.p_busy) { b = find(a.p_busy); if (!b || b.technician_id !== me.id || !['accepted', 'onsite'].includes(b.status)) fail('bad_busy'); }
       else if (a.p_note != null && note.length < 3) fail('reason_required');
-      const busyNow = !!b || !!note, origin = b ? b.building_code : where(me.id);
-      Object.assign(r, { status: 'accepted', technician_id: me.id, accepted_at: now(), accept_method: 'self', origin, target_arrive: arriveTarget(r.building_code, r.priority, r.stage, origin), hold_kind: busyNow ? 'busy' : null, hold_at: busyNow ? now() : null, hold_ref: b ? b.id : null, hold_note: b ? null : note || null });
+      const busyNow = !!b || !!note, origin = b ? b.building_code : originOf(me.id, r.building_code);
+      Object.assign(r, { status: 'accepted', accepted_at: now(), accept_method: 'self', origin, target_arrive: arriveTarget(r.building_code, r.priority, r.stage, origin), hold_kind: busyNow ? 'busy' : null, hold_at: busyNow ? now() : null, hold_ref: b ? b.id : null, hold_note: b ? null : note || null, escalated_at: null });
       ev(r.id, me.id, 'accepted');
       if (busyNow) ev(r.id, me.id, 'hold_busy', b ? '#' + b.no : note);
+    },
+    tech_decline: a => {
+      const me = auth(a.p_token), note = String(a.p_note || '').trim().slice(0, 300); if (note.length < 3) fail('reason_required');
+      const r = find(a.p_id); if (!r) fail('not_found'); if (r.technician_id !== me.id) fail('not_assigned'); if (r.status !== 'assigned') fail('not_ready');
+      endVisit(r, 'declined', note, true); ev(r.id, me.id, 'declined', note);
     },
     tech_hold: a => {
       const me = auth(a.p_token), r = find(a.p_id); if (!r || !['accepted', 'onsite'].includes(r.status) || r.hold_kind) fail('not_ready');
@@ -3263,7 +3537,7 @@ const Demo = (function () {
       if (!own(r, me)) fail('not_assigned');
       const s2 = secsSince(r.hold_at);
       if (r.status === 'accepted') {
-        const origin = where(r.technician_id);
+        const origin = originOf(r.technician_id, r.building_code);
         r.paused_arrive = (r.paused_arrive || 0) + s2; r.origin = origin; r.target_arrive = arriveTarget(r.building_code, r.priority, r.stage, origin);
         clearHold(r); ev(r.id, me.id, 'resumed'); return 'go';
       }
@@ -3291,7 +3565,7 @@ const Demo = (function () {
     tech_escalate: a => {
       const me = auth(a.p_token); const note = String(a.p_note || '').trim().slice(0, 500); if (note.length < 3) fail('reason_required');
       const r = find(a.p_id); if (!r || r.status !== 'onsite' || r.stage !== 'hm') fail('not_ready'); if (!own(r, me)) fail('not_assigned');
-      handover(r, 'escalated', note, null, 'ops'); ev(r.id, me.id, 'to_ops', note); release(r.id, r.building_code);
+      endVisit(r, 'escalated', note, true, 'ops'); ev(r.id, me.id, 'to_ops', note); release(r.id, r.building_code);
     },
     onsite_signoff: a => {
       const me = auth(a.p_token);
@@ -3301,27 +3575,18 @@ const Demo = (function () {
       ev(r.id, me.id, 'signed_onsite', a.p_signer);
     },
     mgr_assign: a => {
-      const me = auth(a.p_token, ['supervisor', 'admin']), s = db.staff.find(x => x.id === a.p_staff && x.active && x.role === 'technician'); if (!s) fail('bad_technician');
-      const r = find(a.p_id); if (!r || !['new', 'accepted', 'onsite'].includes(r.status)) fail('not_ready');
+      const me = auth(a.p_token, ['supervisor', 'admin']), s = techOf(a.p_staff); if (!s) fail('bad_technician');
+      const r = find(a.p_id); if (!r || !['new', 'assigned', 'accepted', 'onsite'].includes(r.status)) fail('not_ready');
       if (r.technician_id === s.id) return;
-      const stage = s.team === 'hm' ? 'hm' : 'ops';
-      if (r.status === 'new') {
-        const origin = where(s.id);
-        Object.assign(r, { status: 'accepted', technician_id: s.id, accepted_at: now(), accept_method: 'assigned', stage, origin, target_arrive: arriveTarget(r.building_code, r.priority, stage, origin) });
-        ev(r.id, me.id, 'assigned', s.full_name);
-      } else { handover(r, 'reassigned', s.full_name, s.id, stage); ev(r.id, me.id, 'reassigned', s.full_name); release(r.id, r.building_code); }
-    },
-    mgr_stage: a => {
-      const me = auth(a.p_token, ['supervisor', 'admin']); if (['hm', 'ops'].indexOf(a.p_stage) < 0) fail('bad_stage');
-      const r = find(a.p_id); if (!r || r.status !== 'new') fail('not_ready'); if (r.stage === a.p_stage) return;
-      Object.assign(r, { stage: a.p_stage, offered_at: now(), escalated_at: null, target_arrive: arriveTarget(r.building_code, r.priority, a.p_stage, null) });
-      ev(r.id, me.id, a.p_stage === 'ops' ? 'sent_ops' : 'sent_hm');
+      const note = String(a.p_note || '').trim().slice(0, 300) || null, label = [s.full_name, note].filter(Boolean).join(' · ');
+      if (r.status === 'new') { offer(r, s.id, me.id, note); ev(r.id, me.id, 'assigned', label); }
+      else { endVisit(r, 'reassigned', s.full_name, false); offer(r, s.id, me.id, note); ev(r.id, me.id, 'reassigned', label); release(r.id, r.building_code); }
     },
     mgr_priority: a => {
       const me = auth(a.p_token, ['supervisor', 'admin']); if (['urgent', 'normal'].indexOf(a.p_priority) < 0) fail('bad_priority');
       const r = find(a.p_id); if (!r || ['closed', 'cancelled'].includes(r.status)) fail('not_ready'); if (r.priority === a.p_priority) return;
       const tg = targets(a.p_priority);
-      Object.assign(r, { priority: a.p_priority, target_pickup: tg[0], target_work: tg[1], target_arrive: r.arrived_at ? r.target_arrive : arriveTarget(r.building_code, a.p_priority, r.stage, r.origin) });
+      Object.assign(r, { priority: a.p_priority, target_pickup: tg[0], target_work: tg[1], target_dispatch: tg[2], target_arrive: r.arrived_at ? r.target_arrive : arriveTarget(r.building_code, a.p_priority, r.stage, r.origin) });
       ev(r.id, me.id, 'priority_' + a.p_priority);
     },
     mgr_close: a => {
@@ -3438,28 +3703,47 @@ const Demo = (function () {
     const ESC = ['الكمبروسر لا يعمل، يحتاج فني تكييف', 'العطل في لوحة الكهرباء الرئيسية', 'يحتاج سلّم ومعدات غير متوفرة في المبنى', 'التسريب من الأنبوب الرئيسي داخل الجدار', 'يحتاج فني كهرباء مختص'];
     const COMMENTS = ['شكراً، خدمة سريعة', 'Very polite technician', 'تأخر قليلاً لكن العمل ممتاز', 'Good job', 'الفني محترم ونظيف في العمل', 'وصل متأخراً'];
     const NAMES = ['أحمد', 'Fatma', 'خالد', 'Priya', 'سعيد', 'مريم', 'John', null, null];
-    const db0 = { v: 4, at: Date.now(), settings: st, units, staff, sessions: {}, requests: [], events: [], seq: { no: 1000, ev: 0 } };
+    const db0 = { v: 5, at: Date.now(), settings: st, units, staff, sessions: {}, requests: [], events: [], seq: { no: 1000, ev: 0 } };
     const iso = x => new Date(x).toISOString();
     const nowMs = Date.now(), midnight = d => { const n = d + OFFSET; return n - (n % 864e5) - OFFSET; };
     const pushEv = (rid, at, actor, e, note) => db0.events.push({ id: ++db0.seq.ev, request_id: rid, at: iso(at), actor: actor || null, ev: e, note: note || null });
     const sname = id => (staff.find(x => x.id === id) || {}).full_name;
     const ops = c => st.buildings[c].ops;
-    const tgA = (code, p, team, origin) => (team === 'hm' || (origin && origin === code) ? st.targets[p].arrive : Math.max(ops(code), origin ? ops(origin) : 0));
+    const tgA = (code, p, team, origin) => ((origin && origin === code) || (team === 'hm' && !origin) ? st.targets[p].arrive : Math.max(ops(code), origin ? ops(origin) : 0));
+    const HOME = { 's-h1': 'AZB', 's-h2': 'SAY', 's-h3': 'MWL', 's-h4': 'BSH' };
+    const teamOfS = id => (HOME[id] ? 'hm' : 'ops');
+    const fromOf = (id, code) => (HOME[id] ? (HOME[id] === code ? code : HOME[id]) : null);
+    const SUP_NOTES = ['المستأجر في البيت بعد العصر', 'المفتاح عند حارس المبنى', 'اتصل بالمستأجر قبل الوصول', 'Tenant asked for a call before coming', 'خذ معك سلّماً'];
+    const DECLINE = ['أنا في مبنى آخر بمهمة عاجلة', 'في إجازة اليوم', 'يحتاج فني كهرباء وليس سباكة', 'On another urgent job until the evening'];
     const mk = (u, issue, created) => {
       const it = st.issueTypes.find(i => i.k === issue), stage = HM[u.building_code] ? 'hm' : 'ops';
       const descs = (u.kind === 'common' && COMMON_DESC[issue]) || DESC[issue] || DESC.other;
       const nm = pickR(NAMES);
-      return { id: uid(), no: 0, unit_id: u.id, building_code: u.building_code, building_ar: u.building_ar, building_en: u.building_en, unit_ar: u.label_ar, unit_en: u.label_en, unit_kind: u.kind, issue_type: issue, priority: it.p, target_pickup: st.targets[it.p].pickup, target_arrive: tgA(u.building_code, it.p, stage, null), target_work: st.targets[it.p].work, description: pickR(descs), photo_before: PH_BEFORE, lang: R() < 0.7 ? 'ar' : 'en', contact_name: nm, contact_phone: nm ? '9' + String(1000000 + Math.floor(R() * 8999999)) : null, tracking_code: uid() + uid(), status: 'new', created_at: iso(created), offered_at: iso(created), source: R() < 0.12 ? pickR(['phone', 'whatsapp']) : 'qr', stage, paused_arrive: 0, paused_work: 0, parts: [], legs: [] };
+      return { id: uid(), no: 0, unit_id: u.id, building_code: u.building_code, building_ar: u.building_ar, building_en: u.building_en, unit_ar: u.label_ar, unit_en: u.label_en, unit_kind: u.kind, issue_type: issue, priority: it.p, target_pickup: st.targets[it.p].pickup, target_arrive: tgA(u.building_code, it.p, stage, null), target_work: st.targets[it.p].work, target_dispatch: st.targets[it.p].dispatch, description: pickR(descs), photo_before: PH_BEFORE, lang: R() < 0.7 ? 'ar' : 'en', contact_name: nm, contact_phone: nm ? '9' + String(1000000 + Math.floor(R() * 8999999)) : null, tracking_code: uid() + uid(), status: 'new', created_at: iso(created), queued_at: iso(created), offered_at: null, source: R() < 0.12 ? pickR(['phone', 'whatsapp']) : 'qr', stage, paused_arrive: 0, paused_work: 0, parts: [], legs: [] };
     };
-    // one visit, from being offered to the end; returns where it stopped
-    const visit = (r, techId, startAt, upTo, opts) => {
-      const p = prof[techId], team = r.stage; let at = startAt;
-      const pk = r.priority === 'urgent' ? 2 + R() * 13 : 5 + R() * 55; at += pk * 60000;
+    // the supervisor gives the request to someone (and the visit record when it ends)
+    const give = (r, techId, at, note) => { const team = teamOfS(techId), origin = fromOf(techId, r.building_code); Object.assign(r, { status: 'assigned', technician_id: techId, stage: team, offered_at: iso(at), assigned_by: 's-sup', assign_note: note || null, origin, target_arrive: tgA(r.building_code, r.priority, team, origin) }); };
+    const legNow = (r, outcome, note, endAt) => ({ staff_id: r.technician_id, name: sname(r.technician_id), team: r.stage, queued_at: r.queued_at, target_dispatch: r.target_dispatch, assigned_by: r.assigned_by, assigned_by_name: sname(r.assigned_by), assign_note: r.assign_note || null, offered_at: r.offered_at, accepted_at: r.accepted_at || null, accept_method: r.accept_method || null, arrived_at: r.arrived_at || null, arrival_method: r.arrival_method || null, ended_at: iso(endAt), outcome, note: note || null, target_pickup: r.target_pickup, target_arrive: r.target_arrive, target_work: r.target_work, origin: r.origin || null, paused_arrive: r.paused_arrive || 0, paused_work: r.paused_work || 0 });
+    const backToQueue = (r, at, stage) => Object.assign(r, { stage: stage || r.stage, status: 'new', technician_id: null, queued_at: iso(at), offered_at: null, assigned_by: null, assign_note: null, accepted_at: null, accept_method: null, arrived_at: null, arrival_method: null, arrival_note: null, arrival_lat: null, arrival_lng: null, arrival_acc: null, origin: null, paused_arrive: 0, paused_work: 0, target_arrive: tgA(r.building_code, r.priority, stage || r.stage, null) });
+    // one visit: the supervisor gives it to techId after some minutes, he accepts (or declines), and so on
+    const visit = (r, techId, queuedAt, upTo, opts) => {
+      let at = queuedAt + (r.priority === 'urgent' ? 1 + R() * 11 : 3 + R() * 34) * 60000;
       if (at > upTo) return 'new';
-      const assigned = R() < 0.15, origin = team === 'ops' && R() < 0.25 ? pickR(['SAY', 'MWL', 'BSH', 'AZB']) : null;
-      r.target_arrive = tgA(r.building_code, r.priority, team, origin);
-      Object.assign(r, { status: 'accepted', technician_id: techId, accepted_at: iso(at), accept_method: assigned ? 'assigned' : 'self', origin });
-      pushEv(r.id, at, assigned ? 's-sup' : techId, assigned ? 'assigned' : 'accepted', assigned ? sname(techId) : null);
+      const p = prof[techId], team = teamOfS(techId);
+      give(r, techId, at, R() < 0.18 ? pickR(SUP_NOTES) : null);
+      if (team === 'ops' && R() < 0.25) { r.origin = pickR(['SAY', 'MWL', 'BSH', 'AZB']); r.target_arrive = tgA(r.building_code, r.priority, team, r.origin); }
+      pushEv(r.id, at, 's-sup', 'assigned', [sname(techId), r.assign_note].filter(Boolean).join(' · '));
+      if (!opts.noDecline && R() < 0.06) {
+        const dAt = at + (2 + R() * 14) * 60000; if (dAt > upTo) return 'assigned';
+        const note = pickR(DECLINE);
+        r.legs.push(legNow(r, 'declined', note, dAt)); pushEv(r.id, dAt, techId, 'declined', note);
+        backToQueue(r, dAt);
+        return visit(r, team === 'hm' ? opts.ops() : pickR(Object.keys(opsW).filter(x => x !== techId)), dAt, upTo, Object.assign({}, opts, { noDecline: true }));
+      }
+      at += (r.priority === 'urgent' ? 1 + R() * 9 : 2 + R() * 26) * 60000;
+      if (at > upTo) return 'assigned';
+      Object.assign(r, { status: 'accepted', accepted_at: iso(at), accept_method: 'self' });
+      pushEv(r.id, at, techId, 'accepted');
       if (R() < (team === 'ops' ? 0.22 : 0.1)) { const pause = (team === 'ops' ? 20 + R() * 100 : 10 + R() * 35) * 60000; r.paused_arrive += Math.round(pause / 1000); pushEv(r.id, at + 1000, techId, 'hold_busy', pickR(['صيانة دورية لمضخات المياه', 'طلب آخر في نفس المبنى', 'Routine check of the fire pumps'])); pushEv(r.id, at + pause, null, 'resumed_auto', ''); at += pause; }
       const arr = at + r.target_arrive * p.a * (0.5 + R() * 0.95) * 60000; if (arr > upTo) return 'accepted';
       const manual = R() < p.man;
@@ -3469,9 +3753,9 @@ const Demo = (function () {
       if (team === 'hm' && R() < p.esc + (escBoost[r.issue_type] || 0)) {
         const end = arr + (10 + R() * 30) * 60000; if (end > upTo) return 'onsite';
         const note = pickR(ESC);
-        r.legs.push({ staff_id: techId, name: sname(techId), team: 'hm', offered_at: r.offered_at, accepted_at: r.accepted_at, accept_method: r.accept_method, arrived_at: r.arrived_at, arrival_method: r.arrival_method, ended_at: iso(end), outcome: 'escalated', note, target_pickup: r.target_pickup, target_arrive: r.target_arrive, target_work: r.target_work, origin: null, paused_arrive: r.paused_arrive, paused_work: 0 });
+        r.legs.push(legNow(r, 'escalated', note, end));
         pushEv(r.id, end, techId, 'to_ops', note);
-        Object.assign(r, { stage: 'ops', status: 'new', technician_id: null, offered_at: iso(end), accepted_at: null, accept_method: null, arrived_at: null, arrival_method: null, arrival_note: null, arrival_lat: null, arrival_lng: null, arrival_acc: null, origin: null, paused_arrive: 0, paused_work: 0, target_arrive: tgA(r.building_code, r.priority, 'ops', null) });
+        backToQueue(r, end, 'ops');
         return visit(r, opts.ops(), end, upTo, opts);
       }
       let fin = arr + r.target_work * p.w * (0.3 + R() * 1.0) * 60000;
@@ -3518,39 +3802,49 @@ const Demo = (function () {
       const u = units.find(x => x.id === r.unit_id), again = mk(u, r.issue_type, D(r.closed_at).getTime() + (3 + R() * 6) * 864e5);
       play(again, nowMs - 6 * 3600e3); hist.push(again);
     });
-    // two cancelled duplicates
-    hist.slice(5, 7).forEach(r => { const d = mk(units.find(x => x.id === r.unit_id), r.issue_type, D(r.created_at).getTime() + 9 * 60000); pushEv(d.id, D(d.created_at), null, 'submitted'); Object.assign(d, { status: 'cancelled', cancelled_at: iso(D(d.created_at).getTime() + 20 * 60000), cancel_note: 'طلب مكرر' }); pushEv(d.id, D(d.cancelled_at), 's-sup', 'cancelled', d.cancel_note); hist.push(d); });
+    // two cancelled duplicates, cancelled by the supervisor before giving them out
+    hist.slice(5, 7).forEach(r => { const d = mk(units.find(x => x.id === r.unit_id), r.issue_type, D(r.created_at).getTime() + 9 * 60000); pushEv(d.id, D(d.created_at), null, 'submitted'); Object.assign(d, { status: 'cancelled', cancelled_at: iso(D(d.created_at).getTime() + 6 * 60000), cancel_note: 'طلب مكرر' }); pushEv(d.id, D(d.cancelled_at), 's-sup', 'cancelled', d.cancel_note); hist.push(d); });
     // what is happening right now
     const at = (code, label, issue, mins) => { const u = units.find(x => x.building_code === code && x.label_en === label) || units.find(x => x.building_code === code); return mk(u, issue, nowMs - mins * 60000); };
-    const m = mins => iso(nowMs - mins * 60000);
+    const ago = mins => nowMs - mins * 60000, m = mins => iso(ago(mins));
     const live = [];
-    live.push(at('AZB', 'Flat 32', 'water_leak', 6));                                                                   // 0 new, waiting for the AZB handyman
-    const f44 = at('AZB', 'Flat 44', 'lights', 70); Object.assign(f44, { status: 'onsite', technician_id: 's-h1', accepted_at: m(64), accept_method: 'self', arrived_at: m(55), arrival_method: 'qr', origin: null }); live.push(f44);
-    const f23 = at('AZB', 'Flat 23', 'ac', 38); Object.assign(f23, { status: 'accepted', technician_id: 's-h1', accepted_at: m(33), accept_method: 'self', hold_kind: 'busy', hold_at: m(33), hold_ref: f44.id }); live.push(f23);
-    const say = at('SAY', 'Flat 102', 'no_power', 52);
-    say.legs = [{ staff_id: 's-h2', name: 'Sameer Ali', team: 'hm', offered_at: m(52), accepted_at: m(47), accept_method: 'self', arrived_at: m(36), arrival_method: 'qr', ended_at: m(21), outcome: 'escalated', note: 'العطل في لوحة الكهرباء الرئيسية للشقة، يحتاج فني كهرباء', target_pickup: 15, target_arrive: 15, target_work: 120, origin: null, paused_arrive: 0, paused_work: 0 }];
-    Object.assign(say, { stage: 'ops', offered_at: m(21), target_arrive: ops('SAY') }); live.push(say);
-    const mwl = at('MWL', 'Flat 21', 'ac', 150);
-    mwl.legs = [{ staff_id: 's-h3', name: 'Bijoy Das', team: 'hm', offered_at: m(150), accepted_at: m(122), accept_method: 'self', arrived_at: m(95), arrival_method: 'manual', ended_at: m(70), outcome: 'escalated', note: 'الكمبروسر لا يعمل، يحتاج فني تكييف', target_pickup: 60, target_arrive: 60, target_work: 240, origin: null, paused_arrive: 0, paused_work: 0 }];
-    Object.assign(mwl, { stage: 'ops', offered_at: m(70), status: 'accepted', technician_id: 's-t1', accepted_at: m(58), accept_method: 'self', target_arrive: ops('MWL') }); live.push(mwl);
-    const bsh = at('BSH', 'Flat 3', 'heater', 26 * 60);
-    Object.assign(bsh, { status: 'onsite', technician_id: 's-h4', accepted_at: m(26 * 60 - 20), accept_method: 'self', arrived_at: m(26 * 60 - 35), arrival_method: 'qr', hold_kind: 'parts', hold_at: m(25 * 60), hold_note: 'السخان تالف بالكامل، طُلب سخان جديد من المورد', hold_parts: [{ n: 'سخان 80 لتر', q: 1 }, { n: 'صمام أمان', q: 1 }], hold_eta: iso(midnight(nowMs + 864e5) + 10 * 3600e3) }); live.push(bsh);
-    live.push(at('HO', 'First floor', 'lights', 8));                                                                    // new, operations room
-    const scc = at('SCC', 'Shop 12', 'water_leak', 50); Object.assign(scc, { status: 'onsite', technician_id: 's-t2', accepted_at: m(46), accept_method: 'self', arrived_at: m(35), arrival_method: 'qr' }); live.push(scc);
-    const f13 = at('AZB', 'Flat 13', 'heater', 300); Object.assign(f13, { status: 'finished', technician_id: 's-h1', accepted_at: m(290), accept_method: 'self', arrived_at: m(270), arrival_method: 'qr', finished_at: m(150), photo_after: PH_AFTER, tech_note: 'الثرموستات تالف، تم تغييره وتجربة التسخين', parts: [{ n: 'ثرموستات سخان', q: 1 }] }); live.push(f13);
-    const obts = at('OBTS', 'Floor 5', 'ac', 40); Object.assign(obts, { status: 'onsite', technician_id: 's-t3', accepted_at: m(36), accept_method: 'self', arrived_at: m(25), arrival_method: 'qr' }); live.push(obts);
-    const hoq = at('HO', 'Common area', 'door_lock', 20); Object.assign(hoq, { status: 'accepted', technician_id: 's-t3', accepted_at: m(16), accept_method: 'self', origin: 'OBTS', hold_kind: 'busy', hold_at: m(16), hold_ref: obts.id }); live.push(hoq);
-    const azc = at('AZB', 'Common area', 'drain_overflow', 95); Object.assign(azc, { stage: 'ops', offered_at: m(92), status: 'accepted', technician_id: 's-t4', accepted_at: m(82), accept_method: 'assigned', target_arrive: ops('AZB') }); live.push(azc);
+    // waiting for the supervisor: just reported, past its target, declined, and asked for the operations room
+    const q1 = at('AZB', 'Flat 32', 'water_leak', 6); live.push(q1);
+    const q2 = at('HO', 'First floor', 'lights', 36); live.push(q2);
+    const q3 = at('BSH', 'Flat 1', 'ac', 25); give(q3, 's-h4', ago(19)); q3.legs = [legNow(q3, 'declined', 'أنا مع شركة المصاعد في مبنى آخر حتى الواحدة', ago(4))]; backToQueue(q3, ago(4)); live.push(q3);
+    const say = at('SAY', 'Flat 102', 'no_power', 52); give(say, 's-h2', ago(49)); Object.assign(say, { status: 'onsite', accepted_at: m(47), accept_method: 'self', arrived_at: m(36), arrival_method: 'qr' });
+    say.legs = [legNow(say, 'escalated', 'العطل في لوحة الكهرباء الرئيسية للشقة، يحتاج فني كهرباء', ago(3))]; backToQueue(say, ago(3), 'ops'); live.push(say);
+    // given out, waiting for the person to accept
+    const azc = at('AZB', 'Common area', 'drain_overflow', 15); give(azc, 's-t4', ago(7), 'الانسداد قريب من غرفة الكهرباء، ابدأ بالتصريف'); live.push(azc);
+    // in hand
+    const f44 = at('AZB', 'Flat 44', 'lights', 70); give(f44, 's-h1', ago(67)); Object.assign(f44, { status: 'onsite', accepted_at: m(64), accept_method: 'self', arrived_at: m(55), arrival_method: 'qr' }); live.push(f44);
+    const f23 = at('AZB', 'Flat 23', 'ac', 38); give(f23, 's-h1', ago(35)); Object.assign(f23, { status: 'accepted', accepted_at: m(33), accept_method: 'self', hold_kind: 'busy', hold_at: m(33), hold_ref: f44.id }); live.push(f23);
+    const mwl = at('MWL', 'Flat 21', 'ac', 150); give(mwl, 's-h3', ago(141)); Object.assign(mwl, { status: 'onsite', accepted_at: m(122), accept_method: 'self', arrived_at: m(95), arrival_method: 'manual', arrival_note: 'ملصق الرمز تالف' });
+    mwl.legs = [legNow(mwl, 'escalated', 'الكمبروسر لا يعمل، يحتاج فني تكييف', ago(70))]; backToQueue(mwl, ago(70), 'ops');
+    give(mwl, 's-t1', ago(64), 'الهاندي مان فحصه: الكمبروسر'); Object.assign(mwl, { status: 'accepted', accepted_at: m(58), accept_method: 'self' }); live.push(mwl);
+    const bsh = at('BSH', 'Flat 3', 'heater', 26 * 60); give(bsh, 's-h4', ago(26 * 60 - 7));
+    Object.assign(bsh, { status: 'onsite', accepted_at: m(26 * 60 - 20), accept_method: 'self', arrived_at: m(26 * 60 - 35), arrival_method: 'qr', hold_kind: 'parts', hold_at: m(25 * 60), hold_note: 'السخان تالف بالكامل، طُلب سخان جديد من المورد', hold_parts: [{ n: 'سخان 80 لتر', q: 1 }, { n: 'صمام أمان', q: 1 }], hold_eta: iso(midnight(nowMs + 864e5) + 10 * 3600e3) }); live.push(bsh);
+    const scc = at('SCC', 'Shop 12', 'water_leak', 50); give(scc, 's-t2', ago(48)); Object.assign(scc, { status: 'onsite', accepted_at: m(46), accept_method: 'self', arrived_at: m(35), arrival_method: 'qr' }); live.push(scc);
+    const f13 = at('AZB', 'Flat 13', 'heater', 300); give(f13, 's-h1', ago(296)); Object.assign(f13, { status: 'finished', accepted_at: m(290), accept_method: 'self', arrived_at: m(270), arrival_method: 'qr', finished_at: m(150), photo_after: PH_AFTER, tech_note: 'الثرموستات تالف، تم تغييره وتجربة التسخين', parts: [{ n: 'ثرموستات سخان', q: 1 }] }); live.push(f13);
+    const obts = at('OBTS', 'Floor 5', 'ac', 40); give(obts, 's-t3', ago(38)); Object.assign(obts, { status: 'onsite', accepted_at: m(36), accept_method: 'self', arrived_at: m(25), arrival_method: 'qr' }); live.push(obts);
+    const hoq = at('HO', 'Common area', 'door_lock', 20); give(hoq, 's-t3', ago(18)); Object.assign(hoq, { status: 'accepted', accepted_at: m(16), accept_method: 'self', origin: 'OBTS', target_arrive: tgA('HO', hoq.priority, 'ops', 'OBTS'), hold_kind: 'busy', hold_at: m(16), hold_ref: obts.id }); live.push(hoq);
     live.forEach(x => {
-      const c = D(x.created_at).getTime(); pushEv(x.id, c, null, 'submitted');
-      (x.legs || []).forEach(l => { pushEv(x.id, D(l.accepted_at), l.staff_id, 'accepted'); pushEv(x.id, D(l.arrived_at), l.staff_id, l.arrival_method === 'manual' ? 'arrived_manual' : 'arrived_qr', l.arrival_method === 'manual' ? 'ملصق الرمز تالف' : null); pushEv(x.id, D(l.ended_at), l.staff_id, 'to_ops', l.note); });
-      if (x === azc) pushEv(x.id, D(x.offered_at), 's-sup', 'sent_ops');
-      if (x.accepted_at) pushEv(x.id, D(x.accepted_at), x.accept_method === 'assigned' ? 's-sup' : x.technician_id, x.accept_method === 'assigned' ? 'assigned' : 'accepted', x.accept_method === 'assigned' ? sname(x.technician_id) : null);
+      pushEv(x.id, D(x.created_at), null, 'submitted');
+      (x.legs || []).forEach(l => {
+        pushEv(x.id, D(l.offered_at), 's-sup', 'assigned', [l.name, l.assign_note].filter(Boolean).join(' · '));
+        if (l.accepted_at) pushEv(x.id, D(l.accepted_at), l.staff_id, 'accepted');
+        if (l.arrived_at) pushEv(x.id, D(l.arrived_at), l.staff_id, l.arrival_method === 'manual' ? 'arrived_manual' : 'arrived_qr', l.arrival_method === 'manual' ? 'ملصق الرمز تالف' : null);
+        if (l.outcome === 'escalated' || l.outcome === 'declined') pushEv(x.id, D(l.ended_at), l.staff_id, l.outcome === 'escalated' ? 'to_ops' : 'declined', l.note);
+      });
+      if (x.offered_at) pushEv(x.id, D(x.offered_at), 's-sup', 'assigned', [sname(x.technician_id), x.assign_note].filter(Boolean).join(' · '));
+      if (x.accepted_at) pushEv(x.id, D(x.accepted_at), x.technician_id, 'accepted');
       if (x.hold_kind === 'busy') pushEv(x.id, D(x.hold_at) + 1000, x.technician_id, 'hold_busy', '#?');
-      if (x.arrived_at) pushEv(x.id, D(x.arrived_at), x.technician_id, 'arrived_qr');
+      if (x.arrived_at) pushEv(x.id, D(x.arrived_at), x.technician_id, x.arrival_method === 'manual' ? 'arrived_manual' : 'arrived_qr', x.arrival_note || null);
       if (x.hold_kind === 'parts') pushEv(x.id, D(x.hold_at), x.technician_id, 'hold_parts', x.hold_note + ' · ' + partsTxt(x.hold_parts));
       if (x.finished_at) pushEv(x.id, D(x.finished_at), x.technician_id, 'finished', x.tech_note);
     });
+    // the five-minute reminder already went out for the one waiting past its target
+    q2.escalated_at = iso(D(q2.created_at) + (q2.target_dispatch + 2) * 60000); pushEv(q2.id, D(q2.escalated_at), null, 'late_dispatch');
     db0.requests = hist.concat(live).sort((a, b) => D(a.created_at) - D(b.created_at));
     db0.requests.forEach((x, i) => { x.no = 1001 + i; });
     db0.events.forEach(e => { if (e.ev === 'hold_busy' && e.note === '#?') { const r = db0.requests.find(x => x.id === e.request_id), b = r && db0.requests.find(x => x.id === r.hold_ref); e.note = b ? '#' + b.no : null; } });
@@ -3571,7 +3865,7 @@ const Demo = (function () {
     reset() { db = seed(); save(); },
     peek() { return load(); },
     loginAs(id) { load(); const s = db.staff.find(x => x.id === id) || db.staff[0]; const res = session(s); save(); return res; },
-    firstFor(code, stage) { load(); const s = db.staff.find(x => x.active && x.role === 'technician' && (stage === 'hm' ? x.team === 'hm' && (x.sites || []).includes(code) : x.team !== 'hm')); return s ? s.id : 's-t1'; }
+    assignee(rid) { load(); const r = db.requests.find(x => x.id === rid); return (r && r.technician_id) || 's-t1'; }
   };
 })();
 const svgUri = s => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(s);
