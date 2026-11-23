@@ -15,7 +15,7 @@ jobs:
       - name: Safari engine (WebKit) and Chrome on this build
         run: |
           mkdir -p /tmp/lc && cd /tmp/lc && npm init -y > /dev/null && npm i playwright@1.65.1 > /dev/null 2>&1
-          npx playwright install --with-deps webkit chromium > /dev/null 2>&1
+          for i in 1 2 3; do timeout 420 npx playwright install --with-deps webkit chromium > install.log 2>&1 && break; echo "install try $i failed"; tail -5 install.log; done
           cp "$GITHUB_WORKSPACE/.github/serve.cjs" "$GITHUB_WORKSPACE/.github/live-check.mjs" .
           (node serve.cjs "$GITHUB_WORKSPACE" > serve.log 2>&1 &)
           sleep 1
