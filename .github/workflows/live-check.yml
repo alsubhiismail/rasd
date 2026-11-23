@@ -1,0 +1,36 @@
+name: live-check
+on:
+  push:
+    branches: [diag-live-check]
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: The site over HTTP
+        run: |
+          getent hosts alsubhiismail.github.io || true
+          for u in "" "?demo=1" "?u=azb32-sj2xbm" "config.js" "app.js?v=104890b1b4" "app.css?v=104890b1b4" "manifest.webmanifest" "sw.js"; do
+            curl -sS -o /dev/null -w "%{http_code} %{size_download}B %{time_total}s  /rasd/$u\n" "https://alsubhiismail.github.io/rasd/$u"
+          done
+          curl -sS -D - -o /dev/null https://alsubhiismail.github.io/rasd/ | head -20
+          echo "live app.js : $(curl -sS https://alsubhiismail.github.io/rasd/app.js | sha1sum)"
+          echo "repo app.js : $(sha1sum < app.js)"
+          echo "live index  : $(curl -sS https://alsubhiismail.github.io/rasd/ | sha1sum)"
+          echo "repo index  : $(sha1sum < index.html)"
+      - name: The site in Safari (WebKit) and Chrome on a phone
+        run: |
+          mkdir -p /tmp/lc && cd /tmp/lc && npm init -y > /dev/null && npm i playwright@latest > /dev/null 2>&1
+          npx playwright --version
+          npx playwright install --with-deps webkit chromium > /dev/null 2>&1
+          cp "$GITHUB_WORKSPACE/.github/live-check.mjs" . && node live-check.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shots
+          path: /tmp/lc/shots
