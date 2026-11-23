@@ -112,6 +112,10 @@ ar: {
   tm_active: 'الحساب نشط', tm_inactive: 'موقوف', tm_locked: 'مقفل مؤقتاً', tm_pin: 'الرمز السري (6 أرقام)',
   tm_pin_new: 'رمز جديد (اتركه فارغاً للإبقاء على الحالي)', tm_gen: 'توليد', tm_saved: 'تم الحفظ. أعطِ {n} الرمز السري {p} ورابط الدخول.',
   tm_saved_plain: 'تم الحفظ.', tm_readonly: 'إضافة الأعضاء وتعديلهم وحذفهم من صلاحية المدير فقط.', tm_share: 'رابط دخول الفريق',
+  tm_saved_demo: 'في النموذج التجريبي يبقى {n} على هذا الجهاز فقط، فجرّب دوره من «تبديل الدور». الدخول من جواله برقم الجوال والرمز {p} يعمل بعد التشغيل الفعلي.',
+  tm_share_demo: 'في النموذج التجريبي يفتح هذا الرابط نسخة تجريبية مستقلة على كل جهاز، فلا يدخل به الموظف من جواله ولا تصل بياناته إليك. يعمل الدخول لكل الفريق بعد التشغيل الفعلي.',
+  q_demo: 'في النموذج التجريبي، مسح الرمز بجوال آخر يفتح نسخة تجريبية مستقلة على ذلك الجوال، فلا يصل البلاغ إلى لوحتك هنا. لتجربة البلاغ على هذا الجهاز اضغط «فتح». بعد التشغيل الفعلي يصل كل بلاغ إلى الجميع.',
+  t_not_found_demo: 'هذا الطلب غير موجود على هذا الجهاز. النموذج التجريبي يحفظ البيانات في الجهاز الذي أُرسل منه الطلب فقط، وبعد التشغيل الفعلي يعمل رابط المتابعة على أي جهاز.',
   se_title: 'الإعدادات', se_contractor: 'اسم المقاول', se_targets: 'الأوقات المستهدفة بالدقائق', se_pickup: 'قبول الفني',
   se_arrive: 'وصول الهاندي مان', se_work: 'الإصلاح', se_buildings: 'المباني ووقت وصول غرفة العمليات', se_b_arrive: 'وقت الوصول لهذا المبنى حسب بعده عن المقر (اتركه فارغاً لاستخدام الوقت العام)',
   se_b_loc: 'موقع المبنى (لحساب بُعد الفني عند الوصول)', se_b_here: 'استخدم موقعي الحالي', se_issues: 'أنواع المشاكل وتصنيفها',
@@ -430,6 +434,10 @@ en: {
   tm_active: 'Account active', tm_inactive: 'Disabled', tm_locked: 'Temporarily locked', tm_pin: 'PIN (6 digits)',
   tm_pin_new: 'New PIN (leave empty to keep the current one)', tm_gen: 'Generate', tm_saved: 'Saved. Give {n} the PIN {p} and the sign-in link.',
   tm_saved_plain: 'Saved.', tm_readonly: 'Only the manager can add, change or remove members.', tm_share: 'Team sign-in link',
+  tm_saved_demo: 'In the demo, {n} exists on this device only, so try their role with “Switch role”. Signing in from their own phone with their number and the PIN {p} works once Rasd is live.',
+  tm_share_demo: 'In the demo this link opens a separate sample copy on each device, so staff cannot sign in with it from their phones and nothing they do reaches you. Sign-in works for the whole team once Rasd is live.',
+  q_demo: 'In the demo, scanning a code with another phone opens a separate sample copy on that phone, so the request does not reach your board here. To try a request on this device, tap “Open”. Once Rasd is live, every request reaches everyone.',
+  t_not_found_demo: 'This request is not on this device. The demo keeps its data only on the device the request was sent from; once Rasd is live, the tracking link works on any device.',
   se_title: 'Settings', se_contractor: 'Contractor name', se_targets: 'Target times in minutes', se_pickup: 'Technician accepts',
   se_arrive: 'Handyman arrival', se_work: 'Repair', se_buildings: 'Buildings and operations-room travel time', se_b_arrive: 'Arrival target for this building, by its distance from base (leave empty to use the general target)',
   se_b_loc: "Building location (to measure the technician's distance on arrival)", se_b_here: 'Use my current location', se_issues: 'Problem types and priority',
@@ -874,6 +882,7 @@ async function render() {
   try {
     await dispatch(parts, alive);
   } catch (e) {
+    try { console.error('[rasd] ' + ((e && e.stack) ? e.message + '\n' + e.stack : e)); } catch (x) { /* ignore */ }
     if (alive()) page(errorBox(e), { staff: !!S.session });
   }
   if (changed && alive()) window.scrollTo(0, 0);
@@ -931,7 +940,9 @@ function page(body, o) {
 const navKey = () => (isMgr() ? 'board' : 'jobs');
 const loadingBox = () => `<div class="loading"><div class="spin"></div><span>${t('loading')}</span></div>`;
 function errorBox(e) {
-  return `<div class="wrap narrow"><div class="card empty">${ICON.alert}<p>${esc(errMsg(e))}</p><button class="btn" type="button" data-act="reload">${t('retry')}</button></div></div>`;
+  // an unexpected error also shows its technical reason in small print, so a screenshot is enough to find it
+  const code = String((e && e.message) || e || ''), known = !!L.ar['err_' + code];
+  return `<div class="wrap narrow"><div class="card empty">${ICON.alert}<p>${esc(errMsg(e))}</p>${known ? '' : `<small class="err-tech" dir="ltr">${esc(code.slice(0, 180))}</small>`}<button class="btn" type="button" data-act="reload">${t('retry')}</button></div></div>`;
 }
 function toast(msg, kind) {
   const el = document.createElement('div');
@@ -1444,7 +1455,7 @@ async function vTrack(id, code, alive) {
   try { [r] = await Promise.all([rpc('track_request', { p_id: id, p_code: code }), settings()]); }
   catch (e) { if (alive()) page(errorBox(e), { tenant: true }); return; }
   if (!alive()) return;
-  if (!r) { page(`<div class="wrap narrow"><div class="card empty">${ICON.alert}<p>${t('t_not_found')}</p></div></div>`, { tenant: true }); return; }
+  if (!r) { page(`<div class="wrap narrow"><div class="card empty">${ICON.alert}<p>${t(DEMO ? 't_not_found_demo' : 't_not_found')}</p></div></div>`, { tenant: true }); return; }
   S.track = { id, code, r };
   const mine = myRequests().find(m => m.id === id);
   if (!mine) addMine({ id, code, no: r.no, token: null, at: r.created_at });
@@ -2610,7 +2621,7 @@ async function vTeam(alive) {
     <div class="sec-h"><h1>${t('tm_title')}</h1>${admin ? `<button class="btn primary" type="button" data-act="staff-edit" data-id="">${ICON.plus}${t('tm_add')}</button>` : ''}</div>
     <p class="callout">${ICON.shield}<span>${t(admin ? 'tm_only_you' : 'tm_readonly')}</span></p>
     ${groups.map(g => `<h2 class="sec">${esc(g[0])}<span class="count">${g[1].length}</span></h2><section class="card list">${g[1].map(member).join('')}</section>`).join('')}
-    <section class="card"><h3>${t('tm_share')}</h3><p class="mono" dir="ltr">${esc(APP_URL)}</p><div class="row"><button class="btn sm" type="button" data-act="copy" data-v="${esc(APP_URL)}">${ICON.copy}${t('q_copy')}</button></div></section>
+    <section class="card"><h3>${t('tm_share')}</h3><p class="mono" dir="ltr">${esc(APP_URL)}</p>${DEMO ? `<p class="callout">${ICON.alert}${t('tm_share_demo')}</p>` : ''}<div class="row"><button class="btn sm" type="button" data-act="copy" data-v="${esc(APP_URL)}">${ICON.copy}${t('q_copy')}</button></div></section>
   </div>`, { staff: true, nav: 'team' });
 }
 const genPin = () => { let p = ''; const a = new Uint32Array(6); (window.crypto || {}).getRandomValues ? crypto.getRandomValues(a) : a.forEach((x, i) => (a[i] = Math.random() * 1e9)); a.forEach(x => (p += x % 10)); return p; };
@@ -2687,6 +2698,7 @@ async function vQr(alive) {
   groups.sort((a, b) => ((order.indexOf(a.code) + 1 || 99) - (order.indexOf(b.code) + 1 || 99)));
   page(`<div class="wrap wide">
     <div class="sec-h"><h1>${t('q_title')}</h1><button class="btn primary" type="button" data-act="unit-new">${ICON.plus}${t('q_add')}</button></div>
+    ${DEMO ? `<p class="callout">${ICON.alert}${t('q_demo')}</p>` : ''}
     ${groups.map(g => `<section class="card"><div class="sec-h"><h2>${esc(LANG === 'ar' ? g.ar : g.en)} <span class="count">${g.units.length}</span></h2>${EMB ? '' : `<a class="btn sm" href="#/qr/print/${esc(g.code)}">${ICON.print}${t('q_print')}</a>`}</div>
       <div class="qr-grid">${g.units.map(u => `<div class="qr-item ${u.active ? '' : 'off'}"><div class="qr">${qrSvg(unitUrl(u.token))}</div><b>${esc(LANG === 'ar' ? u.label_ar : u.label_en)}</b><small class="mono" dir="ltr">${esc(u.token)}</small>
         <div class="row"><a class="btn sm ghost" href="${esc(unitHref(u.token))}" ${DEMO ? '' : 'target="_blank" rel="noopener"'}>${t('q_open')}</a><button class="btn sm ghost" type="button" data-act="copy" data-v="${esc(unitUrl(u.token))}">${ICON.copy}</button><button class="btn sm ghost" type="button" data-act="unit-toggle" data-id="${esc(u.id)}" data-on="${u.active ? '0' : '1'}">${u.active ? t('q_disable') : t('q_enable')}</button></div></div>`).join('')}</div></section>`).join('')}
@@ -3605,7 +3617,7 @@ const FORM = {
     await busy(f.querySelector('[type="submit"]'), async () => {
       await srpc('admin_save_staff', { p_id: id, p_name: name, p_phone: v('phone'), p_role: role, p_active: id ? v('active') : true, p_pin: pin || null, p_team: kind === 'hm' ? 'hm' : 'ops', p_sites: kind === 'hm' ? sites : [] });
       closeModal(f.closest('.modal'));
-      if (pin) modal(`<div class="success">${ICON.check}<div><b>${t('tm_saved_plain')}</b><p>${esc(t('tm_saved', { n: name, p: pin }))}</p><p class="mono" dir="ltr">${esc(APP_URL)}</p></div></div><button class="btn" type="button" data-act="modal-close">${t('close')}</button>`);
+      if (pin) modal(`<div class="success">${ICON.check}<div><b>${t('tm_saved_plain')}</b>${DEMO ? `<p>${esc(t('tm_saved_demo', { n: name, p: pin }))}</p>` : `<p>${esc(t('tm_saved', { n: name, p: pin }))}</p><p class="mono" dir="ltr">${esc(APP_URL)}</p>`}</div></div><button class="btn" type="button" data-act="modal-close">${t('close')}</button>`);
       else toast(t('tm_saved_plain'));
       render();
     });
@@ -4269,13 +4281,13 @@ const Demo = (function () {
       });
       if (x.offered_at) pushEv(x.id, D(x.offered_at), 's-sup', 'assigned', [sname(x.technician_id), x.assign_note].filter(Boolean).join(' · '));
       if (x.accepted_at) pushEv(x.id, D(x.accepted_at), x.technician_id, 'accepted');
-      if (x.hold_kind === 'busy') pushEv(x.id, D(x.hold_at) + 1000, x.technician_id, 'hold_busy', '#?');
+      if (x.hold_kind === 'busy') pushEv(x.id, D(x.hold_at).getTime() + 1000, x.technician_id, 'hold_busy', '#?');
       if (x.arrived_at) pushEv(x.id, D(x.arrived_at), x.technician_id, x.arrival_method === 'manual' ? 'arrived_manual' : 'arrived_qr', x.arrival_note || null);
       if (x.hold_kind === 'parts') pushEv(x.id, D(x.hold_at), x.technician_id, 'hold_parts', x.hold_note + ' · ' + partsTxt(x.hold_parts));
       if (x.finished_at) pushEv(x.id, D(x.finished_at), x.technician_id, 'finished', x.tech_note);
     });
     // the five-minute reminder already went out for the one waiting past its target
-    q2.escalated_at = iso(D(q2.created_at) + (q2.target_dispatch + 2) * 60000); pushEv(q2.id, D(q2.escalated_at), null, 'late_dispatch');
+    q2.escalated_at = iso(D(q2.created_at).getTime() + (q2.target_dispatch + 2) * 60000); pushEv(q2.id, D(q2.escalated_at), null, 'late_dispatch');
     db0.requests = hist.concat(live).sort((a, b) => D(a.created_at) - D(b.created_at));
     db0.requests.forEach((x, i) => { x.no = 1001 + i; });
     db0.events.forEach(e => { if (e.ev === 'hold_busy' && e.note === '#?') { const r = db0.requests.find(x => x.id === e.request_id), b = r && db0.requests.find(x => x.id === r.hold_ref); e.note = b ? '#' + b.no : null; } });

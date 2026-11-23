@@ -13,13 +13,37 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@500;600;700&display=swap">
-<link rel="stylesheet" href="app.css?v=104890b1b4">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="app.css?v=e81749b91e">
 </head>
 <body>
-<div id="app"><div class="loading" style="min-height:90vh;display:grid;place-items:center;color:#8A8576;font-family:sans-serif">رصد · Rasd</div></div>
+<div id="app"><div id="boot" class="loading" style="min-height:90vh;display:grid;place-items:center;color:#8A8576;font-family:sans-serif">رصد · Rasd</div></div>
 <noscript><p style="padding:24px;font-family:sans-serif">يحتاج رصد إلى تفعيل JavaScript في المتصفح. · Rasd needs JavaScript turned on.</p></noscript>
+<script>
+/* If Rasd cannot start on a phone, say so on the screen (with the reason) instead of staying blank. */
+(function () {
+  function show(msg) {
+    var b = document.getElementById('boot');
+    if (!b) return;
+    b.removeAttribute('id');
+    b.innerHTML = '<div style="max-width:440px;padding:24px;text-align:center;line-height:1.8;color:#3A372F">'
+      + '<b style="font-size:18px">رصد · Rasd</b><p>' + msg + '</p>'
+      + '<button type="button" onclick="location.reload()" style="font:inherit;padding:10px 22px;border-radius:10px;border:0;background:#8B7E49;color:#fff">إعادة المحاولة · Try again</button></div>';
+  }
+  window.__rasdBootFail = function (why) {
+    show('تعذّر تشغيل رصد على هذا المتصفح. حدّث المتصفح أو جرّب متصفحاً آخر.<br>Rasd could not start on this browser.<br><small dir="ltr" style="color:#8A8576;word-break:break-all">'
+      + String(why || 'error').replace(/[<>&]/g, '') + '</small>');
+  };
+  window.addEventListener('error', function (e) {
+    window.__rasdBootFail((e && e.message) + (e && e.lineno ? ' @' + e.lineno + ':' + e.colno : ''));
+  });
+  setTimeout(function () {
+    show('ما زال التحميل جارياً… تأكد من اتصال الإنترنت ثم أعد المحاولة.<br>Still loading… check the internet connection and try again.');
+  }, 20000);
+})();
+</script>
 <script src="config.js"></script>
-<script src="app.js?v=104890b1b4"></script>
+<script src="app.js?v=e81749b91e" onerror="window.__rasdBootFail &amp;&amp; window.__rasdBootFail('app.js did not load')"></script>
 </body>
 </html>
