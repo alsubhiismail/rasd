@@ -4281,13 +4281,13 @@ const Demo = (function () {
       });
       if (x.offered_at) pushEv(x.id, D(x.offered_at), 's-sup', 'assigned', [sname(x.technician_id), x.assign_note].filter(Boolean).join(' · '));
       if (x.accepted_at) pushEv(x.id, D(x.accepted_at), x.technician_id, 'accepted');
-      if (x.hold_kind === 'busy') pushEv(x.id, D(x.hold_at) + 1000, x.technician_id, 'hold_busy', '#?');
+      if (x.hold_kind === 'busy') pushEv(x.id, D(x.hold_at).getTime() + 1000, x.technician_id, 'hold_busy', '#?');
       if (x.arrived_at) pushEv(x.id, D(x.arrived_at), x.technician_id, x.arrival_method === 'manual' ? 'arrived_manual' : 'arrived_qr', x.arrival_note || null);
       if (x.hold_kind === 'parts') pushEv(x.id, D(x.hold_at), x.technician_id, 'hold_parts', x.hold_note + ' · ' + partsTxt(x.hold_parts));
       if (x.finished_at) pushEv(x.id, D(x.finished_at), x.technician_id, 'finished', x.tech_note);
     });
     // the five-minute reminder already went out for the one waiting past its target
-    q2.escalated_at = iso(D(q2.created_at) + (q2.target_dispatch + 2) * 60000); pushEv(q2.id, D(q2.escalated_at), null, 'late_dispatch');
+    q2.escalated_at = iso(D(q2.created_at).getTime() + (q2.target_dispatch + 2) * 60000); pushEv(q2.id, D(q2.escalated_at), null, 'late_dispatch');
     db0.requests = hist.concat(live).sort((a, b) => D(a.created_at) - D(b.created_at));
     db0.requests.forEach((x, i) => { x.no = 1001 + i; });
     db0.events.forEach(e => { if (e.ev === 'hold_busy' && e.note === '#?') { const r = db0.requests.find(x => x.id === e.request_id), b = r && db0.requests.find(x => x.id === r.hold_ref); e.note = b ? '#' + b.no : null; } });
