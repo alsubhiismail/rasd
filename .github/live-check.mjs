@@ -43,6 +43,8 @@ async function run(type, devName) {
     try {
       await page.goto(BASE + '?demo=1#/demo'); await page.waitForSelector('.demo-grid', { timeout: 8000 });
       at = 'pick flat'; await page.selectOption('#dm-unit', 'azb12-vhbyze'); await page.click('[data-act="dm-unit"]');
+      at = 'language'; await page.waitForSelector('form[data-form="submit-req"], [data-act="pick-lang"]', { timeout: 8000 });
+      if (await page.$('[data-act="pick-lang"][data-l="ar"]')) await page.click('[data-act="pick-lang"][data-l="ar"]');
       at = 'form'; await page.waitForSelector('form[data-form="submit-req"]', { timeout: 8000 });
       at = 'issue'; await page.click('label.choice:has(input[value="water_leak"])', { timeout: 8000 });
       at = 'desc'; await page.fill('#f-desc', 'تسرّب ماء تحت مغسلة المطبخ');
