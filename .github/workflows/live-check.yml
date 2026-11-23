@@ -7,16 +7,14 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.1-noble
+      options: --ipc=host
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
       - name: Safari engine (WebKit) and Chrome on the live link
         run: |
           mkdir -p /tmp/lc && cd /tmp/lc && npm init -y > /dev/null && npm i playwright@1.65.1 > /dev/null 2>&1
-          for i in 1 2 3; do timeout 420 npx playwright install --with-deps webkit chromium > install.log 2>&1 && break; echo "install try $i failed"; tail -5 install.log; done
-          echo "live app.js: $(curl -sS https://alsubhiismail.github.io/rasd/app.js | sha1sum)"
           curl -sS https://alsubhiismail.github.io/rasd/app.js | grep -c "D(x.hold_at).getTime() + 1000" || echo "FIX NOT LIVE YET"
           cp "$GITHUB_WORKSPACE/.github/live-check.mjs" .
           node live-check.mjs
