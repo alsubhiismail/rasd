@@ -630,25 +630,41 @@ h3.sub { margin-top: 6px; }
 /* ---------- printing ---------- */
 .print-only { display: none; }
 .sheet { display: grid; gap: 0; }
-.label-sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0; background: #fff; color: #262521; }
-.lbl-card { border: 1px dashed #CFC6B3; padding: 14px 10px; display: grid; justify-items: center; gap: 6px; text-align: center; break-inside: avoid; }
-.lbl-card .lb-top { display: flex; align-items: center; gap: 6px; font-family: var(--font-display); font-weight: 700; color: #6F6436; }
-.lbl-card .lb-top svg { width: 22px; height: 22px; }
-.lbl-card .lb-qr { width: 120px; height: 120px; }
-.lbl-card .lb-qr svg { width: 100%; height: 100%; }
-.lbl-card .lb-unit { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; line-height: 1.2; }
-.lbl-card .lb-b { font-size: .72rem; color: #57534A; }
-.lbl-card .lb-cta { font-size: .74rem; line-height: 1.35; }
+/* QR labels: ISO A6 (105 x 148.5 mm), four to an A4 sheet, 6.4 cm code. Sizes are in cqw of the sheet
+   (1cqw = 2.1 mm when printed), so the screen preview is the printed sheet, scaled. */
+.label-sheet { display: grid; gap: 16px; justify-items: center; }
+.lbl-page { width: min(100%, 560px); aspect-ratio: 210 / 297; container-type: inline-size; position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; background: #fff; color: #262521; box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 8px 24px rgba(0, 0, 0, .08); }
+.lbl-page::before, .lbl-page::after { content: ''; position: absolute; border: 0 dashed #CDC4B0; }
+.lbl-page::before { top: 0; bottom: 0; left: 50%; border-left-width: .1cqw; }
+.lbl-page::after { left: 0; right: 0; top: 50%; border-top-width: .1cqw; }
+.lbl-card { padding: 4.29cqw 3.81cqw 3.81cqw; display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; min-height: 0; overflow: hidden; }
+.lbl-card .lb-top { display: flex; align-items: center; gap: .95cqw; }
+.lbl-card .lb-top svg { width: 3.81cqw; height: 3.81cqw; }
+.lbl-card .lb-top b { font-family: var(--font-display); font-size: 2.52cqw; font-weight: 700; }
+.lbl-card .lb-top i { font-style: normal; font-family: var(--font-display); font-size: 1.68cqw; font-weight: 600; color: #8B7E49; }
+.lbl-card .lb-cta { margin-top: 1.67cqw; display: grid; gap: .29cqw; line-height: 1.4; }
+.lbl-card .lb-cta b { font-size: 2.02cqw; font-weight: 700; }
+.lbl-card .lb-cta span { font-size: 1.51cqw; color: #57534A; }
+.lbl-card .lb-qr { margin-top: 1.67cqw; width: 30.48cqw; height: 30.48cqw; flex: none; border: .24cqw solid #262521; border-radius: 1.9cqw; padding: .48cqw; background: #fff; }
+.lbl-card .lb-qr svg { width: 100%; height: 100%; display: block; }
+.lbl-card .lb-unit { margin-top: 1.67cqw; display: grid; line-height: 1.12; }
+.lbl-card .lb-unit b { font-family: var(--font-display); font-size: 4.7cqw; font-weight: 700; }
+.lbl-card .lb-unit span { font-family: var(--font-display); font-size: 2.18cqw; font-weight: 600; color: #6F6436; }
+.lbl-card .lb-b { margin-top: .71cqw; font-size: 1.6cqw; color: #3B3934; }
+.lbl-card .lb-ft { margin-top: auto; width: 100%; display: flex; justify-content: space-between; align-items: baseline; font-size: 1.18cqw; color: #8A8576; }
 @media print {
   @page { size: A4; margin: 10mm; }
   body { background: #fff; color: #000; }
   .top, .nav, .demo-bar, .no-print, .toast, .back { display: none !important; }
   .print-only { display: block; }
-  .main { padding: 0; max-width: none; }
+  .main, .main.has-nav { padding: 0; max-width: none; }
   .card, .kpi, .tech-card, .score-card { break-inside: avoid; box-shadow: none; }
   .det-grid { grid-template-columns: 1fr 1fr; }
   a { color: inherit; text-decoration: none; }
-  .label-sheet { grid-template-columns: repeat(3, 1fr); }
+  .lbl-wrap { padding: 0 !important; margin: 0 !important; max-width: none !important; display: block !important; }
+  .label-sheet { display: block; }
+  .lbl-page { width: 210mm; height: 297mm; aspect-ratio: auto; box-shadow: none; break-after: page; break-inside: avoid; }
+  .lbl-page:last-child { break-after: auto; }
   body.print-report #app, body.print-report .toast, body.print-report .modal { display: none !important; }
   body.print-report #print-root { display: block; }
 }

@@ -1409,7 +1409,7 @@ update public.settings s
   from (select $json${"v":3,"contractor":{"ar":"الطاؤوس","en":"Tawoos"},"targets":{"urgent":{"dispatch":10,"pickup":10,"arrive":15,"work":120},"normal":{"dispatch":30,"pickup":30,"arrive":60,"work":240}},"buildings":{"AZB":{"ar":"مبنى العذيبة","en":"Azaiba Building","type":"res","ops":30,"sort":1,"lat":null,"lng":null},"SAY":{"ar":"مبنى السيب","en":"Seeb Building","type":"res","ops":120,"sort":2,"lat":null,"lng":null},"MWL":{"ar":"مبنى الموالح","en":"Mawaleh Building","type":"res","ops":90,"sort":3,"lat":null,"lng":null},"BSH":{"ar":"مبنى بوشر","en":"Bousher Building","type":"res","ops":60,"sort":4,"lat":null,"lng":null},"HO":{"ar":"المكتب الرئيسي","en":"Head Office","type":"com","ops":30,"sort":5,"lat":null,"lng":null},"SCC":{"ar":"سابكو سنتر","en":"SABCO Centre","type":"com","ops":30,"sort":6,"lat":null,"lng":null},"OBTS":{"ar":"الواحة على الشاطئ","en":"Oasis by the Sea","type":"com","ops":30,"sort":7,"lat":null,"lng":null}},"repeatDays":30,"issueTypes":[{"k":"water_leak","p":"urgent","ar":"تسرّب مياه أو فيضان","en":"Water leak or flooding"},{"k":"no_power","p":"urgent","ar":"انقطاع الكهرباء","en":"Power outage"},{"k":"sparks","p":"urgent","ar":"شرارة أو رائحة احتراق","en":"Sparks or burning smell"},{"k":"no_water","p":"urgent","ar":"انقطاع المياه","en":"No water supply"},{"k":"drain_overflow","p":"urgent","ar":"انسداد أو طفح المجاري","en":"Blocked or overflowing drain"},{"k":"door_lock","p":"urgent","ar":"باب لا يُقفل","en":"Door will not lock"},{"k":"lift","p":"urgent","ar":"المصعد متوقف أو عالق","en":"Lift stopped or stuck"},{"k":"ac","p":"normal","ar":"المكيف لا يعمل أو لا يبرّد","en":"AC not working or not cooling"},{"k":"lights","p":"normal","ar":"إنارة لا تعمل","en":"Lights not working"},{"k":"sockets","p":"normal","ar":"أفياش أو مفاتيح كهرباء","en":"Sockets or switches"},{"k":"heater","p":"normal","ar":"سخان الماء","en":"Water heater"},{"k":"plumbing","p":"normal","ar":"حنفية أو سيفون أو شطاف","en":"Tap, toilet flush or hand spray"},{"k":"carpentry","p":"normal","ar":"أبواب أو نوافذ أو خزائن","en":"Doors, windows or cupboards"},{"k":"pests","p":"normal","ar":"حشرات","en":"Pests"},{"k":"other","p":"normal","ar":"أخرى","en":"Other"}]}$json$::jsonb as def) d
  where s.id = 1 and coalesce(s.data->>'v', '1')::int < 3;
 
--- مبنى العذيبة (25)، مبنى السيب (1)، مبنى الموالح (1)، مبنى بوشر (1)، المكتب الرئيسي (1)، سابكو سنتر (1)، الواحة على الشاطئ (1) — QR codes (do not change the tokens: they are printed on the labels)
+-- مبنى العذيبة (25)، مبنى السيب (1)، مبنى الموالح (24)، مبنى بوشر (1)، المكتب الرئيسي (1)، سابكو سنتر (1)، الواحة على الشاطئ (1) — QR codes (do not change the tokens: they are printed on the labels)
 insert into public.units (building_code, building_ar, building_en, label_ar, label_en, kind, token, sort) values
   ('AZB', 'مبنى العذيبة', 'Azaiba Building', 'شقة 11', 'Flat 11', 'flat', 'azb11-v6jt9x', 11),
   ('AZB', 'مبنى العذيبة', 'Azaiba Building', 'شقة 12', 'Flat 12', 'flat', 'azb12-vhbyze', 12),
@@ -1437,6 +1437,29 @@ insert into public.units (building_code, building_ar, building_en, label_ar, lab
   ('AZB', 'مبنى العذيبة', 'Azaiba Building', 'شقة 64', 'Flat 64', 'flat', 'azb64-tst374', 64),
   ('AZB', 'مبنى العذيبة', 'Azaiba Building', 'المنطقة العامة', 'Common area', 'common', 'azbc-b8xswv', 100),
   ('SAY', 'مبنى السيب', 'Seeb Building', 'المنطقة العامة', 'Common area', 'common', 'sayc-a5s5va', 100),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 1', 'Flat 1', 'flat', 'mwl1-qsrtpq', 1),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 2', 'Flat 2', 'flat', 'mwl2-khwk8h', 2),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 3', 'Flat 3', 'flat', 'mwl3-5kv7u2', 3),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 4', 'Flat 4', 'flat', 'mwl4-2p9w8a', 4),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 5', 'Flat 5', 'flat', 'mwl5-dgfyn5', 5),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 11', 'Flat 11', 'flat', 'mwl11-i9jkuw', 11),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 12', 'Flat 12', 'flat', 'mwl12-bjivv2', 12),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 13', 'Flat 13', 'flat', 'mwl13-k3c9mh', 13),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 14', 'Flat 14', 'flat', 'mwl14-5dwuqu', 14),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 15', 'Flat 15', 'flat', 'mwl15-psg6ji', 15),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 16', 'Flat 16', 'flat', 'mwl16-yn8wj6', 16),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 21', 'Flat 21', 'flat', 'mwl21-c4qdnz', 21),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 22', 'Flat 22', 'flat', 'mwl22-dipizi', 22),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 23', 'Flat 23', 'flat', 'mwl23-4257wa', 23),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 24', 'Flat 24', 'flat', 'mwl24-nnmg5y', 24),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 25', 'Flat 25', 'flat', 'mwl25-6ev5eu', 25),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 26', 'Flat 26', 'flat', 'mwl26-nx6zx5', 26),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 31', 'Flat 31', 'flat', 'mwl31-sk8jdp', 31),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 32', 'Flat 32', 'flat', 'mwl32-zrdfx8', 32),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 33', 'Flat 33', 'flat', 'mwl33-tn4x7b', 33),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 34', 'Flat 34', 'flat', 'mwl34-xbzhek', 34),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 35', 'Flat 35', 'flat', 'mwl35-w5mf3i', 35),
+  ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'شقة 36', 'Flat 36', 'flat', 'mwl36-93ecmr', 36),
   ('MWL', 'مبنى الموالح', 'Mawaleh Building', 'المنطقة العامة', 'Common area', 'common', 'mwlc-25ss5i', 100),
   ('BSH', 'مبنى بوشر', 'Bousher Building', 'المنطقة العامة', 'Common area', 'common', 'bshc-9arcwu', 100),
   ('HO', 'المكتب الرئيسي', 'Head Office', 'المنطقة العامة', 'Common area', 'common', 'hoc-jxu2ur', 100),
