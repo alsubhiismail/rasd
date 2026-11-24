@@ -3741,10 +3741,13 @@ const Demo = (function () {
   const LIGHT = ['id', 'no', 'unit_id', 'building_code', 'building_ar', 'building_en', 'unit_ar', 'unit_en', 'unit_kind', 'issue_type', 'priority', 'target_pickup', 'target_arrive', 'target_work', 'description', 'lang', 'contact_name', 'contact_phone', 'status', 'created_at', 'technician_id', 'accepted_at', 'accept_method', 'arrived_at', 'arrival_method', 'finished_at', 'signed_at', 'signoff_method', 'rating', 'closed_at', 'close_method', 'cancelled_at', 'source', 'stage', 'offered_at', 'origin', 'hold_kind', 'hold_at', 'hold_ref', 'hold_eta', 'paused_arrive', 'paused_work', 'legs', 'queued_at', 'target_dispatch', 'assigned_by', 'assign_note'];
   const FULL = LIGHT.concat(['tech_note', 'parts', 'signer_name', 'rating_comment', 'close_note', 'cancel_note', 'hold_note', 'hold_parts']);
   const TIMES = ['created_at', 'queued_at', 'offered_at', 'accepted_at', 'arrived_at', 'finished_at', 'signed_at', 'closed_at', 'cancelled_at', 'hold_at', 'hold_eta'];
+  // a fingerprint of the real flat list: when flats are added (as with Mawaleh), phones that kept an older
+  // demo build a fresh one, so every printed code opens its flat
+  const UNITS_SIG = (() => { let h = 2166136261; const txt = DEMO_UNITS ? DEMO_UNITS.buildings.map(b => b.code + ':' + b.units.map(u => u.token).join(',')).join('|') : ''; for (let i = 0; i < txt.length; i++) { h ^= txt.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0).toString(36); })();
   function load() {
     if (!db) {
       db = store.get(KEY, null);
-      if (!db || db.v !== 6 || !db.units || !db.units.length) { db = seed(); save(); }
+      if (!db || db.v !== 6 || db.sig !== UNITS_SIG || !db.units || !db.units.length) { db = seed(); save(); }
       else if (Date.now() - (db.at || 0) > 3600e3) { shift(Date.now() - (db.at || Date.now())); save(); }
     }
     return db;
@@ -4136,7 +4139,7 @@ const Demo = (function () {
     const ESC = ['الكمبروسر لا يعمل، يحتاج فني تكييف', 'العطل في لوحة الكهرباء الرئيسية', 'يحتاج سلّم ومعدات غير متوفرة في المبنى', 'التسريب من الأنبوب الرئيسي داخل الجدار', 'يحتاج فني كهرباء مختص'];
     const COMMENTS = ['شكراً، خدمة سريعة', 'Very polite technician', 'تأخر قليلاً لكن العمل ممتاز', 'Good job', 'الفني محترم ونظيف في العمل', 'وصل متأخراً'];
     const NAMES = ['أحمد', 'Fatma', 'خالد', 'Priya', 'سعيد', 'مريم', 'John', null, null];
-    const db0 = { v: 6, at: Date.now(), settings: st, units, staff, sessions: {}, requests: [], events: [], seq: { no: 1000, ev: 0 } };
+    const db0 = { v: 6, sig: UNITS_SIG, at: Date.now(), settings: st, units, staff, sessions: {}, requests: [], events: [], seq: { no: 1000, ev: 0 } };
     const iso = x => new Date(x).toISOString();
     const nowMs = Date.now(), midnight = d => { const n = d + OFFSET; return n - (n % 864e5) - OFFSET; };
     let quiet = false;   // the older history keeps no event log, to stay small
